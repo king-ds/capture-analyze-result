@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">Bionyx</string>
+    <string name="last_name">Last Name</string>
+    <string name="title_activity_dashboard">Main Activity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="beausline">
+        \t\tBeaus lines are indentations that run across the nails. The indentations can appear when growth at the area under the cuticle is interrupted by injury or severe illness.\n
+        \n\t\tConditions associated with Beaus lines include uncontrolled diabetes and peripheral vascular disease, as well as illnesses associated with a high fever, such as scarlet fever, measles, mumps and pneumonia. Beaus lines can also be a sign of zinc deficiency.\n
+    </string>
+
+    <string name="clubbed_nail">
+        \t\tNail clubbing occurs when the tips of the fingers enlarge and the nails curve around the fingertips, usually over the course of years.\n
+        \n\t\tNail clubbing is sometimes the result of low oxygen in the blood and could be a sign of various types of lung disease. Nail clubbing is also associated with inflammatory bowel disease, cardiovascular disease, liver disease and AIDS.\n
+    </string>
+
+
+    <string name="splinter_nail">
+        \t\tA splinter hemorrhage causes a person to have longitudinal streaks down the nails, which usually appear as small red blood vessels or streaks under the nails.\n
+        \n\t\tA persons fingernails are composed mostly of a protein called keratin, which gives them their strength and flexibility.\n
+        </string>
+
+
+    <string name="terry_nail">
+        \t\tWith the condition known as Terrys nails, most of the nails appear white except for a narrow pink band at the tip.\n
+        \n\t\tTerrys nails can sometimes be attributed to aging. In other cases, Terrys nails can be a sign of a serious underlying condition, such as liver disease, congestive heart failure, kidney failure or diabetes.\n
+    </string>
+
+
+    <string name="yello_nail">
+        \t\tWith yellow nail syndrome, nails thicken and new growth slows. This results in a yellowish discoloration of the nails.\n
+        \n\t\tNails affected by yellow nail syndrome might lack a cuticle and detach from the nail bed in places. Yellow nail syndrome is often a sign of respiratory disease, such as chronic bronchitis. Yellow nail syndrome can also be related to swelling of the hands (lymphedema).\n
+    </string>
+
+    <string name="about_bionyx">
+        \t\tBionyx is an application that captures fingernail images to analyze nail color and patterns for possible disease identification.\n
+    </string>
+
+
+    <string name="title_activity_about">About Bionyx</string>
+    <string name="title_activity_user_profile">Profile</string>
+    <string name="title_activity_developer">About Bionyx</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="about">About</string>
+    <string name="developer">Developer</string>
+</resources>
+
