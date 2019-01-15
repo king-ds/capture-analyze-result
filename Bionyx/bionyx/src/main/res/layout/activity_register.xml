@@ -43,20 +43,6 @@
             android:textSize="25dp" />
     </LinearLayout>
 
-    <ProgressBar
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:id="@+id/registration_process"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_gravity="center"
-        android:indeterminateDrawable="@drawable/loading"
-        android:max="100"
-        android:progress="20"
-        android:layout_marginTop="50dp"
-        android:visibility="gone"
-        android:layout_marginBottom="500dp"
-        />
-
     <ScrollView
         android:id="@+id/registration_form"
         android:layout_width="match_parent"
@@ -218,7 +204,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical|center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:clickable="true">
 
                 <Button
                     android:id="@+id/btnRegister"
