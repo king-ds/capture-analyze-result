@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.king.mobile_app">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="false"
+        android:icon="@drawable/iconic"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!-- Login Form Start -->
+        <activity
+            android:name="com.example.king.mobile_app.LoginActivity"
+            android:exported="true"
+            android:label="Bionyx"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!-- Login Form End -->
+        <!-- Registration Form Start -->
+        <activity
+            android:name="com.example.king.mobile_app.RegisterActivity"
+            android:label="Registration"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <!-- Registration Form End -->
+        <!-- Dashboard Start -->
+        <activity
+            android:name="com.example.king.mobile_app.DashboardActivity"
+            android:label="@string/title_activity_dashboard"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name="com.example.king.mobile_app.DiseasesActivity" />
+        <activity android:name="com.example.king.mobile_app.NailAssessmentActivity" />
+        <activity android:name="com.example.king.mobile_app.HistoryActivity" />
+        <activity android:name="com.example.king.mobile_app.SingleItemView" />
+
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.king.mobile_app.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <!-- ressource file to create -->
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity
+            android:name="com.example.king.mobile_app.AboutActivity"
+            android:label="@string/title_activity_about"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.example.king.mobile_app.UserProfileActivity"
+            android:label="@string/title_activity_user_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="com.example.king.mobile_app.zzzPangTryNiJover"></activity>
+        <activity android:name="com.example.king.mobile_app.disease_beausline" />
+        <activity android:name="com.example.king.mobile_app.disease_clubbed" />
+        <activity android:name="com.example.king.mobile_app.disease_splinter_haemorrhages" />
+        <activity android:name="com.example.king.mobile_app.disease_terry" />
+        <activity android:name="com.example.king.mobile_app.disease_yellownails" />
+        <activity android:name="com.example.king.mobile_app.SplashActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
