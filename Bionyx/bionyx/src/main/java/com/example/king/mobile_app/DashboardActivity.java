@@ -99,7 +99,7 @@ public class DashboardActivity extends AppCompatActivity
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("avatar_url", AVATAR_URL);
         editor.commit();
-        //Verifying the session values
+        //Verify the session values
         System.out.println(token+" "+user_id+" "+username+" "+first_name+" "+last_name+" "+email+" "+datejoined);
 
         View headerView = navigationView.getHeaderView(0);

@@ -62,7 +62,6 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
         last_name = (EditText)findViewById(R.id.etLastName);
         r_email = (EditText)findViewById(R.id.etEmail);
         Register = (Button)findViewById(R.id.btnRegister);
-        progressView = findViewById(R.id.registration_process);
         registrationView = findViewById(R.id.registration_form);
 
         Register.setOnClickListener(new View.OnClickListener() {

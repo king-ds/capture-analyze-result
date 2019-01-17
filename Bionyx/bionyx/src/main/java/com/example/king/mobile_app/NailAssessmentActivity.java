@@ -2,6 +2,7 @@ package com.example.king.mobile_app;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +11,7 @@ import android.content.pm.PackageManager;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -49,31 +51,28 @@ import java.util.Date;
 public class NailAssessmentActivity extends BaseActivity {
 
     //URL
-    private String SERVER_URL = "http://"+currentIp+"/uploadImg/";
+    private String SERVER_URL = "http://"+currentIp+"/api/classifyImage/";
 
     //REQUEST
     private String token;
     private String id;
-    private static final int ACTION_TAKE_PHOTO_B = 1;
-
 
     //STORAGE
-    private Uri mCurrentImageUri;
-    private String mCurrentPhotoPath;
-    private String mCurrentPhotoName;
+    Uri mCurrentImageUri, mCurrentCroppedImageUri;
+    String mCurrentPhotoPath, mCurrentThumbPath;
+    String mCurrentPhotoName, mCurrentCroppedPhotoName;
 
     //GUI ITEMS
     private static ProgressDialog mProgressDialog;
     Button CaptureImg, Upload;
     ImageView iCaptured;
-    TextView Result;
-    private View AssessmentForm, AssessmentProgressView;
 
-    // Activity request codes
-    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+//    String realPath;
 
-    String realPath;
-    String sdk_version, real_Path, data_Values;
+    final int CAMERA_CAPTURE = 1;
+    final int PIC_CROP = 3;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +92,7 @@ public class NailAssessmentActivity extends BaseActivity {
         CaptureImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dispatchTakePictureIntent(ACTION_TAKE_PHOTO_B);
+                dispatchTakePictureIntent(CAMERA_CAPTURE);
             }
         });
 
@@ -101,15 +100,12 @@ public class NailAssessmentActivity extends BaseActivity {
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
         this.token = prefs.getString("token", "");
         this.id = prefs.getString("id", "");
-        System.out.println(token+" "+id);
-
-        //check for uses-permission
-        //if none, add uses permission
         askPermissions();
     }
 
 
     private void askPermissions() {
+
         ArrayList<String> permissions = new ArrayList<>();
 
         if (ContextCompat.checkSelfPermission(NailAssessmentActivity.this, Manifest.permission.CAMERA)
@@ -135,135 +131,190 @@ public class NailAssessmentActivity extends BaseActivity {
         }
         }
 
-
-
-
+    /*
+    Function for creating file directory (original image)
+    */
     private File createFileDirectory() throws IOException{
 
-        String folder = "Bionyx/CapturedImages";
+        String folder = "DCIM/Bionyx";
+        File imgDir = new File(Environment.getExternalStorageDirectory(), folder);
 
-        File imgDir = new File(Environment.getExternalStorageDirectory(), folder+"/user"+id);
-
-        //Create the storage directory if it does not exist
         if(!imgDir.exists()){
             if(!imgDir.mkdir()){
-                Log.e("Finger Nails", "Oops! Failed create Finger Nails directory");
-                return  null;
+                Log.e("NailAssessmentActivity", "Failed to create DCIM/Bionyx directory");
+                return null;
             }
         }
-        System.out.println(imgDir);
         return imgDir;
     }
 
-
-
-    //Create image file name
+    /*
+    Function for creating image file (original image)
+    */
     private File createImageFile() throws IOException {
 
-        //Set the date
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        //Assign an image file name
         String imageFileName = "IMG_" + timestamp + "_";
-        //Directory for image
         File imgDir = createFileDirectory();
-        //Create Temporary File with suffix .jpg
         File imageF = File.createTempFile(imageFileName, ".jpg", imgDir);
 
-        //return the created image
         return imageF;
     }
 
-    //Set up the created image
+    /*
+    Function for finalizing the creation of image file as well as its folder directory (original image)
+    */
     private File setUpPhotoFile() throws IOException {
 
-        //Assign the created image to variable file "f"
         File f = createImageFile();
-        //Get and assign the path of an image
         mCurrentPhotoPath = f.getAbsolutePath();
-        //Get and assign the name of an image
         mCurrentPhotoName = f.getName();
-        //Get and assign the uri of an image
-//        mCurrentImageUri = Uri.fromFile(f);
-        mCurrentImageUri = FileProvider.getUriForFile(NailAssessmentActivity.this, "com.example.king.mobile_app.provider", f );
-
-
-
+        mCurrentImageUri = Uri.fromFile(f);
+//        mCurrentImageUri = FileProvider.getUriForFile(NailAssessmentActivity.this, "com.example.king.mobile_app.provider", f );
         return f;
 
     }
 
+    /*
+    Function for finalizing the creation of image file as well as its folder directory (Cropped Image)
+     */
+    private File setUpCroppedFile() throws IOException {
+
+        File f = createCroppedImageFile();
+        mCurrentThumbPath = f.getAbsolutePath();
+        mCurrentCroppedPhotoName = f.getName();
+        mCurrentCroppedImageUri = Uri.fromFile(f);
+
+        return f;
+    }
+
+    /*
+    Function for creating image file (cropped image)
+    */
+    private File createCroppedImageFile() throws IOException {
+
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "IMG_" + timestamp + "_";
+        File imgDir = createCroppedFileDirectory();
+        File imageF = File.createTempFile(imageFileName, ".jpg", imgDir);
+
+        return imageF;
+    }
+
+    /*
+    Function for creating file directory (Cropped Image)
+     */
+    private File createCroppedFileDirectory() throws IOException{
+
+        String folder = "DCIM/Bionyx/Crop";
+        File imgDir = new File(Environment.getExternalStorageDirectory(), folder);
+
+        if(!imgDir.exists()){
+            if(!imgDir.mkdir()){
+                Log.e("NailAssessmentActivity", "Failed to create DCIM/Bionyx/Crop directory");
+                return null;
+            }
+        }
+        return imgDir;
+    }
+
+    /*
+    Function for accessing camera
+     */
     private void dispatchTakePictureIntent(int actionCode) {
 
-        //Access Camera
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        //switch case using action code
         switch (actionCode) {
 
-            //case 1: take a photo
-            case ACTION_TAKE_PHOTO_B:
+            case CAMERA_CAPTURE:
 
-                //Reset
                 File f = null;
 
-
                 try {
-                    //Get the photo
                     f = setUpPhotoFile();
                     mCurrentPhotoPath = f.getAbsolutePath();
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentImageUri);
-
-
+                    takePictureIntent.putExtra("return-data",true);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    f = null;
                     mCurrentPhotoPath = null;
                 }
                 break;
 
             default:
                 break;
-        }//switch
-        startActivityForResult(takePictureIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+        }
+        startActivityForResult(takePictureIntent, CAMERA_CAPTURE);
     }
 
+    /*
+    Override function for getting the result from captured and cropped image
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode,Intent data) {
-        // if the result is capturing Image
-        if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                previewCapturedImage();
 
-            } else if (resultCode == RESULT_CANCELED) {
-                // user cancelled Image capture
-                Toast.makeText(getApplicationContext(),
-                        "User cancelled image capture", Toast.LENGTH_SHORT)
-                        .show();
-            } else {
-                // failed to capture image
-                Toast.makeText(getApplicationContext(),
-                        "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
-                        .show();
+        if (requestCode == CAMERA_CAPTURE && resultCode == RESULT_OK){
+            cropImg();
+        }
+        else if(requestCode == PIC_CROP && resultCode == RESULT_OK){
+            Bundle extras = data.getExtras();
+            Bitmap croppedImage = (Bitmap) extras.get("data");
+            iCaptured.setImageBitmap(croppedImage);
+        }
+        else if(requestCode == CAMERA_CAPTURE && resultCode == RESULT_CANCELED ){
+            Toast.makeText(getApplicationContext(), "Capture image cancelled", Toast.LENGTH_SHORT).show();
+        }
+        else if (requestCode == PIC_CROP && resultCode == RESULT_CANCELED){
+            Toast.makeText(getApplicationContext(), "Crop image cancelled", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
             }
         }
+
+    /*
+    Function for cropping image
+     */
+    private void cropImg(){
+
+        Intent cropIntent = new Intent("com.android.camera.action.CROP");
+        try {
+
+            cropIntent.setDataAndType(mCurrentImageUri, "image/*");
+
+            cropIntent.putExtra("crop", "true");
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            cropIntent.putExtra("outputX", 256);
+            cropIntent.putExtra("outputY", 256);
+            cropIntent.putExtra("return-data", true);
+
+            File f;
+            try {
+                f = setUpCroppedFile();
+                mCurrentThumbPath = f.getAbsolutePath();
+                cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentCroppedImageUri);
+
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+        catch(ActivityNotFoundException ex){
+            ex.printStackTrace();
+            mCurrentThumbPath = null;
+            String error = "Your device doesn't support crop action!";
+            Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        }
+        startActivityForResult(cropIntent, PIC_CROP);
     }
 
-    private void previewCapturedImage() {
-
-        //Pass URI
-        realPath = mCurrentImageUri.getPath();
-        System.out.println("REALPAAAAAAAAAAAAAAAATH"+realPath);
-        iCaptured.setImageURI(Uri.parse(mCurrentPhotoPath));
-        iCaptured.setRotation(90);
-    }
-
-
-
+   /*
+   Function for uploading image
+   */
     private void uploadImg(){
-        //iCaptured.setImageURI(Uri.parse(mCurrentPhotoPath));
-        //iCaptured.setRotation(90);
-        final String selectedFilePath = mCurrentPhotoPath;
-        System.out.println("The image file path is " + selectedFilePath);
+
+        final String selectedFilePath = mCurrentThumbPath;
 
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -275,24 +326,22 @@ public class NailAssessmentActivity extends BaseActivity {
         }
     }
 
-
+    /*
+    Asynctask for uploading image to server (django-rest api)
+     */
     private class UploadImageTask extends AsyncTask<String, String, String>{
 
         @Override
         protected void onPreExecute(){
+
             super.onPreExecute();
-            //Create process dialog
             mProgressDialog = new ProgressDialog(NailAssessmentActivity.this);
-            //Set Progress dialog title
             mProgressDialog.setTitle("Fingernail Assessment");
-            //Set progress dialog message
             mProgressDialog.setMessage("Processing...");
             mProgressDialog.setIndeterminate(false);
             mProgressDialog.setCancelable(false);
             mProgressDialog.setCanceledOnTouchOutside(false);
-            //Show progress dialog
             mProgressDialog.show();
-
         }
 
         @Override
@@ -345,8 +394,6 @@ public class NailAssessmentActivity extends BaseActivity {
                     connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
                     connection.setRequestProperty("uploaded_file", selectedFilePath);
                     connection.setRequestProperty("Authorization", token);
-                    //creating new dataoutputstream
-                    //Start content wrapper
                     dataOutputStream = new DataOutputStream(connection.getOutputStream());
                     String dispName = "image";
                     dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
@@ -355,23 +402,17 @@ public class NailAssessmentActivity extends BaseActivity {
                     dataOutputStream.writeBytes("Content-Type: image/jpeg" + lineEnd);
                     dataOutputStream.writeBytes(lineEnd);
 
-                    //returns no. of bytes present in fileInputStream
                     bytesAvailable = fileInputStream.available();
                     System.out.println("Bytes Available "+bytesAvailable);
-                    //selecting the buffer size as minimum of available bytes or 1MB
                     bufferSize = Math.min(bytesAvailable, maxBufferSize);
                     System.out.println("Buffer Size: "+bufferSize);
-                    //setting the buffer as byte array of size of bufferSize
                     buffer = new byte[bufferSize];
 
-                    //read bytes from FileInputStream(from 0th index to bufferSize)
                     bytesRead = fileInputStream.read(buffer, 0, bufferSize);
                     System.out.println("Total bytes: "+bytesRead);
 
-                    //loop repeats till bytesRead = -1, i.e., no bytes are left to read
                     while (bytesRead > 0) {
                         try {
-                            //write the bytes read from inputstream
                             dataOutputStream.write(buffer, 0, bufferSize);
                         } catch (OutOfMemoryError e) {
                             Toast.makeText(NailAssessmentActivity.this, "Insufficient Memory", Toast.LENGTH_SHORT).show();
@@ -379,7 +420,6 @@ public class NailAssessmentActivity extends BaseActivity {
                         bytesAvailable = fileInputStream.available();
                         bufferSize = Math.min(bytesAvailable, maxBufferSize);
                         bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-                        System.out.println("Bytes Available: "+bytesAvailable+"\nBuffer Size: "+bufferSize+"\nBytes Read: "+bytesRead);
                     }
                     dataOutputStream.writeBytes(lineEnd);
                     dataOutputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
@@ -404,7 +444,6 @@ public class NailAssessmentActivity extends BaseActivity {
                             sb.append(output);
                         }
                         String response = sb.toString();
-                        System.out.println(response);
 
                         try{
                             DecimalFormat df = new DecimalFormat("#0.00");
@@ -420,18 +459,13 @@ public class NailAssessmentActivity extends BaseActivity {
                             Results = "Status: "+status+"\nBeau Lines: " +df.format(Float.parseFloat(BeauLines))  +"\nClubbed Nails: " + df.format(Float.parseFloat(ClubbedNails))
                                     +"\nHealthy: "+ df.format(Float.parseFloat(Healthy)) + "\nSpoon Nails: " + df.format(Float.parseFloat(Splinter)) +"\nTerry's Nails: "+ df.format(Float.parseFloat(TerryNails))
                                     +"\nYellow Nail Syndrome: " + df.format(Float.parseFloat(YellowNails));
-                            System.out.println(Results);
-
 
                         }catch (JSONException ex){
                             ex.printStackTrace();
                             return "";
                         }
                         br.close();
-
                     }
-
-                    //closing the input and output streams
 
                     fileInputStream.close();
                     dataOutputStream.flush();
