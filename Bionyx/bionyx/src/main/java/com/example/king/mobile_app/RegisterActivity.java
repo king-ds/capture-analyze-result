@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 public class RegisterActivity extends BaseActivity implements AsyncResponse {
 
     //Declare all variables needed.
+    private InternetConnectionManager ICM;
 
     //For Authentication Related Stuff
     private static final String TOKEN_URL = "http://"+currentIp+"/register/";
@@ -58,6 +59,7 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
         setContentView(R.layout.activity_register);
 
         //Assign the declared variables.
+        ICM = new InternetConnectionManager();
         r_username = (EditText)findViewById(R.id.etUsername);
         password = (EditText)findViewById(R.id.etPassword);
         confirm_password = (EditText)findViewById(R.id.etConfirm_Password);
@@ -159,8 +161,11 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
             if (cancel) {
                 focusView.requestFocus();
             } else {
-                mAuthTask = new UserRegisterTask(Username, Password, Firstname, Lastname, Email, this);
-                mAuthTask.execute((Void) null);
+
+                if(ICM.isNetworkAvailable(this)){
+                    mAuthTask = new UserRegisterTask(Username, Password, Firstname, Lastname, Email, this);
+                    mAuthTask.execute((Void) null);
+                }
             }
         }
     }
@@ -372,6 +377,11 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
             if (this.success) {
                 delegate.processFinish(Success_Message);
             }
+            else{
+                Log.d("RegisterActivity", response);
+                delegate.processFinish(Failures_Message);
+            }
+
         }
         @Override
         protected void onCancelled(){
