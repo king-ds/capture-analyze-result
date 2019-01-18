@@ -56,6 +56,7 @@ public class NailAssessmentActivity extends BaseActivity {
     //REQUEST
     private String token;
     private String id;
+    private InternetConnectionManager ICM;
 
     //STORAGE
     Uri mCurrentImageUri, mCurrentCroppedImageUri;
@@ -79,6 +80,7 @@ public class NailAssessmentActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nail_assessment);
 
+        ICM = new InternetConnectionManager();
         Upload = (Button)findViewById(R.id.btnUpload);
         CaptureImg = (Button)findViewById(R.id.btnCapture);
         iCaptured = (ImageView)findViewById(R.id.ivCaptured);
@@ -316,13 +318,16 @@ public class NailAssessmentActivity extends BaseActivity {
 
         final String selectedFilePath = mCurrentThumbPath;
 
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
+//        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+//        if (networkInfo != null && networkInfo.isConnected()) {
+//            new UploadImageTask().execute(selectedFilePath);
+//            System.out.println("Uploading image....." + selectedFilePath);
+//        } else {
+//            System.out.println("No network connection available");
+//        }
+        if(ICM.isNetworkAvailable(this)){
             new UploadImageTask().execute(selectedFilePath);
-            System.out.println("Uploading image....." + selectedFilePath);
-        } else {
-            System.out.println("No network connection available");
         }
     }
 
