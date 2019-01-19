@@ -2,18 +2,16 @@ package com.example.king.mobile_app;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
-import android.content.Context;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 
 import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -30,8 +28,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import com.squareup.picasso.Picasso;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,6 +43,8 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import com.theartofdev.edmodo.cropper.CropImage;
 
 public class NailAssessmentActivity extends BaseActivity {
 
@@ -68,12 +66,7 @@ public class NailAssessmentActivity extends BaseActivity {
     Button CaptureImg, Upload;
     ImageView iCaptured;
 
-//    String realPath;
-
     final int CAMERA_CAPTURE = 1;
-    final int PIC_CROP = 3;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,13 +91,11 @@ public class NailAssessmentActivity extends BaseActivity {
             }
         });
 
-
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
         this.token = prefs.getString("token", "");
         this.id = prefs.getString("id", "");
         askPermissions();
     }
-
 
     private void askPermissions() {
 
@@ -128,10 +119,10 @@ public class NailAssessmentActivity extends BaseActivity {
 
             ActivityCompat.requestPermissions(NailAssessmentActivity.this, permiss,
                     222);
-        }else{
+        } else {
 
         }
-        }
+    }
 
     /*
     Function for creating file directory (original image)
@@ -172,7 +163,8 @@ public class NailAssessmentActivity extends BaseActivity {
         mCurrentPhotoPath = f.getAbsolutePath();
         mCurrentPhotoName = f.getName();
         mCurrentImageUri = Uri.fromFile(f);
-//        mCurrentImageUri = FileProvider.getUriForFile(NailAssessmentActivity.this, "com.example.king.mobile_app.provider", f );
+        mCurrentImageUri = FileProvider.getUriForFile(NailAssessmentActivity.this, "com.example.king.mobile_app.provider", f );
+
         return f;
 
     }
@@ -256,59 +248,75 @@ public class NailAssessmentActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode,Intent data) {
 
-        if (requestCode == CAMERA_CAPTURE && resultCode == RESULT_OK){
-            cropImg();
-        }
-        else if(requestCode == PIC_CROP && resultCode == RESULT_OK){
-            Bundle extras = data.getExtras();
-            Bitmap croppedImage = (Bitmap) extras.get("data");
-            iCaptured.setImageBitmap(croppedImage);
-        }
-        else if(requestCode == CAMERA_CAPTURE && resultCode == RESULT_CANCELED ){
-            Toast.makeText(getApplicationContext(), "Capture image cancelled", Toast.LENGTH_SHORT).show();
-        }
-        else if (requestCode == PIC_CROP && resultCode == RESULT_CANCELED){
-            Toast.makeText(getApplicationContext(), "Crop image cancelled", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(getApplicationContext(), "Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
+        if (requestCode == CAMERA_CAPTURE && resultCode == RESULT_OK) {
+            performCrop();
+        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
+            if (resultCode == RESULT_OK) {
+                mCurrentCroppedImageUri = result.getUri();
+                iCaptured.setImageURI(mCurrentCroppedImageUri);
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mCurrentCroppedImageUri);
+                    saveCropImage(bitmap);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
+        } else if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_CANCELED) {
+            mCurrentCroppedImageUri = null;
+            Toast.makeText(getApplicationContext(), "Crop image cancelled", Toast.LENGTH_SHORT).show();
+        } else if (requestCode == CAMERA_CAPTURE && resultCode == RESULT_CANCELED) {
+            Toast.makeText(getApplicationContext(), "Capture image cancelled", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
         }
+    }
 
     /*
     Function for cropping image
      */
-    private void cropImg(){
+    private void performCrop(){
+        mCurrentCroppedImageUri = null;
+        CropImage.activity(mCurrentImageUri).start(this);
+    }
 
-        Intent cropIntent = new Intent("com.android.camera.action.CROP");
+    /*
+    Function for saving cropped image
+     */
+    private void saveCropImage(Bitmap image) {
+
+    try {
+        File f = setUpCroppedFile();
+        if (f == null) {
+            Log.d("NailAssessmentActivity",
+                    "Error creating media file, check storage permissions: ");
+            return;
+        }
+
         try {
-
-            cropIntent.setDataAndType(mCurrentImageUri, "image/*");
-
-            cropIntent.putExtra("crop", "true");
-            cropIntent.putExtra("aspectX", 1);
-            cropIntent.putExtra("aspectY", 1);
-            cropIntent.putExtra("outputX", 256);
-            cropIntent.putExtra("outputY", 256);
-            cropIntent.putExtra("return-data", true);
-
-            File f;
-            try {
-                f = setUpCroppedFile();
-                mCurrentThumbPath = f.getAbsolutePath();
-                cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentCroppedImageUri);
-
-            }catch (IOException e){
-                e.printStackTrace();
-            }
+            FileOutputStream fos = new FileOutputStream(f);
+            image.compress(Bitmap.CompressFormat.PNG, 90, fos);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            Log.d("NailAssessmentActivity", "File not found: " + e.getMessage());
+        } catch (IOException e) {
+            Log.d("NailAssessmentActivity", "Error accessing file: " + e.getMessage());
         }
-        catch(ActivityNotFoundException ex){
-            ex.printStackTrace();
-            mCurrentThumbPath = null;
-            String error = "Your device doesn't support crop action!";
-            Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        values.put(MediaStore.MediaColumns.DATA, f.getPath());
+
+        getApplicationContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+    }catch (IOException ex){
+        ex.printStackTrace();
         }
-        startActivityForResult(cropIntent, PIC_CROP);
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
     }
 
    /*
@@ -317,15 +325,6 @@ public class NailAssessmentActivity extends BaseActivity {
     private void uploadImg(){
 
         final String selectedFilePath = mCurrentThumbPath;
-
-//        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-//        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-//        if (networkInfo != null && networkInfo.isConnected()) {
-//            new UploadImageTask().execute(selectedFilePath);
-//            System.out.println("Uploading image....." + selectedFilePath);
-//        } else {
-//            System.out.println("No network connection available");
-//        }
         if(ICM.isNetworkAvailable(this)){
             new UploadImageTask().execute(selectedFilePath);
         }
