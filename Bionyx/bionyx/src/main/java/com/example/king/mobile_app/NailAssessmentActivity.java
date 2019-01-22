@@ -49,7 +49,7 @@ import java.util.Date;
 public class NailAssessmentActivity extends BaseActivity {
 
     //URL
-    private String SERVER_URL = "http://"+currentIp+"/uploadImg/";
+    private String SERVER_URL = "http://"+currentIp+"/api/classifyImage/";
 
     //REQUEST
     private String token;
