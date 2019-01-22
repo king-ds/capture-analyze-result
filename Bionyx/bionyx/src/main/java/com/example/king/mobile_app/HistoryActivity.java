@@ -61,7 +61,7 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
 
         this.username = prefs.getString("username", "");
         System.out.println(username);
-        this.TRANSACTION_HISTORY_URL = "http://"+currentIp+"/history/"+username;
+        this.TRANSACTION_HISTORY_URL = "http://"+currentIp+"/api/history/"+username;
         new GetTransactionHistory().execute();
 
 
