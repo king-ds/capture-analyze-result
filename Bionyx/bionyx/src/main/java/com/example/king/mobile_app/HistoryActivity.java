@@ -1,39 +1,39 @@
 package com.example.king.mobile_app;
 
-// --- PDF GENERATORS ---
-//
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-        import java.io.BufferedReader;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-        import android.os.AsyncTask;
-        import android.os.Bundle;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-        import android.widget.ListView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-        import java.util.HashMap;
+import java.util.HashMap;
+import java.util.List;
 
 public class HistoryActivity extends BaseActivity implements AsyncResponse {
 
     private static String username = "";
     private static String token = "";
     private static String TRANSACTION_HISTORY_URL = "";
-    private static ProgressDialog mProgressDialog;
+    private static ProgressDialog getProgressDialog, delProgressDialog;
+    ImageLoader imageLoader;
 
     private Button ClearHistory;
     ArrayList<HashMap<String, String>> arraylist;
@@ -57,18 +57,46 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+        this.username = prefs.getString("username", "");
+        this.TRANSACTION_HISTORY_URL = "http://"+currentIp+"/api/history/"+username;
+        new GetTransactionHistory().execute();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
+        imageLoader = new ImageLoader(this);
+        final Button clear_history = (Button)findViewById(R.id.btnClearHistory);
+        clear_history.setVisibility(View.GONE);
+        clear_history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder selectionWindow = new AlertDialog.Builder(HistoryActivity.this);
+                View clear_history_selection_view = getLayoutInflater().inflate(R.layout.activity_clear_history_selection, null);
+                Button okay_button = (Button)clear_history_selection_view.findViewById(R.id.btnOkay);
+                Button cancel_button =  (Button)clear_history_selection_view.findViewById(R.id.btnCancel);
 
-        SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+                selectionWindow.setView(clear_history_selection_view);
+                final AlertDialog selectionDialog = selectionWindow.create();
+                selectionDialog.show();
+                selectionDialog.setCancelable(false);
+                selectionDialog.setCanceledOnTouchOutside(false);
 
-        this.username = prefs.getString("username", "");
-        System.out.println(username);
-        this.TRANSACTION_HISTORY_URL = "http://"+currentIp+"/api/history/" + username;
-        new GetTransactionHistory().execute();
+                okay_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selectionDialog.dismiss();
+                        new DelTransactionHistory().execute();
+                    }
+                });
 
-
+                cancel_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selectionDialog.dismiss();
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -87,42 +115,30 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //Create process dialog
-            mProgressDialog = new ProgressDialog(HistoryActivity.this);
-            //Set Progress dialog title
-            mProgressDialog.setTitle("History");
-            //Set progress dialog message
-            mProgressDialog.setMessage("Loading...");
-            mProgressDialog.setIndeterminate(false);
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.setCanceledOnTouchOutside(false);
-            //Show progress dialog
-            mProgressDialog.show();
-
+            getProgressDialog = new ProgressDialog(HistoryActivity.this);
+            getProgressDialog.setTitle("History");
+            getProgressDialog.setMessage("Loading...");
+            getProgressDialog.setIndeterminate(false);
+            getProgressDialog.setCancelable(false);
+            getProgressDialog.setCanceledOnTouchOutside(false);
+            getProgressDialog.show();
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             String inputLine;
             String response;
-            //Create an arrray
             arraylist = new ArrayList<HashMap<String, String>>();
-
             try {
-                //Create URL object
                 URL myUrl = new URL(TRANSACTION_HISTORY_URL);
-
                 //Create a connection
                 HttpURLConnection connection = (HttpURLConnection) myUrl.openConnection();
-
                 //Set methods and timeouts
                 connection.setRequestMethod("GET");
                 connection.setReadTimeout(15000);
                 connection.setConnectTimeout(15000);
-
                 //Connect to url
                 connection.connect();
-
                 //To read input or response from API
                 //Create new InputStreamReader
                 InputStreamReader is = new InputStreamReader(connection.getInputStream());
@@ -139,7 +155,10 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
                 is.close();
                 //Set our result equal to string builder
                 response = sb.toString();
-                if (response != null) {
+                System.out.println(response);
+                if (response.equals("[]") || response == null) {
+                    isEmpty = true;
+                } else {
                     isEmpty = false;
                     try {
                         JSONArray jsonarray = new JSONArray(response);
@@ -176,35 +195,119 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
 
         @Override
         protected void onPostExecute(Void args) {
+            Button clear_history = (Button)findViewById(R.id.btnClearHistory);
 
             if (isEmpty == true) {
+                System.out.println("Status: "+isEmpty);
                 String message = "No history yet";
-                mProgressDialog.dismiss();
-                AlertDialog.Builder PopupWindow = new AlertDialog.Builder(HistoryActivity.this);
+                getProgressDialog.dismiss();
+                AlertDialog.Builder getWindow= new AlertDialog.Builder(HistoryActivity.this);
                 View empty_view = getLayoutInflater().inflate(R.layout.activity_history_emptymessage, null);
                 TextView empty_message = (TextView) empty_view.findViewById(R.id.tvMessage);
                 Button okay_button = (Button) empty_view.findViewById(R.id.btnOkay);
 
                 empty_message.setText(message);
-                PopupWindow.setView(empty_view);
-                AlertDialog dialog = PopupWindow.create();
-                dialog.show();
+                getWindow.setView(empty_view);
+                final AlertDialog getDialog = getWindow.create();
+                getDialog.show();
+                getDialog.setCanceledOnTouchOutside(false);
+                getDialog.setCancelable(false);
 
                 okay_button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        getDialog.dismiss();
                         HistoryActivity.this.finish();
                         Intent intent = new Intent(HistoryActivity.this, DashboardActivity.class);
                         startActivity(intent);
                     }
                 });
-
             } else {
+                clear_history.setVisibility(View.VISIBLE);
                 listview = (ListView) findViewById(R.id.listview);
                 adapter = new ListViewAdapter(HistoryActivity.this, arraylist);
                 listview.setAdapter(adapter);
-                mProgressDialog.dismiss();
+                getProgressDialog.dismiss();
+            }
+        }
+    }
+
+    /*
+    Asnyctask for deleting all entries in history
+    */
+    public class DelTransactionHistory extends AsyncTask<Void, Void, Void> {
+
+        boolean isDeleted = false;
+        int response_code = 0;
+        String response_message = "";
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            delProgressDialog = new ProgressDialog(HistoryActivity.this);
+            delProgressDialog.setTitle("History");
+            delProgressDialog.setMessage("Removing...");
+            delProgressDialog.setIndeterminate(false);
+            delProgressDialog.setCancelable(false);
+            delProgressDialog.setCanceledOnTouchOutside(false);
+            delProgressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                URL myUrl = new URL(TRANSACTION_HISTORY_URL);
+                //Create a connection
+                HttpURLConnection connection = (HttpURLConnection) myUrl.openConnection();
+                //Set methods and timeouts
+                connection.setRequestMethod("DELETE");
+                connection.setReadTimeout(15000);
+                connection.setConnectTimeout(15000);
+                //Connect to url
+                connection.connect();
+                response_code = connection.getResponseCode();
+                response_message = connection.getResponseMessage();
+                if (response_code == 204) {
+                    isDeleted = true;
+                    imageLoader.clearCache();
+                    Log.e("HistoryActivity", "Server response message : " + response_message);
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            if (isDeleted == true) {
+                delProgressDialog.dismiss();
+                String message = "You have successfully clear history. Click okay to proceed";
+                AlertDialog.Builder delWindow= new AlertDialog.Builder(HistoryActivity.this);
+                View deleted_view = getLayoutInflater().inflate(R.layout.activity_clear_history, null);
+                TextView deleted_message = (TextView) deleted_view.findViewById(R.id.tvMessage);
+                Button okay_button = (Button)deleted_view.findViewById(R.id.btnOkay);
+
+                deleted_message.setText(message);
+                delWindow.setView(deleted_view);
+                final AlertDialog delDialog = delWindow.create();
+                delDialog.show();
+                delDialog.setCancelable(false);
+                delDialog.setCanceledOnTouchOutside(false);
+
+                okay_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        delDialog.dismiss();
+                        HistoryActivity.this.finish();
+                        Intent intent = new Intent(HistoryActivity.this, DashboardActivity.class);
+                        startActivity(intent);
+                    }
+                });
             }
         }
     }
 }
+
