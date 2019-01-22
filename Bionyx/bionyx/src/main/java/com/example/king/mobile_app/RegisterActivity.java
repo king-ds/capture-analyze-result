@@ -38,7 +38,7 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
     //For Authentication Related Stuff
     private static final String TOKEN_URL = "http://"+currentIp+"/register/";
     private static final String Success_Message = "Successfully Register";
-    private static final String Failures_Message = "Something went wrong";
+    private static final String Failures_Message = "Check your internet connection";
     private UserRegisterTask mAuthTask = null;
 
     //For Registration Field
@@ -48,10 +48,6 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
     //For Views
     private static ProgressDialog mProgressDialog;
     private View focusView = null;
-
-    //For Cancellation
-    private boolean cancel = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,17 +71,15 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
 
             }
         });
-
     }
 
     private void initiateRegister() {
 
-        //If user is not very patient
+        boolean cancel = false;
         if(mAuthTask != null){
             return;
         }
         //Reset Errors.
-
         r_username.setError(null);
         password.setError(null);
         first_name.setError(null);
@@ -99,76 +93,63 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
         String Firstname = first_name.getText().toString();
         String Lastname = last_name.getText().toString();
         String Email = r_email.getText().toString();
-//        System.out.println(username);
 
-        //Check for the validity of password
-        if (TextUtils.isEmpty(Password)){
+        if (TextUtils.isEmpty(Firstname)) {
+            first_name.setError("This field cannot be blank");
+            focusView = first_name;
+            cancel = true;
+        }
+        else if (TextUtils.isEmpty(Lastname)) {
+            last_name.setError("This field cannot be blank");
+            focusView = last_name;
+            cancel = true;
+        }
+        else if (TextUtils.isEmpty(Email)) {
+            r_email.setError("This field cannot be blank");
+            focusView = r_email;
+            cancel = true;
+        }
+        else if (TextUtils.isEmpty(Username)) {
+            r_username.setError("This field cannot be blank");
+            focusView = r_username;
+            cancel = true;
+        }
+        else if (TextUtils.isEmpty(Password)){
             password.setError("This field cannot be blank");
             focusView = password;
             cancel = true;
         }
-
         else if (TextUtils.isEmpty(Confirm_Password)) {
             confirm_password.setError("This field cannot be blank");
             focusView = confirm_password;
             cancel = true;
         }
-
         else if(!isPasswordMatch(Password, Confirm_Password)){
             password.setError("Password does not match");
             confirm_password.setError("Password does not match");
             focusView = confirm_password;
             cancel = true;
         }
-
-        else if (TextUtils.isEmpty(Username)) {
-            r_username.setError("This field cannot be blank");
-            focusView = r_username;
-            cancel = true;
-        }
-
-        else if (TextUtils.isEmpty(Firstname)) {
-            first_name.setError("This field cannot be blank");
-            focusView = first_name;
-            cancel = true;
-        }
-
-        else if (TextUtils.isEmpty(Lastname)) {
-            last_name.setError("This field cannot be blank");
-            focusView = last_name;
-            cancel = true;
-        }
-
-        else if (TextUtils.isEmpty(Email)) {
-            r_email.setError("This field cannot be blank");
-            focusView = r_email;
-            cancel = true;
-        }
-
         else if (isPasswordSameWithUsername(Password, Username)){
             password.setError("Password should not contain username");
             focusView = password;
             cancel = true;
         }
-
         else if (!isPasswordHasMixUpperLowerNumber(Password)){
             password.setError("Your password must be at least 8 characters long, contain at least one number and have a mixture of uppercase and lowercase letters");
             focusView = password;
             cancel = true;
         }
-
-        else{
-            if (cancel) {
-                focusView.requestFocus();
-            } else {
-
-                if(ICM.isNetworkAvailable(this)){
-                    mAuthTask = new UserRegisterTask(Username, Password, Firstname, Lastname, Email, this);
-                    mAuthTask.execute((Void) null);
-                }
+        if (cancel) {
+            focusView.requestFocus();
+        } else {
+            if(ICM.isNetworkAvailable(this)){
+                mAuthTask = new UserRegisterTask(Username, Password, Firstname, Lastname, Email, this);
+                mAuthTask.execute((Void) null);
             }
         }
     }
+
 
     private boolean isPasswordMatch(String password, String confirm_password){
         return password.equals(confirm_password);
