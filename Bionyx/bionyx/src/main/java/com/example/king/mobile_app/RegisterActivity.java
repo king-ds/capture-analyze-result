@@ -27,27 +27,27 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.regex.Pattern;
 
 
 public class RegisterActivity extends BaseActivity implements AsyncResponse {
 
     //Declare all variables needed.
+    private InternetConnectionManager ICM;
 
     //For Authentication Related Stuff
     private static final String TOKEN_URL = "http://"+currentIp+"/register/";
     private static final String Success_Message = "Successfully Register";
-    private static final String Failures_Message = "Something went wrong";
+    private static final String Failures_Message = "Check your internet connection";
     private UserRegisterTask mAuthTask = null;
+
     //For Registration Field
     private EditText r_username, first_name, last_name, r_email, password, confirm_password;
     private Button Register;
+
     //For Views
     private static ProgressDialog mProgressDialog;
     private View focusView = null;
-    private View progressView, registrationView;
-    //For Cancellation
-    private boolean cancel = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +55,7 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
         setContentView(R.layout.activity_register);
 
         //Assign the declared variables.
+        ICM = new InternetConnectionManager();
         r_username = (EditText)findViewById(R.id.etUsername);
         password = (EditText)findViewById(R.id.etPassword);
         confirm_password = (EditText)findViewById(R.id.etConfirm_Password);
@@ -62,7 +63,6 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
         last_name = (EditText)findViewById(R.id.etLastName);
         r_email = (EditText)findViewById(R.id.etEmail);
         Register = (Button)findViewById(R.id.btnRegister);
-        registrationView = findViewById(R.id.registration_form);
 
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,17 +71,15 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
 
             }
         });
-
     }
 
     private void initiateRegister() {
 
-        //If user is not very patient
+        boolean cancel = false;
         if(mAuthTask != null){
             return;
         }
         //Reset Errors.
-
         r_username.setError(null);
         password.setError(null);
         first_name.setError(null);
@@ -95,10 +93,28 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
         String Firstname = first_name.getText().toString();
         String Lastname = last_name.getText().toString();
         String Email = r_email.getText().toString();
-//        System.out.println(username);
 
-        //Check for the validity of password
-        if (TextUtils.isEmpty(Password)){
+        if (TextUtils.isEmpty(Firstname)) {
+            first_name.setError("This field cannot be blank");
+            focusView = first_name;
+            cancel = true;
+        }
+        else if (TextUtils.isEmpty(Lastname)) {
+            last_name.setError("This field cannot be blank");
+            focusView = last_name;
+            cancel = true;
+        }
+        else if (TextUtils.isEmpty(Email)) {
+            r_email.setError("This field cannot be blank");
+            focusView = r_email;
+            cancel = true;
+        }
+        else if (TextUtils.isEmpty(Username)) {
+            r_username.setError("This field cannot be blank");
+            focusView = r_username;
+            cancel = true;
+        }
+        else if (TextUtils.isEmpty(Password)){
             password.setError("This field cannot be blank");
             focusView = password;
             cancel = true;
@@ -108,94 +124,71 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
             focusView = confirm_password;
             cancel = true;
         }
-
-        else if(isPasswordValid(Password)){
-            password.setError("Must be at least 8 characters");
-            focusView = password;
-            cancel = true;
-        }
         else if(!isPasswordMatch(Password, Confirm_Password)){
             password.setError("Password does not match");
             confirm_password.setError("Password does not match");
             focusView = confirm_password;
             cancel = true;
         }
-
-        else if (TextUtils.isEmpty(Username)) {
-            r_username.setError("This field cannot be blank");
-            focusView = r_username;
+        else if (isPasswordSameWithUsername(Password, Username)){
+            password.setError("Password should not contain username");
+            focusView = password;
             cancel = true;
         }
-
-        else if (TextUtils.isEmpty(Firstname)) {
-            first_name.setError("This field cannot be blank");
-            focusView = first_name;
+        else if (!isPasswordHasMixUpperLowerNumber(Password)){
+            password.setError("Your password must be at least 8 characters long, contain at least one number and have a mixture of uppercase and lowercase letters");
+            focusView = password;
             cancel = true;
         }
-
-        else if (TextUtils.isEmpty(Lastname)) {
-            last_name.setError("This field cannot be blank");
-            focusView = last_name;
-            cancel = true;
-        }
-
-        else if (TextUtils.isEmpty(Email)) {
-            r_email.setError("This field cannot be blank");
-            focusView = r_email;
-            cancel = true;
-        }
-
-        else{
-
-            if (cancel) {
-                focusView.requestFocus();
-            } else {
-                //showProgress(true);
+        if (cancel) {
+            focusView.requestFocus();
+        } else {
+            if(ICM.isNetworkAvailable(this)){
                 mAuthTask = new UserRegisterTask(Username, Password, Firstname, Lastname, Email, this);
                 mAuthTask.execute((Void) null);
             }
         }
     }
 
-    private boolean isPasswordValid(String password) {
-        return password.length() < 4;
-    }
 
     private boolean isPasswordMatch(String password, String confirm_password){
         return password.equals(confirm_password);
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+    private boolean isPasswordSameWithUsername(String password, String username){
+        return password.equals(username);
+    }
 
-            progressView.setVisibility(show ? View.GONE : View.VISIBLE);
-            registrationView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    registrationView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
+    private boolean isPasswordHasMixUpperLowerNumber(String password) {
 
-            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            progressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    progressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            registrationView.setVisibility(show ? View.GONE : View.VISIBLE);
+        char ch;
+        boolean uppercaseFlag = false;
+        boolean lowerCaseFlag = false;
+        boolean numberFlag = false;
+        boolean lengthFlag = false;
+        boolean success = false;
+
+        if (password.length()> 8){
+            lengthFlag = true;
         }
+
+        for (int i = 0; i < password.length(); i++) {
+
+            ch = password.charAt(i);
+            if (Character.isDigit(ch)) {
+                numberFlag = true;
+            }
+            else if (Character.isUpperCase(ch)) {
+                uppercaseFlag = true;
+            }
+            else if (Character.isLowerCase(ch)) {
+                lowerCaseFlag = true;
+            }
+            if (numberFlag && uppercaseFlag && lowerCaseFlag && lengthFlag) {
+                success = true;
+            }
+        }
+        return success;
     }
 
     public void processFinish(String response){
@@ -364,12 +357,12 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
             mProgressDialog.dismiss();
             if (this.success) {
                 delegate.processFinish(Success_Message);
-//            }
-//            else{
-//                Log.d("RegisterActivity", response);
-//                delegate.processFinish(Failures_Message);
-//            }
             }
+            else{
+                Log.d("RegisterActivity", response);
+                delegate.processFinish(Failures_Message);
+            }
+
         }
         @Override
         protected void onCancelled(){
