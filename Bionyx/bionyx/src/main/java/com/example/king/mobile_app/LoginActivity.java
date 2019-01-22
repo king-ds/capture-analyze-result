@@ -40,7 +40,7 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
     //Message for MainActivity
     public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
     //Authentication Stuff
-    private static final String AUTH_TOKEN_URL = "http://"+currentIp+"/authenticate/";
+    private static final String AUTH_TOKEN_URL = "http://"+currentIp+"/api/authenticate/";
     private UserLoginTask mAuthTask = null;
 
     // UI references
