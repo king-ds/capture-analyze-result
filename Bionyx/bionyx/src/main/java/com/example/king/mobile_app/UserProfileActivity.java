@@ -48,7 +48,7 @@ public class UserProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ImageLoader imgLoader, imageLoader;
-    private String SERVER_URL = "http://"+currentIp+"/postAvatar/";
+    private String SERVER_URL = "http://"+currentIp+"/api/postAvatar/";
     private String AVATAR_URL = "";
     private String user_id = "";
     private String username = "";
@@ -62,7 +62,6 @@ public class UserProfileActivity extends AppCompatActivity
     private ImageView Profile_Pic;
     private static final int PICK_IMAGE = 1;
     private static final int PICK_CAMERA_IMAGE = 2;
-    String realPath;
     private Uri mCurrentImageUri;
     private String mCurrentPhotoPath;
     private String mCurrentPhotoName;
@@ -164,7 +163,7 @@ public class UserProfileActivity extends AppCompatActivity
         //Create the storage directory if it does not exist
         if(!imgDir.exists()){
             if(!imgDir.mkdir()){
-                Log.e("Finger Nails", "Oops! Failed create Finger Nails directory");
+                Log.e("Profile Picture", "Oops! Failed create Profile Picture directory");
                 return  null;
             }
         }
