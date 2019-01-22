@@ -3,7 +3,8 @@ package com.example.king.mobile_app;
 // --- PDF GENERATORS ---
 //
 import android.app.ProgressDialog;
-        import android.content.SharedPreferences;
+import android.content.Intent;
+import android.content.SharedPreferences;
 
         import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,11 +15,14 @@ import java.util.ArrayList;
 
         import android.os.AsyncTask;
         import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
-        import android.widget.Button;
+import android.view.View;
+import android.widget.Button;
         import android.widget.ListView;
+import android.widget.TextView;
 
-        import org.json.JSONArray;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,20 +54,19 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
     static String STATUS = "status";
     static String DISEASES = "diseases";
     static String FILTERED_IMAGE = "filtered_image";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
 
-
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
 
         this.username = prefs.getString("username", "");
         System.out.println(username);
-        this.TRANSACTION_HISTORY_URL = "http://"+currentIp+"/history/"+username;
+        this.TRANSACTION_HISTORY_URL = "http://"+currentIp+"/api/history/" + username;
         new GetTransactionHistory().execute();
-
 
 
     }
@@ -79,8 +82,10 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
      */
     public class GetTransactionHistory extends AsyncTask<Void, Void, Void> {
 
+        boolean isEmpty = true;
+
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             super.onPreExecute();
             //Create process dialog
             mProgressDialog = new ProgressDialog(HistoryActivity.this);
@@ -95,6 +100,7 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
             mProgressDialog.show();
 
         }
+
         @Override
         protected Void doInBackground(Void... params) {
             String inputLine;
@@ -133,34 +139,33 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
                 is.close();
                 //Set our result equal to string builder
                 response = sb.toString();
-                System.out.println(response);
-                try {
-
-                    JSONArray jsonarray = new JSONArray(response);
-
-                    for(int i = 0; i<jsonarray.length(); i++){
-                        HashMap<String, String> map = new HashMap<String, String>();
-                        jsonobject = jsonarray.getJSONObject(i);
-
-                        //Retrieve JSON Objects
-                        map.put("id", jsonobject.getString("id"));
-                        map.put("image", jsonobject.getString("image"));
-                        map.put("owner", jsonobject.getString("owner"));
-                        map.put("uploaded", jsonobject.getString("uploaded"));
-                        map.put("BeauLines", jsonobject.getString("beau_lines"));
-                        map.put("ClubbedNails", jsonobject.getString("clubbed_nails"));
-                        map.put("Healthy", jsonobject.getString("healthy"));
-                        map.put("Splinter", jsonobject.getString("splinter_hemorrhage"));
-                        map.put("TerryNails", jsonobject.getString("terry_nails"));
-                        map.put("YellowNails", jsonobject.getString("yellow_nails"));
-                        map.put("status", jsonobject.getString("status"));
-                        map.put("diseases", jsonobject.getString("diseases"));
-                        map.put("filtered_image", jsonobject.getString("filtered_image"));
-                        arraylist.add(map);
+                if (response != null) {
+                    isEmpty = false;
+                    try {
+                        JSONArray jsonarray = new JSONArray(response);
+                        for (int i = 0; i < jsonarray.length(); i++) {
+                            HashMap<String, String> map = new HashMap<String, String>();
+                            jsonobject = jsonarray.getJSONObject(i);
+                            //Retrieve JSON Objects
+                            map.put("id", jsonobject.getString("id"));
+                            map.put("image", jsonobject.getString("image"));
+                            map.put("owner", jsonobject.getString("owner"));
+                            map.put("uploaded", jsonobject.getString("uploaded"));
+                            map.put("BeauLines", jsonobject.getString("beau_lines"));
+                            map.put("ClubbedNails", jsonobject.getString("clubbed_nails"));
+                            map.put("Healthy", jsonobject.getString("healthy"));
+                            map.put("Splinter", jsonobject.getString("splinter_hemorrhage"));
+                            map.put("TerryNails", jsonobject.getString("terry_nails"));
+                            map.put("YellowNails", jsonobject.getString("yellow_nails"));
+                            map.put("status", jsonobject.getString("status"));
+                            map.put("diseases", jsonobject.getString("diseases"));
+                            map.put("filtered_image", jsonobject.getString("filtered_image"));
+                            arraylist.add(map);
+                        }
+                    } catch (JSONException e) {
+                        Log.e("Error", e.getMessage());
+                        e.printStackTrace();
                     }
-                }catch (JSONException e){
-                    Log.e("Error", e.getMessage());
-                    e.printStackTrace();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -171,14 +176,35 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
 
         @Override
         protected void onPostExecute(Void args) {
-            //Locate the listview in listview_main.xml
-            listview = (ListView)findViewById(R.id.listview);
-            //Pass the results into ListViewAdapterter.java
-            adapter = new ListViewAdapter(HistoryActivity.this, arraylist);
-            //Set the adapter to the ListView
-            listview.setAdapter(adapter);
-            //Close the progressdialog
-            mProgressDialog.dismiss();
+
+            if (isEmpty == true) {
+                String message = "No history yet";
+                mProgressDialog.dismiss();
+                AlertDialog.Builder PopupWindow = new AlertDialog.Builder(HistoryActivity.this);
+                View empty_view = getLayoutInflater().inflate(R.layout.activity_history_emptymessage, null);
+                TextView empty_message = (TextView) empty_view.findViewById(R.id.tvMessage);
+                Button okay_button = (Button) empty_view.findViewById(R.id.btnOkay);
+
+                empty_message.setText(message);
+                PopupWindow.setView(empty_view);
+                AlertDialog dialog = PopupWindow.create();
+                dialog.show();
+
+                okay_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        HistoryActivity.this.finish();
+                        Intent intent = new Intent(HistoryActivity.this, DashboardActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
+            } else {
+                listview = (ListView) findViewById(R.id.listview);
+                adapter = new ListViewAdapter(HistoryActivity.this, arraylist);
+                listview.setAdapter(adapter);
+                mProgressDialog.dismiss();
+            }
         }
     }
 }
