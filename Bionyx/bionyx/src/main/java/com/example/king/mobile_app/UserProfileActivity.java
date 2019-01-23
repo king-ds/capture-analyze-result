@@ -59,13 +59,14 @@ public class UserProfileActivity extends AppCompatActivity
     private String token = "";
     private String processed_images = "";
     private TextView FirstName, LastName, Email, Username, DateJoined, UserID, Processed_Images;
-    private ImageView Profile_Pic;
+    private ImageView Profile_Pic, Nav_Avatar;
     private static final int PICK_IMAGE = 1;
     private static final int PICK_CAMERA_IMAGE = 2;
     private Uri mCurrentImageUri;
     private String mCurrentPhotoPath;
     private String mCurrentPhotoName;
     private static ProgressDialog mProgressDialog;
+    private InternetConnectionManager ICM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,7 @@ public class UserProfileActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ICM = new InternetConnectionManager();
         imageLoader = new ImageLoader(this);
         imgLoader = new ImageLoader(this);
         FirstName = (TextView)findViewById(R.id.tv_FirstName);
@@ -107,21 +109,21 @@ public class UserProfileActivity extends AppCompatActivity
 
         imgLoader.DisplayImage(AVATAR_URL, Profile_Pic);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         View headerView = navigationView.getHeaderView(0);
-        TextView Nav_UserName = (TextView) headerView.findViewById(R.id.tv_Nav_UserName);
+        TextView Nav_UserName = headerView.findViewById(R.id.tv_Nav_UserName);
         Nav_UserName.setText(username);
-        TextView Nav_Email = (TextView)headerView.findViewById(R.id.tv_Nav_Email);
+        TextView Nav_Email = headerView.findViewById(R.id.tv_Nav_Email);
         Nav_Email.setText(email);
-        ImageView Nav_Avatar = (ImageView)headerView.findViewById(R.id.tv_Nav_Avatar);
+        Nav_Avatar = headerView.findViewById(R.id.tv_Nav_Avatar);
         imgLoader.DisplayImage(AVATAR_URL, Nav_Avatar);
 
         Profile_Pic.bringToFront();
@@ -133,13 +135,14 @@ public class UserProfileActivity extends AppCompatActivity
                 View SelectionView = getLayoutInflater().inflate(R.layout.activity_selection_imageview, null);
 
                 PopupWindow.setView(SelectionView);
-                AlertDialog dialog = PopupWindow.create();
+                final AlertDialog dialog = PopupWindow.create();
                 dialog.show();
                 Button Take_Picture = (Button)SelectionView.findViewById(R.id.btnTakePicture);
                 Take_Picture.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         openCamera(1);
+                        dialog.dismiss();
                     }
                 });
                 Button Choose_from_gallery = (Button)SelectionView.findViewById(R.id.btnChooseFromGallery);
@@ -147,20 +150,30 @@ public class UserProfileActivity extends AppCompatActivity
                     @Override
                     public void onClick(View v) {
                         openGallery();
+                        dialog.dismiss();
+                    }
+                });
+                Button View_photo = (Button)SelectionView.findViewById(R.id.btnViewPicture);
+                View_photo.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog.Builder PopupWindow = new AlertDialog.Builder(UserProfileActivity.this);
+                        View view_photo = getLayoutInflater().inflate(R.layout.activity_view_photo, null);
+                        PopupWindow.setView(view_photo);
+                        final AlertDialog view_photo_dialog = PopupWindow.create();
+                        view_photo_dialog.show();
+                        ImageView profile_photo = view_photo.findViewById(R.id.iv_ViewPhoto);
+                        imgLoader.DisplayImage(AVATAR_URL, profile_photo);
                     }
                 });
             }
         });
-
     }
 
     private File createFileDirectory() throws IOException{
 
-        String folder = "Bionyx/Profile_Pic";
-
+        String folder = "Bionyx/DCIM/Profile_Pic";
         File imgDir = new File(Environment.getExternalStorageDirectory(), folder);
-
-        //Create the storage directory if it does not exist
         if(!imgDir.exists()){
             if(!imgDir.mkdir()){
                 Log.e("Profile Picture", "Oops! Failed create Profile Picture directory");
@@ -171,38 +184,24 @@ public class UserProfileActivity extends AppCompatActivity
         return imgDir;
     }
 
-
-
     //Create image file name
     private File createImageFile() throws IOException {
 
-        //Set the date
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        //Assign an image file name
         String imageFileName = "IMG_" + timestamp + "_";
-        //Directory for image
         File imgDir = createFileDirectory();
-        //Create Temporary File with suffix .jpg
         File imageF = File.createTempFile(imageFileName, ".jpg", imgDir);
 
-        //return the created image
         return imageF;
     }
 
     //Set up the created image
     private File setUpPhotoFile() throws IOException {
 
-        //Assign the created image to variable file "f"
         File f = createImageFile();
-        //Get and assign the path of an image
         mCurrentPhotoPath = f.getAbsolutePath();
-        //Get and assign the name of an image
         mCurrentPhotoName = f.getName();
-        //Get and assign the uri of an image
-//        mCurrentImageUri = Uri.fromFile(f);
         mCurrentImageUri = FileProvider.getUriForFile(UserProfileActivity.this, "com.example.king.mobile_app.provider", f );
-
-
 
         return f;
 
@@ -210,36 +209,25 @@ public class UserProfileActivity extends AppCompatActivity
 
     public void openCamera(int actionCode){
 
-        //Access Camera
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        //switch case using action code
         switch (actionCode) {
-
-            //case 1: take a photo
             case 1:
-
-                //Reset
                 File f = null;
-
                 try {
-                    //Get the photo
                     f = setUpPhotoFile();
                     mCurrentPhotoPath = f.getAbsolutePath();
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentImageUri);
-
                 } catch (IOException e) {
                     e.printStackTrace();
                     f = null;
                     mCurrentPhotoPath = null;
                 }
                 break;
-
             default:
                 break;
-        }//switch
+        }
         startActivityForResult(takePictureIntent, PICK_CAMERA_IMAGE);
-
     }
 
     public void openGallery(){
@@ -264,7 +252,7 @@ public class UserProfileActivity extends AppCompatActivity
         Button Cancel = (Button)ProfilePicView.findViewById(R.id.btnCancelProfilePic);
 
         PopupWindow.setView(ProfilePicView);
-        AlertDialog dialog = PopupWindow.create();
+        final AlertDialog dialog = PopupWindow.create();
 
 
         switch (requestCode) {
@@ -324,64 +312,56 @@ public class UserProfileActivity extends AppCompatActivity
                  @Override
                  public void onClick(View v) {
                      uploadImg(selectedFilePath);
+                     dialog.dismiss();
 
                  }
              });
+
         Cancel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                dialog.dismiss();
             }
         });
 
         }
 
     private void uploadImg(String filepath){
-        //iCaptured.setImageURI(Uri.parse(mCurrentPhotoPath));
-        //iCaptured.setRotation(90);
+
         final String selectedFilePath = filepath;
-
-        System.out.println("The image file path is " + selectedFilePath);
-
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
+        if(ICM.isNetworkAvailable(this)) {
             new UserProfileActivity.UploadProfilePicTask().execute(selectedFilePath);
-            System.out.println("Uploading image....." + selectedFilePath);
-        } else {
-            System.out.println("No network connection");
         }
     }
 
-    private class UploadProfilePicTask extends AsyncTask<String, String, String>{
+    private class UploadProfilePicTask extends AsyncTask<String, String, String> {
+
+        boolean isSuccess = false;
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             super.onPreExecute();
-            //Create process dialog
             mProgressDialog = new ProgressDialog(UserProfileActivity.this);
-            //Set Progress dialog title
             mProgressDialog.setTitle("Updating Profile Picture");
-            //Set progress dialog message
             mProgressDialog.setMessage("Loading...");
             mProgressDialog.setIndeterminate(true);
-            //Show progress dialog
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setCanceledOnTouchOutside(false);
             mProgressDialog.show();
-
         }
 
         @Override
-        protected String doInBackground(String... paths){
+        protected String doInBackground(String... paths) {
 
-            try{
+            try {
                 String resp = uploadFile(paths[0]);
-                return ""+resp;
-            }catch (Exception e){
+                return "" + resp;
+            } catch (Exception e) {
                 return "Unable to upload image";
             }
         }
 
 
-        public String uploadFile(final String selectedFilePath){
+        public String uploadFile(final String selectedFilePath) {
 
             int serverResponseCode = 0;
             String Results = "";
@@ -393,15 +373,15 @@ public class UserProfileActivity extends AppCompatActivity
 
             int bytesRead, bytesAvailable, bufferSize;
             byte[] buffer;
-            int maxBufferSize = 10*1024*1024;
+            int maxBufferSize = 10 * 1024 * 1024;
             File selectedFile = new File(selectedFilePath);
 
             String[] parts = selectedFilePath.split("/");
             final String fileName = parts[parts.length - 1];
 
-            if(!selectedFile.isFile()){
+            if (!selectedFile.isFile()) {
 
-                Log.e("UserProfileActivity", "Source File Doesn't Exist: "+selectedFilePath);
+                Log.e("UserProfileActivity", "Source File Doesn't Exist: " + selectedFilePath);
                 return selectedFilePath;
 
             } else {
@@ -431,16 +411,16 @@ public class UserProfileActivity extends AppCompatActivity
 
                     //returns no. of bytes present in fileInputStream
                     bytesAvailable = fileInputStream.available();
-                    System.out.println("Bytes Available "+bytesAvailable);
+                    System.out.println("Bytes Available " + bytesAvailable);
                     //selecting the buffer size as minimum of available bytes or 1MB
                     bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                    System.out.println("Buffer Size: "+bufferSize);
+                    System.out.println("Buffer Size: " + bufferSize);
                     //setting the buffer as byte array of size of bufferSize
                     buffer = new byte[bufferSize];
 
                     //read bytes from FileInputStream(from 0th index to bufferSize)
                     bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-                    System.out.println("Total bytes: "+bytesRead);
+                    System.out.println("Total bytes: " + bytesRead);
 
                     //loop repeats till bytesRead = -1, i.e., no bytes are left to read
                     while (bytesRead > 0) {
@@ -453,7 +433,7 @@ public class UserProfileActivity extends AppCompatActivity
                         bytesAvailable = fileInputStream.available();
                         bufferSize = Math.min(bytesAvailable, maxBufferSize);
                         bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-                        System.out.println("Bytes Available: "+bytesAvailable+"\nBuffer Size: "+bufferSize+"\nBytes Read: "+bytesRead);
+                        System.out.println("Bytes Available: " + bytesAvailable + "\nBuffer Size: " + bufferSize + "\nBytes Read: " + bytesRead);
                     }
                     dataOutputStream.writeBytes(lineEnd);
                     dataOutputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
@@ -468,22 +448,19 @@ public class UserProfileActivity extends AppCompatActivity
                     Log.i("UserProfileActivity", "Server Response is " + serverResponseMessage + ": " + serverResponseCode);
 
 
-
                     //response code of 200 indicates the server status is ok
-                    if (serverResponseCode == 200) {
-
+                    if (serverResponseCode == 201) {
+                        isSuccess = true;
                         Log.e("UserProfileActivity", "File upload completed.\n\n" + fileName);
                         BufferedReader br = new BufferedReader(new InputStreamReader((connection.getInputStream())));
                         StringBuilder sb = new StringBuilder();
                         String output;
-                        while((output = br.readLine()) != null){
+                        while ((output = br.readLine()) != null) {
                             sb.append(output);
                         }
                         String response = sb.toString();
                         System.out.println(response);
-
                         br.close();
-
                     }
 
                     //closing the input and output streams
@@ -491,38 +468,41 @@ public class UserProfileActivity extends AppCompatActivity
                     dataOutputStream.flush();
                     dataOutputStream.close();
 
-                }catch (FileNotFoundException e){
+                } catch (FileNotFoundException e) {
                     e.printStackTrace();
                     Log.e("UserProfileActivity", "File Not Found");
-                }catch (MalformedURLException e){
+                } catch (MalformedURLException e) {
                     e.printStackTrace();
                     Log.e("UserProfileActivity", "URL Error!");
-                }catch (IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                     Log.e("UserProfileActivity", "Cannot Read/Write File");
                 }
                 return Results;
             }
         }
+
         @Override
         protected void onPostExecute(String result) {
 
+            String message;
             mProgressDialog.dismiss();
-            imgLoader.clearCache();
-            imgLoader.DisplayImage(AVATAR_URL, Profile_Pic);
 
+            if (isSuccess == true) {
 
-//            AlertDialog.Builder PopupWindow = new AlertDialog.Builder(UserProfileActivity.this);
-//            View ResultView = getLayoutInflater().inflate(R.layout.activity_nail_result, null);
-//            TextView ResultText = (TextView)ResultView.findViewById(R.id.tvResult);
-//
-//            PopupWindow.setView(ResultView);
-//            AlertDialog dialog = PopupWindow.create();
-//            dialog.show();
-//            ResultText.setText(result);
+                imgLoader.clearCache();
+                imgLoader.DisplayImage(AVATAR_URL, Profile_Pic);
+                imgLoader.DisplayImage(AVATAR_URL, Nav_Avatar);
+                message = "Your profile photo has uploaded";
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+            } else {
+                mProgressDialog.dismiss();
+                message = "Please check your internet connection";
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            }
         }
     }
-
 
     public String getPath(Uri uri) {
         String[] projection = { MediaStore.Images.Media.DATA };
@@ -537,8 +517,6 @@ public class UserProfileActivity extends AppCompatActivity
         } else
             return null;
     }
-
-
 
     @Override
     public void onBackPressed() {
@@ -602,7 +580,6 @@ public class UserProfileActivity extends AppCompatActivity
 
                 break;
         }
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
