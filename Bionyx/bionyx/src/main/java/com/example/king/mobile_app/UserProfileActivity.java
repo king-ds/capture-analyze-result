@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,11 +25,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -36,6 +41,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -49,6 +55,7 @@ public class UserProfileActivity extends AppCompatActivity
 
     private ImageLoader imgLoader, imageLoader;
     private String SERVER_URL = "http://"+currentIp+"/api/postAvatar/";
+    private String UPDATE_USER = "http://"+currentIp+"/api/updateUser/";
     private String AVATAR_URL = "";
     private String user_id = "";
     private String username = "";
@@ -67,6 +74,7 @@ public class UserProfileActivity extends AppCompatActivity
     private String mCurrentPhotoName;
     private static ProgressDialog mProgressDialog;
     private InternetConnectionManager ICM;
+    private Menu action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +86,11 @@ public class UserProfileActivity extends AppCompatActivity
         ICM = new InternetConnectionManager();
         imageLoader = new ImageLoader(this);
         imgLoader = new ImageLoader(this);
-        FirstName = (TextView)findViewById(R.id.tv_FirstName);
-        LastName = (TextView)findViewById(R.id.tv_LastName);
-        Email = (TextView)findViewById(R.id.tv_Email);
-        Username = (TextView)findViewById(R.id.tv_Username);
-        UserID = (TextView)findViewById(R.id.tv_UserID);
+        FirstName = findViewById(R.id.tv_FirstName);
+        LastName = findViewById(R.id.tv_LastName);
+        Email = findViewById(R.id.tv_Email);
+        Username = findViewById(R.id.tv_Username);
+        UserID = findViewById(R.id.tv_UserID);
         DateJoined = (TextView)findViewById(R.id.tv_DateJoined);
         Profile_Pic = (ImageView) findViewById(R.id.iv_Avatar);
         Processed_Images = (TextView)findViewById(R.id.tv_ProcessedImages);
@@ -97,15 +105,10 @@ public class UserProfileActivity extends AppCompatActivity
         this.token = prefs.getString("token", "");
         this.AVATAR_URL = prefs.getString("avatar_url", "");
         this.processed_images = prefs.getString("processed_images", "");
+        this.UPDATE_USER += user_id+"/";
 
-
-        FirstName.setText(first_name);
-        LastName.setText(last_name);
-        Email.setText(email);
-        UserID.setText(user_id);
-        Username.setText(username);
-        DateJoined.setText(datejoined);
-        Processed_Images.setText(processed_images);
+        setUserDetails();
+        setDisabledEditText();
 
         imgLoader.DisplayImage(AVATAR_URL, Profile_Pic);
 
@@ -130,46 +133,89 @@ public class UserProfileActivity extends AppCompatActivity
         Profile_Pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                AlertDialog.Builder PopupWindow = new AlertDialog.Builder(UserProfileActivity.this);
-                View SelectionView = getLayoutInflater().inflate(R.layout.activity_selection_imageview, null);
-
-                PopupWindow.setView(SelectionView);
-                final AlertDialog dialog = PopupWindow.create();
-                dialog.show();
-                Button Take_Picture = (Button)SelectionView.findViewById(R.id.btnTakePicture);
-                Take_Picture.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openCamera(1);
-                        dialog.dismiss();
-                    }
-                });
-                Button Choose_from_gallery = (Button)SelectionView.findViewById(R.id.btnChooseFromGallery);
-                Choose_from_gallery.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openGallery();
-                        dialog.dismiss();
-                    }
-                });
-                Button View_photo = (Button)SelectionView.findViewById(R.id.btnViewPicture);
-                View_photo.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        AlertDialog.Builder PopupWindow = new AlertDialog.Builder(UserProfileActivity.this);
-                        View view_photo = getLayoutInflater().inflate(R.layout.activity_view_photo, null);
-                        PopupWindow.setView(view_photo);
-                        final AlertDialog view_photo_dialog = PopupWindow.create();
-                        view_photo_dialog.show();
-                        ImageView profile_photo = view_photo.findViewById(R.id.iv_ViewPhoto);
-                        imgLoader.DisplayImage(AVATAR_URL, profile_photo);
-                    }
-                });
+                openSelection();
             }
         });
     }
 
+    private void setUserDetails(){
+
+        FirstName.setText(first_name);
+        LastName.setText(last_name);
+        Email.setText(email);
+        UserID.setText(user_id);
+        Username.setText(username);
+        DateJoined.setText(datejoined);
+        Processed_Images.setText(processed_images);
+    }
+
+    private void setDisabledEditText(){
+
+        FirstName.setEnabled(false);
+        LastName.setEnabled(false);
+        Email.setEnabled(false);
+        Username.setEnabled(false);
+        FirstName.setFocusable(false);
+        LastName.setFocusable(false);
+        Email.setFocusable(false);
+        Username.setFocusable(false);
+    }
+
+    private void setEnabledEditText(){
+
+        FirstName.setEnabled(true);
+        LastName.setEnabled(true);
+        Email.setEnabled(true);
+        Username.setEnabled(true);
+        FirstName.setFocusableInTouchMode(true);
+        LastName.setFocusableInTouchMode(true);
+        Email.setFocusableInTouchMode(true);
+        Username.setFocusableInTouchMode(true);
+    }
+
+    /*
+    Add/Update profile picture by using camera or gallery or view photo
+     */
+    private void openSelection(){
+        AlertDialog.Builder PopupWindow = new AlertDialog.Builder(UserProfileActivity.this);
+        View SelectionView = getLayoutInflater().inflate(R.layout.activity_selection_imageview, null);
+        PopupWindow.setView(SelectionView);
+        final AlertDialog dialog = PopupWindow.create();
+        dialog.show();
+        Button Take_Picture = (Button)SelectionView.findViewById(R.id.btnTakePicture);
+        Take_Picture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openCamera(1);
+                dialog.dismiss();
+            }
+        });
+        Button Choose_from_gallery = (Button)SelectionView.findViewById(R.id.btnChooseFromGallery);
+        Choose_from_gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+                dialog.dismiss();
+            }
+        });
+        Button View_photo = (Button)SelectionView.findViewById(R.id.btnViewPicture);
+        View_photo.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder PopupWindow = new AlertDialog.Builder(UserProfileActivity.this);
+                View view_photo = getLayoutInflater().inflate(R.layout.activity_view_photo, null);
+                PopupWindow.setView(view_photo);
+                final AlertDialog view_photo_dialog = PopupWindow.create();
+                view_photo_dialog.show();
+                ImageView profile_photo = view_photo.findViewById(R.id.iv_ViewPhoto);
+                imgLoader.DisplayImage(AVATAR_URL, profile_photo);
+            }
+        });
+    }
+
+    /*
+    Create file directory for profile picture
+     */
     private File createFileDirectory() throws IOException{
 
         String folder = "Bionyx/DCIM/Profile_Pic";
@@ -184,7 +230,10 @@ public class UserProfileActivity extends AppCompatActivity
         return imgDir;
     }
 
-    //Create image file name
+
+    /*
+    Create image file to be saved from directory
+     */
     private File createImageFile() throws IOException {
 
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -195,18 +244,21 @@ public class UserProfileActivity extends AppCompatActivity
         return imageF;
     }
 
-    //Set up the created image
+    /*
+    Setup the created image to get uri and path
+     */
     private File setUpPhotoFile() throws IOException {
 
         File f = createImageFile();
         mCurrentPhotoPath = f.getAbsolutePath();
         mCurrentPhotoName = f.getName();
         mCurrentImageUri = FileProvider.getUriForFile(UserProfileActivity.this, "com.example.king.mobile_app.provider", f );
-
         return f;
-
     }
 
+    /*
+    Function for accessing camera
+     */
     public void openCamera(int actionCode){
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -230,13 +282,19 @@ public class UserProfileActivity extends AppCompatActivity
         startActivityForResult(takePictureIntent, PICK_CAMERA_IMAGE);
     }
 
+    /*
+    Function for accessing gallery
+     */
     public void openGallery(){
 
         mCurrentImageUri = null;
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
-
     }
+
+    /*
+    After capturing image from camera or picking image from gallery
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
@@ -254,7 +312,6 @@ public class UserProfileActivity extends AppCompatActivity
         PopupWindow.setView(ProfilePicView);
         final AlertDialog dialog = PopupWindow.create();
 
-
         switch (requestCode) {
 
             case PICK_IMAGE:
@@ -262,13 +319,11 @@ public class UserProfileActivity extends AppCompatActivity
                 filePath = null;
                 if (resultCode == RESULT_OK) {
                     dialog.show();
-
                     selectedImageUri = data.getData();
                     if(selectedImageUri!=null){
                         try{
                             String filemanagerstring = selectedImageUri.getPath();
                             String selectedImagePath = getPath(selectedImageUri);
-
                             if (selectedImagePath != null) {
                                 filePath = selectedImagePath;
                             } else if (filemanagerstring != null) {
@@ -292,13 +347,11 @@ public class UserProfileActivity extends AppCompatActivity
 
                 filePath = null;
                 if (resultCode == RESULT_OK) {
-
                     dialog.show();
                     selectedImageUri = mCurrentImageUri;
                     filePath = mCurrentPhotoPath;
                     Temp_ProfilePic.setImageURI(selectedImageUri);
                     Temp_ProfilePic.setRotation(90);
-
                 } else if (resultCode == RESULT_CANCELED) {
                     Toast.makeText(this, "Picture was not taken", Toast.LENGTH_SHORT).show();
                 } else {
@@ -306,14 +359,12 @@ public class UserProfileActivity extends AppCompatActivity
                 }
                 break;
              }
-
         final String selectedFilePath = filePath;
         Upload.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
                      uploadImg(selectedFilePath);
                      dialog.dismiss();
-
                  }
              });
 
@@ -322,9 +373,11 @@ public class UserProfileActivity extends AppCompatActivity
                 dialog.dismiss();
             }
         });
+    }
 
-        }
-
+    /*
+    Preparation for uploading image
+     */
     private void uploadImg(String filepath){
 
         final String selectedFilePath = filepath;
@@ -332,7 +385,9 @@ public class UserProfileActivity extends AppCompatActivity
             new UserProfileActivity.UploadProfilePicTask().execute(selectedFilePath);
         }
     }
-
+    /*
+    Asynchronous task for uploading image to django rest api
+     */
     private class UploadProfilePicTask extends AsyncTask<String, String, String> {
 
         boolean isSuccess = false;
@@ -359,7 +414,6 @@ public class UserProfileActivity extends AppCompatActivity
                 return "Unable to upload image";
             }
         }
-
 
         public String uploadFile(final String selectedFilePath) {
 
@@ -447,7 +501,6 @@ public class UserProfileActivity extends AppCompatActivity
                     String serverResponseMessage = connection.getResponseMessage();
                     Log.i("UserProfileActivity", "Server Response is " + serverResponseMessage + ": " + serverResponseCode);
 
-
                     //response code of 200 indicates the server status is ok
                     if (serverResponseCode == 201) {
                         isSuccess = true;
@@ -504,6 +557,101 @@ public class UserProfileActivity extends AppCompatActivity
         }
     }
 
+    private class UpdateUserInformation extends AsyncTask<Void, Void, Void>{
+
+        boolean isUpdated = false;
+        int response_code = 0;
+        String response_message;
+        final String first_name = FirstName.getText().toString().trim();
+        final String last_name = LastName.getText().toString().trim();
+        final String email = Email.getText().toString().trim();
+        final String username = Username.getText().toString().trim();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressDialog = new ProgressDialog(UserProfileActivity.this);
+            mProgressDialog.setTitle("Profile");
+            mProgressDialog.setMessage("Updating...");
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setCanceledOnTouchOutside(false);
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            JSONfunctions parser = new JSONfunctions();
+            JSONObject update = parser.getUpdatedUserInformationObject(first_name, last_name, username, email);
+            String message = update.toString();
+            System.out.println(message);
+
+            try {
+                URL myUrl = new URL(UPDATE_USER);
+                //Create a connection
+                HttpURLConnection connection = (HttpURLConnection) myUrl.openConnection();
+                //Set methods and timeouts
+                connection.setRequestMethod("PUT");
+                connection.setReadTimeout(15000);
+                connection.setConnectTimeout(15000);
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                connection.setFixedLengthStreamingMode(message.getBytes().length);
+                connection.setRequestProperty("Content-Type", "application/json");
+
+                OutputStream os = new BufferedOutputStream(connection.getOutputStream());
+                System.out.println(os);
+                os.write(message.getBytes());
+                os.flush();
+                os.close();
+
+                //Connect to url
+                connection.connect();
+                response_code = connection.getResponseCode();
+                response_message = connection.getResponseMessage();
+                if (response_code == 200) {
+                    isUpdated = true;
+                    Log.e("UserProfileActivity", "Server response message : " + response_message);
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            String message;
+            mProgressDialog.dismiss();
+
+            if(isUpdated){
+                message = "User profile has updated";
+                SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("first_name", first_name);
+                editor.putString("last_name", last_name);
+                editor.putString("email", email);
+                editor.putString("username", username);
+                editor.apply();
+
+                Intent refresh_intent = new Intent(UserProfileActivity.this, UserProfileActivity.class);
+                UserProfileActivity.this.finish();
+                startActivity(refresh_intent);
+
+                Toast.makeText(UserProfileActivity.this, message, Toast.LENGTH_SHORT).show();
+            }else{
+                message = "Check your internet connection";
+                Toast.makeText(UserProfileActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    /*
+    Function for getting path from uri
+     */
     public String getPath(Uri uri) {
         String[] projection = { MediaStore.Images.Media.DATA };
         Cursor cursor = managedQuery(uri, projection, null, null, null);
@@ -518,6 +666,9 @@ public class UserProfileActivity extends AppCompatActivity
             return null;
     }
 
+    /*
+    Override function for touching/clicking back button from phone
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -528,35 +679,83 @@ public class UserProfileActivity extends AppCompatActivity
         }
     }
 
+    /*
+    Side bar menu
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.dashboard, menu);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.edit_save, menu);
+
+        action = menu;
+        action.findItem(R.id.menu_save).setVisible(false);
+        action.findItem(R.id.menu_cancel).setVisible(false);
+
         return true;
     }
 
+    /*
+    Option selected from menu item
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.menu_edit:
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+                setEnabledEditText();
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(Username, InputMethodManager.SHOW_IMPLICIT);
+
+                action.findItem(R.id.menu_edit).setVisible(false);
+                action.findItem(R.id.menu_save).setVisible(true);
+                action.findItem(R.id.menu_cancel).setVisible(true);
+
+                return true;
+
+            case R.id.menu_cancel:
+
+                action.findItem(R.id.menu_edit).setVisible(true);
+                action.findItem(R.id.menu_cancel).setVisible(false);
+                action.findItem(R.id.menu_save).setVisible(false);
+
+                setUserDetails();
+                setDisabledEditText();
+
+                return true;
+
+            case R.id.menu_save:
+
+                new UpdateUserInformation().execute();
+
+                action.findItem(R.id.menu_edit).setVisible(true);
+                action.findItem(R.id.menu_save).setVisible(false);
+                action.findItem(R.id.menu_cancel).setVisible(false);
+
+                setUserDetails();
+                setDisabledEditText();
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
+    /*
+    Get the selected option from menu
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         switch (id){
+
             case R.id.nav_home:
                 Intent iHome = new Intent(UserProfileActivity.this, DashboardActivity.class);
                 startActivity(iHome);
@@ -577,10 +776,8 @@ public class UserProfileActivity extends AppCompatActivity
                 imageLoader.clearCache();
                 Intent iLogin = new Intent(UserProfileActivity.this, LoginActivity.class);
                 startActivity(iLogin);
-
                 break;
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

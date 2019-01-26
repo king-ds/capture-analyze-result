@@ -162,7 +162,7 @@ public class NailAssessmentActivity extends BaseActivity {
         File f = createImageFile();
         mCurrentPhotoPath = f.getAbsolutePath();
         mCurrentPhotoName = f.getName();
-        mCurrentImageUri = Uri.fromFile(f);
+//        mCurrentImageUri = Uri.fromFile(f);
         mCurrentImageUri = FileProvider.getUriForFile(NailAssessmentActivity.this, "com.example.king.mobile_app.provider", f );
 
         return f;
@@ -177,7 +177,8 @@ public class NailAssessmentActivity extends BaseActivity {
         File f = createCroppedImageFile();
         mCurrentThumbPath = f.getAbsolutePath();
         mCurrentCroppedPhotoName = f.getName();
-        mCurrentCroppedImageUri = Uri.fromFile(f);
+//        mCurrentCroppedImageUri = Uri.fromFile(f);
+        mCurrentCroppedImageUri = FileProvider.getUriForFile(NailAssessmentActivity.this, "com.example.king.mobile_app.provider", f );
 
         return f;
     }
