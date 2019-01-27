@@ -1,5 +1,6 @@
 package com.example.king.mobile_app;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,12 +14,19 @@ import java.util.ArrayList;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,12 +35,17 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 
-public class HistoryActivity extends BaseActivity implements AsyncResponse {
 
+import static com.example.king.mobile_app.BaseActivity.currentIp;
+
+public class HistoryActivity extends AppCompatActivity implements AsyncResponse {
+
+    private int i = -1;
     private static String username = "";
     private static String token = "";
     private static String TRANSACTION_HISTORY_URL = "";
     private static ProgressDialog getProgressDialog, delProgressDialog;
+    private SweetAlertDialog pDialog;
     ImageLoader imageLoader;
 
     private Button ClearHistory;
@@ -65,38 +78,8 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
         setContentView(R.layout.activity_history);
 
         imageLoader = new ImageLoader(this);
-        final Button clear_history = (Button)findViewById(R.id.btnClearHistory);
-        clear_history.setVisibility(View.GONE);
-        clear_history.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder selectionWindow = new AlertDialog.Builder(HistoryActivity.this);
-                View clear_history_selection_view = getLayoutInflater().inflate(R.layout.activity_clear_history_selection, null);
-                Button okay_button = (Button)clear_history_selection_view.findViewById(R.id.btnOkay);
-                Button cancel_button =  (Button)clear_history_selection_view.findViewById(R.id.btnCancel);
-
-                selectionWindow.setView(clear_history_selection_view);
-                final AlertDialog selectionDialog = selectionWindow.create();
-                selectionDialog.show();
-                selectionDialog.setCancelable(false);
-                selectionDialog.setCanceledOnTouchOutside(false);
-
-                okay_button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        selectionDialog.dismiss();
-                        new DelTransactionHistory().execute();
-                    }
-                });
-
-                cancel_button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        selectionDialog.dismiss();
-                    }
-                });
-            }
-        });
+        getSupportActionBar().setTitle("History");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -195,7 +178,6 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
 
         @Override
         protected void onPostExecute(Void args) {
-            Button clear_history = (Button)findViewById(R.id.btnClearHistory);
 
             if (isEmpty == true) {
                 System.out.println("Status: "+isEmpty);
@@ -223,7 +205,6 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
                     }
                 });
             } else {
-                clear_history.setVisibility(View.VISIBLE);
                 listview = (ListView) findViewById(R.id.listview);
                 adapter = new ListViewAdapter(HistoryActivity.this, arraylist);
                 listview.setAdapter(adapter);
@@ -244,13 +225,10 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            delProgressDialog = new ProgressDialog(HistoryActivity.this);
-            delProgressDialog.setTitle("History");
-            delProgressDialog.setMessage("Removing...");
-            delProgressDialog.setIndeterminate(false);
-            delProgressDialog.setCancelable(false);
-            delProgressDialog.setCanceledOnTouchOutside(false);
-            delProgressDialog.show();
+
+            pDialog = new SweetAlertDialog(HistoryActivity.this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Removing");
+            pDialog.show();
+            pDialog.setCancelable(false);
         }
 
         @Override
@@ -283,31 +261,102 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
             super.onPostExecute(aVoid);
 
             if (isDeleted == true) {
-                delProgressDialog.dismiss();
-                String message = "You have successfully clear history. Click okay to proceed";
-                AlertDialog.Builder delWindow= new AlertDialog.Builder(HistoryActivity.this);
-                View deleted_view = getLayoutInflater().inflate(R.layout.activity_clear_history, null);
-                TextView deleted_message = (TextView) deleted_view.findViewById(R.id.tvMessage);
-                Button okay_button = (Button)deleted_view.findViewById(R.id.btnOkay);
-
-                deleted_message.setText(message);
-                delWindow.setView(deleted_view);
-                final AlertDialog delDialog = delWindow.create();
-                delDialog.show();
-                delDialog.setCancelable(false);
-                delDialog.setCanceledOnTouchOutside(false);
-
-                okay_button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        delDialog.dismiss();
-                        HistoryActivity.this.finish();
-                        Intent intent = new Intent(HistoryActivity.this, DashboardActivity.class);
-                        startActivity(intent);
-                    }
-                });
+                pDialog.dismiss();
+                new SweetAlertDialog(HistoryActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("History")
+                        .setContentText("You have successfully clear the history. Click okay to proceed")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismiss();
+                                HistoryActivity.this.finish();
+                                Intent intent = new Intent(HistoryActivity.this, DashboardActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
             }
+//                delProgressDialog.dismiss();
+//                String message = "You have successfully clear history. Click okay to proceed";
+//                AlertDialog.Builder delWindow= new AlertDialog.Builder(HistoryActivity.this);
+//                View deleted_view = getLayoutInflater().inflate(R.layout.activity_clear_history, null);
+//                TextView deleted_message = (TextView) deleted_view.findViewById(R.id.tvMessage);
+//                Button okay_button = (Button)deleted_view.findViewById(R.id.btnOkay);
+//
+//                deleted_message.setText(message);
+//                delWindow.setView(deleted_view);
+//                final AlertDialog delDialog = delWindow.create();
+//                delDialog.show();
+//                delDialog.setCancelable(false);
+//                delDialog.setCanceledOnTouchOutside(false);
+//
+//                okay_button.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        delDialog.dismiss();
+//                        HistoryActivity.this.finish();
+//                        Intent intent = new Intent(HistoryActivity.this, DashboardActivity.class);
+//                        startActivity(intent);
+//                    }
+//                });
+//            }
         }
+    }
+
+    /*
+    Side bar menu
+    */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.history_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.menu_clear:
+                new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Are you sure?")
+                        .setContentText("You won't be able to recover this information")
+                        .setCancelText("No")
+                        .setConfirmText("Yes, remove it")
+                        .showCancelButton(true)
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                // reuse previous dialog instance, keep widget user state, reset them if you need
+                                sDialog.setTitleText("Cancelled!")
+                                        .setContentText("Your information history is safe")
+                                        .setConfirmText("OK")
+                                        .showCancelButton(false)
+                                        .setCancelClickListener(null)
+                                        .setConfirmClickListener(null)
+                                        .changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                                sDialog.dismiss();
+                            }
+                        })
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                new DelTransactionHistory().execute();
+                                sDialog.dismiss();
+                            }
+                        })
+                        .show();
+
+
+                return true;
+
+            case android.R.id.home:
+                finish();
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

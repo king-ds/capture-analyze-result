@@ -11,10 +11,5 @@
         android:layout_height="fill_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true" />
-    <Button
-        android:id="@+id/btnClearHistory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text ="Clear History"/>
 
 </RelativeLayout>
