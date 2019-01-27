@@ -44,7 +44,7 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
     private static String username = "";
     private static String token = "";
     private static String TRANSACTION_HISTORY_URL = "";
-    private static ProgressDialog getProgressDialog, delProgressDialog;
+    private static ProgressDialog getProgressDialog;
     private SweetAlertDialog pDialog;
     ImageLoader imageLoader;
 
@@ -276,30 +276,6 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
                         })
                         .show();
             }
-//                delProgressDialog.dismiss();
-//                String message = "You have successfully clear history. Click okay to proceed";
-//                AlertDialog.Builder delWindow= new AlertDialog.Builder(HistoryActivity.this);
-//                View deleted_view = getLayoutInflater().inflate(R.layout.activity_clear_history, null);
-//                TextView deleted_message = (TextView) deleted_view.findViewById(R.id.tvMessage);
-//                Button okay_button = (Button)deleted_view.findViewById(R.id.btnOkay);
-//
-//                deleted_message.setText(message);
-//                delWindow.setView(deleted_view);
-//                final AlertDialog delDialog = delWindow.create();
-//                delDialog.show();
-//                delDialog.setCancelable(false);
-//                delDialog.setCanceledOnTouchOutside(false);
-//
-//                okay_button.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        delDialog.dismiss();
-//                        HistoryActivity.this.finish();
-//                        Intent intent = new Intent(HistoryActivity.this, DashboardActivity.class);
-//                        startActivity(intent);
-//                    }
-//                });
-//            }
         }
     }
 
