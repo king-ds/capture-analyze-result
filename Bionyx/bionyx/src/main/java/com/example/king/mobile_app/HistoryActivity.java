@@ -25,7 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class HistoryActivity extends BaseActivity implements AsyncResponse {
 
@@ -33,7 +32,7 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
     private static String token = "";
     private static String TRANSACTION_HISTORY_URL = "";
     private static ProgressDialog getProgressDialog, delProgressDialog;
-    ImageLoader imageLoader;
+    HistoryPhotoLoader historyPhotoLoader;
 
     private Button ClearHistory;
     ArrayList<HashMap<String, String>> arraylist;
@@ -64,7 +63,7 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        imageLoader = new ImageLoader(this);
+        historyPhotoLoader = new HistoryPhotoLoader(this);
         final Button clear_history = (Button)findViewById(R.id.btnClearHistory);
         clear_history.setVisibility(View.GONE);
         clear_history.setOnClickListener(new View.OnClickListener() {
@@ -269,7 +268,7 @@ public class HistoryActivity extends BaseActivity implements AsyncResponse {
                 response_message = connection.getResponseMessage();
                 if (response_code == 204) {
                     isDeleted = true;
-                    imageLoader.clearCache();
+                    historyPhotoLoader.clearCache();
                     Log.e("HistoryActivity", "Server response message : " + response_message);
                 }
             } catch (IOException ex) {
