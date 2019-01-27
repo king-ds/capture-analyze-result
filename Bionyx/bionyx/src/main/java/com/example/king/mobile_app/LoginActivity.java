@@ -367,6 +367,7 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
 
 
                 if(token.length()>2){
+
                     SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString("username", sUserName);
@@ -378,7 +379,7 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
                     editor.putString("id", id);
                     editor.putString("token", token);
                     editor.putString("processed_images", processed_images);
-                    editor.commit();
+                    editor.apply();
                     this.delegate.processFinish(token, id, first_name, last_name, username, email, date_joined);
                 }
             }else {
