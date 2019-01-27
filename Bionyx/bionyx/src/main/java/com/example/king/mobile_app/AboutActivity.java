@@ -20,7 +20,7 @@ import android.widget.TextView;
 public class AboutActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private ImageLoader imageLoader;
+    private HistoryPhotoLoader historyPhotoLoader;
     private ProfilePhotoLoader profile_photo_loader;
 
     @Override
@@ -40,7 +40,7 @@ public class AboutActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        imageLoader = new ImageLoader(this);
+        historyPhotoLoader = new HistoryPhotoLoader(this);
         profile_photo_loader = new ProfilePhotoLoader(this);
 
 
@@ -172,7 +172,7 @@ public class AboutActivity extends AppCompatActivity
 
             case R.id.nav_logout:
                 profile_photo_loader.clearCache();
-                imageLoader.clearCache();
+                historyPhotoLoader.clearCache();
                 SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
                 sharedPreferences.edit().clear().commit();
                 Intent iLogin = new Intent(AboutActivity.this, LoginActivity.class);

@@ -25,7 +25,7 @@ public class DashboardActivity extends AppCompatActivity
     NavigationView navigationView;
     Toolbar toolbar = null;
 
-    private ImageLoader imageLoader;
+    private HistoryPhotoLoader historyPhotoLoader;
     private ProfilePhotoLoader profile_photo_loader;
     private ImageButton Assess, Diseases, History;
     private String token = "";
@@ -43,7 +43,7 @@ public class DashboardActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        imageLoader = new ImageLoader(this);
+        historyPhotoLoader = new HistoryPhotoLoader(this);
         profile_photo_loader = new ProfilePhotoLoader(this);
 
         Assess = (ImageButton)findViewById(R.id.btnAssess);
@@ -184,7 +184,7 @@ public class DashboardActivity extends AppCompatActivity
                 SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
                 sharedPreferences.edit().clear().commit();
                 profile_photo_loader.clearCache();
-                imageLoader.clearCache();
+                historyPhotoLoader.clearCache();
                 Intent iLogin = new Intent(DashboardActivity.this, LoginActivity.class);
                 startActivity(iLogin);
                 DashboardActivity.this.finish();

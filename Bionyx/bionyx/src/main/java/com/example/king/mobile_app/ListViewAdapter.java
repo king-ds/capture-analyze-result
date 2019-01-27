@@ -20,14 +20,14 @@ public class ListViewAdapter extends BaseAdapter {
     Context context;
     LayoutInflater inflater;
     ArrayList<HashMap<String, String>> data;
-    ImageLoader imageLoader;
+    HistoryPhotoLoader historyPhotoLoader;
     HashMap<String, String> resultp = new HashMap<String, String>();
 
     public ListViewAdapter(Context context,
                            ArrayList<HashMap<String, String>> arraylist) {
         this.context = context;
         data = arraylist;
-        imageLoader = new ImageLoader(context);
+        historyPhotoLoader = new HistoryPhotoLoader(context);
     }
 
     @Override
@@ -95,8 +95,8 @@ public class ListViewAdapter extends BaseAdapter {
         //TerryNails.setText(resultp.get(HistoryActivity.TERRYNAILS));
         //YellowNails.setText(resultp.get(HistoryActivity.YELLOWNAILS));
         // Capture position and set results to the ImageView
-        // Passes flag images URL into ImageLoader.class
-        imageLoader.DisplayImage(resultp.get(HistoryActivity.IMAGE), image);
+        // Passes flag images URL into HistoryPhotoLoader.class
+        historyPhotoLoader.DisplayImage(resultp.get(HistoryActivity.IMAGE), image);
         // Capture ListView item click
         itemView.setOnClickListener(new OnClickListener() {
 

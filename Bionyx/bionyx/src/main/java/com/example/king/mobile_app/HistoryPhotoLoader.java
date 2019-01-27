@@ -21,7 +21,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-public class ImageLoader {
+public class HistoryPhotoLoader {
     MemoryCache memoryCache = new MemoryCache();
     FileCache fileCache;
     private Map<ImageView, String> imageViews = Collections
@@ -30,7 +30,7 @@ public class ImageLoader {
     // Handler to display images in UI thread
     Handler handler = new Handler();
 
-    public ImageLoader(Context context) {
+    public HistoryPhotoLoader(Context context) {
         fileCache = new FileCache(context);
         executorService = Executors.newFixedThreadPool(5);
     }
