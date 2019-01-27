@@ -53,7 +53,7 @@ import static com.example.king.mobile_app.BaseActivity.currentIp;
 public class UserProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private ImageLoader imgLoader, imageLoader;
+    private ProfilePhotoLoader profile_photo_loader;
     private String SERVER_URL = "http://"+currentIp+"/api/postAvatar/";
     private String UPDATE_USER = "http://"+currentIp+"/api/updateUser/";
     private String AVATAR_URL = "";
@@ -84,8 +84,7 @@ public class UserProfileActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         ICM = new InternetConnectionManager();
-        imageLoader = new ImageLoader(this);
-        imgLoader = new ImageLoader(this);
+        profile_photo_loader = new ProfilePhotoLoader(this);
         FirstName = findViewById(R.id.tv_FirstName);
         LastName = findViewById(R.id.tv_LastName);
         Email = findViewById(R.id.tv_Email);
@@ -110,7 +109,7 @@ public class UserProfileActivity extends AppCompatActivity
         setUserDetails();
         setDisabledEditText();
 
-        imgLoader.DisplayImage(AVATAR_URL, Profile_Pic);
+        profile_photo_loader.DisplayImage(AVATAR_URL, Profile_Pic);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -127,7 +126,7 @@ public class UserProfileActivity extends AppCompatActivity
         TextView Nav_Email = headerView.findViewById(R.id.tv_Nav_Email);
         Nav_Email.setText(email);
         Nav_Avatar = headerView.findViewById(R.id.tv_Nav_Avatar);
-        imgLoader.DisplayImage(AVATAR_URL, Nav_Avatar);
+        profile_photo_loader.DisplayImage(AVATAR_URL, Nav_Avatar);
 
         Profile_Pic.bringToFront();
         Profile_Pic.setOnClickListener(new View.OnClickListener() {
@@ -208,7 +207,7 @@ public class UserProfileActivity extends AppCompatActivity
                 final AlertDialog view_photo_dialog = PopupWindow.create();
                 view_photo_dialog.show();
                 ImageView profile_photo = view_photo.findViewById(R.id.iv_ViewPhoto);
-                imgLoader.DisplayImage(AVATAR_URL, profile_photo);
+                profile_photo_loader.DisplayImage(AVATAR_URL, profile_photo);
             }
         });
     }
@@ -543,9 +542,9 @@ public class UserProfileActivity extends AppCompatActivity
 
             if (isSuccess == true) {
 
-                imgLoader.clearCache();
-                imgLoader.DisplayImage(AVATAR_URL, Profile_Pic);
-                imgLoader.DisplayImage(AVATAR_URL, Nav_Avatar);
+                profile_photo_loader.clearCache();
+                profile_photo_loader.DisplayImage(AVATAR_URL, Profile_Pic);
+                profile_photo_loader.DisplayImage(AVATAR_URL, Nav_Avatar);
                 message = "Your profile photo has uploaded";
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
@@ -772,8 +771,7 @@ public class UserProfileActivity extends AppCompatActivity
             case R.id.nav_logout:
                 SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
                 sharedPreferences.edit().clear().commit();
-                imgLoader.clearCache();
-                imageLoader.clearCache();
+                profile_photo_loader.clearCache();
                 Intent iLogin = new Intent(UserProfileActivity.this, LoginActivity.class);
                 startActivity(iLogin);
                 break;
