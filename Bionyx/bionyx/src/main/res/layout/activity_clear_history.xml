@@ -22,21 +22,33 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/ownerlabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Message"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="#3797CF"
+                    android:textSize="20sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#2F7092" />
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/tvMessage"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
                 <Button
-                    android:id="@+id/btnChooseFromGallery"
+                    android:id="@+id/btnOkay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Choose from gallery"/>
-                <Button
-                    android:id="@+id/btnTakePicture"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Take picture"/>
-                <Button
-                    android:id="@+id/btnViewPicture"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="View photo"/>
+                    android:text="Okay"/>
 
             </LinearLayout>
 

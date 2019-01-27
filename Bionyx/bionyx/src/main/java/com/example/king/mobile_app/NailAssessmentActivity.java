@@ -162,7 +162,7 @@ public class NailAssessmentActivity extends BaseActivity {
         File f = createImageFile();
         mCurrentPhotoPath = f.getAbsolutePath();
         mCurrentPhotoName = f.getName();
-        mCurrentImageUri = Uri.fromFile(f);
+//        mCurrentImageUri = Uri.fromFile(f);
         mCurrentImageUri = FileProvider.getUriForFile(NailAssessmentActivity.this, "com.example.king.mobile_app.provider", f );
 
         return f;
@@ -177,7 +177,8 @@ public class NailAssessmentActivity extends BaseActivity {
         File f = createCroppedImageFile();
         mCurrentThumbPath = f.getAbsolutePath();
         mCurrentCroppedPhotoName = f.getName();
-        mCurrentCroppedImageUri = Uri.fromFile(f);
+//        mCurrentCroppedImageUri = Uri.fromFile(f);
+        mCurrentCroppedImageUri = FileProvider.getUriForFile(NailAssessmentActivity.this, "com.example.king.mobile_app.provider", f );
 
         return f;
     }
@@ -437,19 +438,22 @@ public class NailAssessmentActivity extends BaseActivity {
                     String serverResponseMessage = connection.getResponseMessage();
                     Log.i("NailAssessmentActivity", "Server Response is " + serverResponseMessage + ": " + serverResponseCode);
 
-                    //response code of 200 indicates the server status is ok
+                    /*
+                    Okay request valid fingernail image
+                     */
                     if (serverResponseCode == 200) {
 
-                        Log.e("NailAssessmentActivity", "File upload completed.\n\n" + fileName);
                         BufferedReader br = new BufferedReader(new InputStreamReader((connection.getInputStream())));
                         StringBuilder sb = new StringBuilder();
                         String output;
+                        Log.e("NailAssessmentActivity", "File upload completed.\n\n" + fileName);
                         while((output = br.readLine()) != null){
                             sb.append(output);
                         }
                         String response = sb.toString();
 
                         try{
+
                             DecimalFormat df = new DecimalFormat("#0.00");
                             JSONObject jsonObject = new JSONObject(response);
                             String status = jsonObject.getString("Status").trim();
@@ -460,15 +464,22 @@ public class NailAssessmentActivity extends BaseActivity {
                             String TerryNails = jsonObject.getString("Terry's Nails").trim();
                             String YellowNails = jsonObject.getString("Yellow Nail Syndrome").trim();
 
-                            Results = "Status: "+status+"\nBeau Lines: " +df.format(Float.parseFloat(BeauLines))  +"\nClubbed Nails: " + df.format(Float.parseFloat(ClubbedNails))
-                                    +"\nHealthy: "+ df.format(Float.parseFloat(Healthy)) + "\nSpoon Nails: " + df.format(Float.parseFloat(Splinter)) +"\nTerry's Nails: "+ df.format(Float.parseFloat(TerryNails))
-                                    +"\nYellow Nail Syndrome: " + df.format(Float.parseFloat(YellowNails));
+                            Results = "Status: "+status;
 
                         }catch (JSONException ex){
                             ex.printStackTrace();
                             return "";
                         }
                         br.close();
+                    }
+                    /*
+                    Bad request not a valid fingernail image
+                     */
+                    else if (serverResponseCode == 400) {
+
+                        Log.e("NailAssessmentActivity", "Invalid image");
+                        String message = "Invalid fingernail image";
+                        Results = message;
                     }
 
                     fileInputStream.close();
@@ -498,13 +509,13 @@ public class NailAssessmentActivity extends BaseActivity {
             Button OkayButton = (Button)ResultView.findViewById(R.id.btnOkay);
 
             PopupWindow.setView(ResultView);
-            AlertDialog dialog = PopupWindow.create();
+            final AlertDialog dialog = PopupWindow.create();
             dialog.show();
             ResultText.setText(result);
             OkayButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    dialog.dismiss();
                     NailAssessmentActivity.this.finish();
                     Intent intent = new Intent(NailAssessmentActivity.this, NailAssessmentActivity.class);
                     startActivity(intent);
