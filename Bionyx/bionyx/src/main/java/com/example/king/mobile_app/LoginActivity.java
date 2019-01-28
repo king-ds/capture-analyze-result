@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-
 import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
@@ -35,10 +34,6 @@ import java.util.TimerTask;
 
 public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
 
-    //Declare all variables needed
-
-    //Message for MainActivity
-    public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
     //Authentication Stuff
     private static final String AUTH_TOKEN_URL = "http://"+currentIp+"/api/authenticate/";
     private UserLoginTask mAuthTask = null;
@@ -49,8 +44,6 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
     private TextView Register;
     private Button Login;
     private View LoginForm, ProgressView;
-//    private int counter = 5;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +51,6 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
         setContentView(R.layout.activity_login);
 
         Timer timer = new Timer();
-
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -76,10 +68,8 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
             }
         },0);
 
-        //Assign the declared variables to edit text, text view and button layout
-        //Set up the log in form
-        Username = (EditText)findViewById(R.id.etUsername);
-        Password = (EditText)findViewById(R.id.etPassword);
+        Username = findViewById(R.id.etUsername);
+        Password = findViewById(R.id.etPassword);
         Password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -92,14 +82,14 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
         });
 
         ICM = new InternetConnectionManager();
-        Login = (Button)findViewById(R.id.btnLogin);
+        Login = findViewById(R.id.btnLogin);
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startLogin();
             }
         });
-        Register = (TextView) findViewById(R.id.tvRegister);
+        Register = findViewById(R.id.tvRegister);
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,14 +99,11 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
 
         LoginForm = findViewById(R.id.login_form);
         ProgressView = findViewById(R.id.login_progress);
-
-
-
     }
 
     @Override
     public void onBackPressed() {
-
+        super.onBackPressed();
     }
 
     private void register(){
@@ -124,56 +111,43 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
         startActivity(intent);
     }
 
-    private boolean isPasswordValid(String password){
-
-        return password.length() >= 8;
-    }
-
     private void startLogin(){
 
-        //If user is not very patient
         if(mAuthTask != null){
             return;
         }
-
         //Reset errors.
         Username.setError(null);
         Password.setError(null);
 
-        //Store the values at the time of the button login clicked.
         String username = Username.getText().toString();
         String password = Password.getText().toString();
 
-        //For focusing certain view and cancellation of process
         boolean cancel = false;
         View focusView = null;
 
-        //Check for valid password, password cannot be blank.
         if(TextUtils.isEmpty(password)){
             Password.setError("This field cannot be blank");
             focusView = Password;
             cancel = true;
         }
-        //Check for valid username, username cannot be blank.
+
         if(TextUtils.isEmpty(username)){
             Username.setError("This field cannot be blank");
             focusView = Username;
             cancel = true;
         }
+
         if(cancel){
-            //If there was an error; don't attempt login and focus the first
-            //form field that commit error
             focusView.requestFocus();
+
         } else {
 
-            //Show a progress spinner, and kick off a background task
-            //to perform the user login attempt
             if(ICM.isNetworkAvailable(this)) {
                 showProgress(true);
                 mAuthTask = new UserLoginTask(username, password, this);
                 mAuthTask.execute((Void) null);
             }
-
         }
     }
 
@@ -188,9 +162,10 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
         intent.putExtra("Token", token);
         intent.putExtra("Id", id);
         startActivity(intent);
+        this.finish();
     }
-    /**
-     * Shows the progress UI and hides the login form.
+    /*
+     Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -225,38 +200,31 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
         }
     }
 
-    //Represents an asynchronous login task used to authenticate the user.
-
+    /*
+    Asnyctask for authentication user (django-rest api)
+     */
     public class UserLoginTask extends AsyncTask<Void, Void, String> {
 
-        //Declare all variables needed for Asynchronous Task
+        // Declare all variables needed for Asynchronous Task
 
-        //Credentials
         private final String sUserName;
         private final String sPassword;
-
-        //Check for successful authentication
         private Boolean success = false;
-
-        //Delegate the process
         public AsyncResponse_Login delegate = null;
 
         UserLoginTask(String sUserName, String sPassword, AsyncResponse_Login delegate) {
 
-            //Fetch the variable from startlogin() function
             this.sUserName = sUserName;
             this.sPassword = sPassword;
             this.delegate = delegate;
         }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //get sharedPreferences here
             SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
         }
 
-
-        //Do while the Asynctask is running...
         @Override
         protected String doInBackground(Void... params) {
             try {
@@ -267,7 +235,6 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
             }
         }
 
-        //Getting the user token
         protected String getToken(String username, String password) {
             JSONfunctions parser = new JSONfunctions();
             JSONObject login = parser.getLoginObject(username, password);
@@ -278,49 +245,28 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
             //Display only the first 500 characters retrieved web page content
             int len = 500;
             try {
-                //Connecting to django rest api......
                 URL url = new URL(AUTH_TOKEN_URL);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                //Connection is now open....
                 Log.d("LoginActivity", "openConnection");
-
-                //Set the read and connect timeout
                 conn.setReadTimeout(10000);
                 conn.setConnectTimeout(15000);
-
-                //POST Method
                 conn.setRequestMethod("POST");
-
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
-
                 Log.d("LoginActivity", "Set up data unrelated headers");
-
                 conn.setFixedLengthStreamingMode(message.getBytes().length);
-
-                //Header.... -> JSON
                 conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
-
-                //Setup the output streaming
                 OutputStream os = new BufferedOutputStream(conn.getOutputStream());
                 os.write(message.getBytes());
                 os.flush();
-
                 conn.connect();
-
                 Log.d("LoginActivity", "Data is sent to API");
-
-                //do something with response
                 is = conn.getInputStream();
-                //Convert InputStream into a String
                 String contentAsString = readIt(is, len);
 
-                //Make sure that the InputStream is closed after the app
-                //finished using it
                 if (is != null) {
                     is.close();
                 }
-
                 String serverResponseMessage = conn.getResponseMessage();
                 int serverResponseCode = conn.getResponseCode();
 
@@ -329,7 +275,6 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
                 } else {
                     Log.d("LoginActivity", serverResponseMessage + " " + serverResponseCode);
                 }
-
                 Log.d("LoginActivity", contentAsString);
                 return contentAsString;
 
@@ -338,7 +283,6 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
                 Log.e("LoginActivity", "Exception");
                 return "";
             }
-
         }
 
         public String readIt(InputStream stream, int len)throws IOException{
@@ -394,8 +338,5 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
             mAuthTask = null;
             showProgress(false);
         }
-
-
     }
-
 }
