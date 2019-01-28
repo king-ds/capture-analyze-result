@@ -33,7 +33,7 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
     private static String username = "";
     private static String TRANSACTION_HISTORY_URL = "";
     private SweetAlertDialog pDialog;
-    ImageLoader imageLoader;
+    HistoryPhotoLoader historyPhotoLoader;
 
     static SwipeMenuListView listView;
     ArrayList<HashMap<String, String>> arraylist;
@@ -64,7 +64,7 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        imageLoader = new ImageLoader(this);
+        historyPhotoLoader = new HistoryPhotoLoader(this);
         getSupportActionBar().setTitle("History");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

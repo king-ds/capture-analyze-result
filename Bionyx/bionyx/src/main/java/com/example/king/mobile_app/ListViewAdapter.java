@@ -96,7 +96,7 @@ public class ListViewAdapter extends BaseAdapter {
         transactionid.setText(resultp.get(HistoryActivity.TRANSACTIONID));
         uploaded.setText(resultp.get(HistoryActivity.UPLOADED));
         result.setText(resultp.get(HistoryActivity.STATUS));
-        imageLoader.DisplayImage(resultp.get(HistoryActivity.IMAGE), image);
+        historyPhotoLoader.DisplayImage(resultp.get(HistoryActivity.IMAGE), image);
 
         /*
         Create swipe menu instance
@@ -209,7 +209,7 @@ public class ListViewAdapter extends BaseAdapter {
                 response_message = connection.getResponseMessage();
                 if (response_code == 204) {
                     isDeleted = true;
-                    imageLoader.clearCache();
+                    historyPhotoLoader.clearCache();
                     Log.e("HistoryActivity", "Server response message : " + response_message);
                 }
             } catch (IOException ex) {
