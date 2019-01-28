@@ -208,7 +208,7 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
                 response_message = connection.getResponseMessage();
                 if (response_code == 204) {
                     isDeleted = true;
-                    imageLoader.clearCache();
+                    historyPhotoLoader.clearCache();
                     Log.e("HistoryActivity", "Server response message : " + response_message);
                 }
             } catch (IOException ex) {

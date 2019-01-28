@@ -44,7 +44,7 @@ public class SingleItemView extends Activity {
     private static ProgressDialog mProgressDialog;
     public String transactionid, owner, uploaded, image, position, bl, cn, h, sh, yn, tn, stat, diseases, first_name, last_name, email, filtered_image;
     public Bitmap bitmap;
-    ImageLoader imageLoader = new ImageLoader(this);
+    HistoryPhotoLoader historyPhotoLoader = new HistoryPhotoLoader(this);
     DecimalFormat df = new DecimalFormat("#0.00");
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -158,8 +158,8 @@ public class SingleItemView extends Activity {
         txtstatus.setText(stat);
 
         // Capture position and set results to the ImageView
-        // Passes flag images URL into ImageLoader.class
-        imageLoader.DisplayImage(filtered_image, imgNail);
+        // Passes flag images URL into HistoryPhotoLoader.class
+        historyPhotoLoader.DisplayImage(filtered_image, imgNail);
     }
     private void generatePDF(){
 

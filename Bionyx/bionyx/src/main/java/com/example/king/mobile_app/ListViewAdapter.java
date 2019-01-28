@@ -40,14 +40,14 @@ public class ListViewAdapter extends BaseAdapter {
     Context context;
     LayoutInflater inflater;
     ArrayList<HashMap<String, String>> data;
-    ImageLoader imageLoader;
+    HistoryPhotoLoader historyPhotoLoader;
     HashMap<String, String> resultp = new HashMap<String, String>();
 
     public ListViewAdapter(Context context,
                            ArrayList<HashMap<String, String>> arraylist) {
         this.context = context;
         data = arraylist;
-        imageLoader = new ImageLoader(context);
+        historyPhotoLoader = new HistoryPhotoLoader(context);
     }
 
     @Override

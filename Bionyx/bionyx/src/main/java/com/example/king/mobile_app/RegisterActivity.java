@@ -36,7 +36,7 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
     private InternetConnectionManager ICM;
 
     //For Authentication Related Stuff
-    private static final String TOKEN_URL = "http://"+currentIp+"/register/";
+    private static final String TOKEN_URL = "http://"+currentIp+"/api/register/";
     private static final String Success_Message = "Successfully Register";
     private static final String Failures_Message = "Check your internet connection";
     private UserRegisterTask mAuthTask = null;

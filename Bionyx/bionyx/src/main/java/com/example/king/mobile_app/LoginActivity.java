@@ -44,6 +44,7 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
     private UserLoginTask mAuthTask = null;
 
     // UI references
+    private InternetConnectionManager ICM;
     public EditText Username, Password;
     private TextView Register;
     private Button Login;
@@ -90,24 +91,15 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
             }
         });
 
-//      Number of attempts
-//      Info = (TextView)findViewById(R.id.tvInfo);
-
-        //Login button
+        ICM = new InternetConnectionManager();
         Login = (Button)findViewById(R.id.btnLogin);
-
-        //When log in button is click
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startLogin();
             }
         });
-
-        //Register button
         Register = (TextView) findViewById(R.id.tvRegister);
-
-        //When register button is click
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,9 +168,11 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
 
             //Show a progress spinner, and kick off a background task
             //to perform the user login attempt
-            showProgress(true);
-            mAuthTask = new UserLoginTask(username, password, this);
-            mAuthTask.execute((Void) null);
+            if(ICM.isNetworkAvailable(this)) {
+                showProgress(true);
+                mAuthTask = new UserLoginTask(username, password, this);
+                mAuthTask.execute((Void) null);
+            }
 
         }
     }
@@ -373,6 +367,7 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
 
 
                 if(token.length()>2){
+
                     SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString("username", sUserName);
@@ -384,7 +379,7 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
                     editor.putString("id", id);
                     editor.putString("token", token);
                     editor.putString("processed_images", processed_images);
-                    editor.commit();
+                    editor.apply();
                     this.delegate.processFinish(token, id, first_name, last_name, username, email, date_joined);
                 }
             }else {

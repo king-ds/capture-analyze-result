@@ -27,6 +27,23 @@ public class JSONfunctions {
         return null;
     }
 
+    public static JSONObject getUpdatedUserInformationObject(String first_name, String last_name, String username, String email){
+
+        try{
+            JSONObject temp = new JSONObject();
+            temp.put("first_name", first_name);
+            temp.put("last_name", last_name);
+            temp.put("username", username);
+            temp.put("email", email);
+
+            Log.d(DEBUG_TAG, "JSON Updated User Information Object Created");
+            return temp;
+        }catch (JSONException ex){
+            Log.e(ERROR_TAG, "Something went wrong with data creation");
+        }
+        return null;
+    }
+
     public static JSONObject getLoginObject(String username, String password){
         try{
             JSONObject temp = new JSONObject();
