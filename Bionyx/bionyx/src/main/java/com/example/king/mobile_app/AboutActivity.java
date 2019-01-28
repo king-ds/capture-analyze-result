@@ -20,7 +20,8 @@ import android.widget.TextView;
 public class AboutActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private ImageLoader imgLoader, imageLoader;
+    private HistoryPhotoLoader historyPhotoLoader;
+    private ProfilePhotoLoader profile_photo_loader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +40,8 @@ public class AboutActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        imgLoader = new ImageLoader(this);
-        imageLoader = new ImageLoader(this);
+        historyPhotoLoader = new HistoryPhotoLoader(this);
+        profile_photo_loader = new ProfilePhotoLoader(this);
 
 
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
@@ -53,7 +54,7 @@ public class AboutActivity extends AppCompatActivity
         TextView Nav_Email = (TextView)headerView.findViewById(R.id.tv_Nav_Email);
         Nav_Email.setText(email);
         ImageView Nav_Avatar = (ImageView)headerView.findViewById(R.id.tv_Nav_Avatar);
-        imgLoader.DisplayImage(AVATAR_URL, Nav_Avatar);
+        profile_photo_loader.DisplayImage(AVATAR_URL, Nav_Avatar);
 
 
 //        Popup Start
@@ -170,8 +171,8 @@ public class AboutActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_logout:
-                imgLoader.clearCache();
-                imageLoader.clearCache();
+                profile_photo_loader.clearCache();
+                historyPhotoLoader.clearCache();
                 SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
                 sharedPreferences.edit().clear().commit();
                 Intent iLogin = new Intent(AboutActivity.this, LoginActivity.class);

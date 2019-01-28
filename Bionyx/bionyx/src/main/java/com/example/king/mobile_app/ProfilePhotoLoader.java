@@ -21,7 +21,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-public class ImageLoader {
+public class ProfilePhotoLoader {
     MemoryCache memoryCache = new MemoryCache();
     FileCache fileCache;
     private Map<ImageView, String> imageViews = Collections
@@ -30,12 +30,12 @@ public class ImageLoader {
     // Handler to display images in UI thread
     Handler handler = new Handler();
 
-    public ImageLoader(Context context) {
+    public ProfilePhotoLoader(Context context) {
         fileCache = new FileCache(context);
         executorService = Executors.newFixedThreadPool(5);
     }
 
-    final int stub_id = R.drawable.grd_mt;
+    final int stub_id = R.drawable.blank_profile_pic;
 
     public void DisplayImage(String url, ImageView imageView) {
         imageViews.put(imageView, url);
@@ -49,8 +49,8 @@ public class ImageLoader {
     }
 
     private void queuePhoto(String url, ImageView imageView) {
-        PhotoToLoad p = new PhotoToLoad(url, imageView);
-        executorService.submit(new PhotosLoader(p));
+        ProfilePhotoLoader.PhotoToLoad p = new ProfilePhotoLoader.PhotoToLoad(url, imageView);
+        executorService.submit(new ProfilePhotoLoader.PhotosLoader(p));
     }
 
     private Bitmap getBitmap(String url) {
@@ -134,9 +134,9 @@ public class ImageLoader {
     }
 
     class PhotosLoader implements Runnable {
-        PhotoToLoad photoToLoad;
+        ProfilePhotoLoader.PhotoToLoad photoToLoad;
 
-        PhotosLoader(PhotoToLoad photoToLoad) {
+        PhotosLoader(ProfilePhotoLoader.PhotoToLoad photoToLoad) {
             this.photoToLoad = photoToLoad;
         }
 
@@ -149,7 +149,7 @@ public class ImageLoader {
                 memoryCache.put(photoToLoad.url, bmp);
                 if (imageViewReused(photoToLoad))
                     return;
-                BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad);
+                ProfilePhotoLoader.BitmapDisplayer bd = new ProfilePhotoLoader.BitmapDisplayer(bmp, photoToLoad);
                 handler.post(bd);
             } catch (Throwable th) {
                 th.printStackTrace();
@@ -157,7 +157,7 @@ public class ImageLoader {
         }
     }
 
-    boolean imageViewReused(PhotoToLoad photoToLoad) {
+    boolean imageViewReused(ProfilePhotoLoader.PhotoToLoad photoToLoad) {
         String tag = imageViews.get(photoToLoad.imageView);
         if (tag == null || !tag.equals(photoToLoad.url))
             return true;
@@ -167,9 +167,9 @@ public class ImageLoader {
     // Used to display bitmap in the UI thread
     class BitmapDisplayer implements Runnable {
         Bitmap bitmap;
-        PhotoToLoad photoToLoad;
+        ProfilePhotoLoader.PhotoToLoad photoToLoad;
 
-        public BitmapDisplayer(Bitmap b, PhotoToLoad p) {
+        public BitmapDisplayer(Bitmap b, ProfilePhotoLoader.PhotoToLoad p) {
             bitmap = b;
             photoToLoad = p;
         }
@@ -189,3 +189,4 @@ public class ImageLoader {
         fileCache.clear();
     }
 }
+

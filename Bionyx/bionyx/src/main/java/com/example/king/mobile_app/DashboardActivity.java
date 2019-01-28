@@ -25,7 +25,8 @@ public class DashboardActivity extends AppCompatActivity
     NavigationView navigationView;
     Toolbar toolbar = null;
 
-    private ImageLoader imgLoader, imageLoader;
+    private HistoryPhotoLoader historyPhotoLoader;
+    private ProfilePhotoLoader profile_photo_loader;
     private ImageButton Assess, Diseases, History;
     private String token = "";
     private String user_id = "";
@@ -42,8 +43,8 @@ public class DashboardActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        imgLoader = new ImageLoader(this);
-        imageLoader = new ImageLoader(this);
+        historyPhotoLoader = new HistoryPhotoLoader(this);
+        profile_photo_loader = new ProfilePhotoLoader(this);
 
         Assess = (ImageButton)findViewById(R.id.btnAssess);
         Diseases = (ImageButton)findViewById(R.id.btnDiseases);
@@ -99,7 +100,7 @@ public class DashboardActivity extends AppCompatActivity
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("avatar_url", AVATAR_URL);
         editor.commit();
-        //Verifying the session values
+        //Verify the session values
         System.out.println(token+" "+user_id+" "+username+" "+first_name+" "+last_name+" "+email+" "+datejoined);
 
         View headerView = navigationView.getHeaderView(0);
@@ -108,7 +109,7 @@ public class DashboardActivity extends AppCompatActivity
         Nav_Email = (TextView)headerView.findViewById(R.id.tv_Nav_Email);
         Nav_Email.setText(email);
         ImageView Nav_Avatar = (ImageView)headerView.findViewById(R.id.tv_Nav_Avatar);
-        imgLoader.DisplayImage(AVATAR_URL, Nav_Avatar);
+        profile_photo_loader.DisplayImage(AVATAR_URL, Nav_Avatar);
 
     }
 
@@ -133,7 +134,7 @@ public class DashboardActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-//            super.onBackPressed();
+            super.onBackPressed();
         }
     }
 
@@ -182,8 +183,8 @@ public class DashboardActivity extends AppCompatActivity
             case R.id.nav_logout:
                 SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
                 sharedPreferences.edit().clear().commit();
-                imgLoader.clearCache();
-                imageLoader.clearCache();
+                profile_photo_loader.clearCache();
+                historyPhotoLoader.clearCache();
                 Intent iLogin = new Intent(DashboardActivity.this, LoginActivity.class);
                 startActivity(iLogin);
                 DashboardActivity.this.finish();

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.king.mobile_app">
 
     <uses-feature
@@ -26,7 +27,8 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:icon">
 
         <!-- Login Form Start -->
         <activity
@@ -56,7 +58,7 @@
         <activity android:name="com.example.king.mobile_app.NailAssessmentActivity" />
         <activity android:name="com.example.king.mobile_app.HistoryActivity" />
         <activity android:name="com.example.king.mobile_app.SingleItemView" />
-
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
