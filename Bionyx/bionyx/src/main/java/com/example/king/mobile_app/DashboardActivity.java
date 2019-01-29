@@ -30,7 +30,13 @@ public class DashboardActivity extends AppCompatActivity
     NavigationView navigationView;
     Toolbar toolbar = null;
 
+<<<<<<< Bionyx/bionyx/src/main/java/com/example/king/mobile_app/DashboardActivity.java
     private ImageLoader imgLoader, imageLoader;
+=======
+    private HistoryPhotoLoader historyPhotoLoader;
+    private ProfilePhotoLoader profile_photo_loader;
+    private ImageButton Assess, Diseases, History;
+>>>>>>> Bionyx/bionyx/src/main/java/com/example/king/mobile_app/DashboardActivity.java
     private String token = "";
     private String user_id = "";
     private String username = "";
@@ -46,13 +52,14 @@ public class DashboardActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+
         initData();
         HorizontalInfiniteCycleViewPager pager = findViewById(R.id.view_pager);
         DashboardAdapter adapter = new DashboardAdapter(lstImages, getBaseContext());
         pager.setAdapter(adapter);
 
-        imgLoader = new ImageLoader(this);
-        imageLoader = new ImageLoader(this);
+        historyPhotoLoader = new HistoryPhotoLoader(this);
+        profile_photo_loader = new ProfilePhotoLoader(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -79,7 +86,7 @@ public class DashboardActivity extends AppCompatActivity
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("avatar_url", AVATAR_URL);
         editor.commit();
-        //Verifying the session values
+        //Verify the session values
         System.out.println(token+" "+user_id+" "+username+" "+first_name+" "+last_name+" "+email+" "+datejoined);
 
         View headerView = navigationView.getHeaderView(0);
@@ -89,7 +96,9 @@ public class DashboardActivity extends AppCompatActivity
 
         Nav_UserName.setText(username);
         Nav_Email.setText(email);
-        imgLoader.DisplayImage(AVATAR_URL, Nav_Avatar);
+
+        ImageView Nav_Avatar = (ImageView)headerView.findViewById(R.id.tv_Nav_Avatar);
+        profile_photo_loader.DisplayImage(AVATAR_URL, Nav_Avatar);
 
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 
@@ -108,7 +117,23 @@ public class DashboardActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.dashboard, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -134,8 +159,8 @@ public class DashboardActivity extends AppCompatActivity
             case R.id.nav_logout:
                 SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
                 sharedPreferences.edit().clear().commit();
-                imgLoader.clearCache();
-                imageLoader.clearCache();
+                profile_photo_loader.clearCache();
+                historyPhotoLoader.clearCache();
                 Intent iLogin = new Intent(DashboardActivity.this, LoginActivity.class);
                 startActivity(iLogin);
                 DashboardActivity.this.finish();
