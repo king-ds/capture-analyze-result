@@ -34,6 +34,11 @@
             android:exported="true"
             android:label="Bionyx"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <!-- Login Form End -->
         <!-- Registration Form Start -->
@@ -47,11 +52,7 @@
             android:name="com.example.king.mobile_app.DashboardActivity"
             android:label="Dashboard"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name="com.example.king.mobile_app.DiseasesActivity" />
         <activity android:name="com.example.king.mobile_app.NailAssessmentActivity" />
