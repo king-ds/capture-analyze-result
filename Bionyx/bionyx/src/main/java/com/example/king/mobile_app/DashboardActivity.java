@@ -2,7 +2,10 @@ package com.example.king.mobile_app;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,22 +15,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager;
+import java.util.ArrayList;
+import java.util.List;
 import static com.example.king.mobile_app.BaseActivity.currentIp;
 
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
+    List<Dashboard> lstImages = new ArrayList<>();
     DrawerLayout drawer;
     NavigationView navigationView;
     Toolbar toolbar = null;
 
+<<<<<<< Bionyx/bionyx/src/main/java/com/example/king/mobile_app/DashboardActivity.java
+    private ImageLoader imgLoader, imageLoader;
+=======
     private HistoryPhotoLoader historyPhotoLoader;
     private ProfilePhotoLoader profile_photo_loader;
     private ImageButton Assess, Diseases, History;
+>>>>>>> Bionyx/bionyx/src/main/java/com/example/king/mobile_app/DashboardActivity.java
     private String token = "";
     private String user_id = "";
     private String username = "";
@@ -43,47 +52,24 @@ public class DashboardActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+
+        initData();
+        HorizontalInfiniteCycleViewPager pager = findViewById(R.id.view_pager);
+        DashboardAdapter adapter = new DashboardAdapter(lstImages, getBaseContext());
+        pager.setAdapter(adapter);
+
         historyPhotoLoader = new HistoryPhotoLoader(this);
         profile_photo_loader = new ProfilePhotoLoader(this);
 
-        Assess = (ImageButton)findViewById(R.id.btnAssess);
-        Diseases = (ImageButton)findViewById(R.id.btnDiseases);
-        History = (ImageButton)findViewById(R.id.btnHistory);
-
-        //if assess fingernail image button is clicked
-        Assess.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startAssess();
-            }
-        });
-        //if diseases image button is clicked
-        Diseases.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDiseases();
-            }
-        });
-        //if history image button is clicked
-        History.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showHistory();
-            }
-        });
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         //Session manager
@@ -104,28 +90,24 @@ public class DashboardActivity extends AppCompatActivity
         System.out.println(token+" "+user_id+" "+username+" "+first_name+" "+last_name+" "+email+" "+datejoined);
 
         View headerView = navigationView.getHeaderView(0);
-        Nav_UserName = (TextView) headerView.findViewById(R.id.tv_Nav_UserName);
+        Nav_UserName = headerView.findViewById(R.id.tv_Nav_UserName);
+        Nav_Email = headerView.findViewById(R.id.tv_Nav_Email);
+        ImageView Nav_Avatar = headerView.findViewById(R.id.tv_Nav_Avatar);
+
         Nav_UserName.setText(username);
-        Nav_Email = (TextView)headerView.findViewById(R.id.tv_Nav_Email);
         Nav_Email.setText(email);
+
         ImageView Nav_Avatar = (ImageView)headerView.findViewById(R.id.tv_Nav_Avatar);
         profile_photo_loader.DisplayImage(AVATAR_URL, Nav_Avatar);
 
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
     }
 
-    private void startAssess(){
-        Intent intent = new Intent(this, NailAssessmentActivity.class);
-        startActivity(intent);
-    }
-
-    private void showHistory(){
-        Intent intent = new Intent(this, HistoryActivity.class);
-        startActivity(intent);
-    }
-
-    private void showDiseases(){
-        Intent intent = new Intent(this, DiseasesActivity.class);
-        startActivity(intent);
+    private void initData() {
+        lstImages.add(new Dashboard("A", R.drawable.dash_camera));
+        lstImages.add(new Dashboard("H", R.drawable.dash_history));
+        lstImages.add(new Dashboard("D", R.drawable.dash_disorders));
     }
 
     @Override
@@ -135,6 +117,7 @@ public class DashboardActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+
         }
     }
 
@@ -151,21 +134,15 @@ public class DashboardActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
         int id = item.getItemId();
         switch (id){
+
             case R.id.nav_home:
                 break;
 
@@ -179,7 +156,6 @@ public class DashboardActivity extends AppCompatActivity
                 startActivity(iAbout);
                 break;
 
-
             case R.id.nav_logout:
                 SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
                 sharedPreferences.edit().clear().commit();
@@ -188,11 +164,9 @@ public class DashboardActivity extends AppCompatActivity
                 Intent iLogin = new Intent(DashboardActivity.this, LoginActivity.class);
                 startActivity(iLogin);
                 DashboardActivity.this.finish();
-
                 break;
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

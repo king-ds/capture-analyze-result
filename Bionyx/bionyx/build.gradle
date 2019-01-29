@@ -35,6 +35,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation files('libs/itextpdf-5.5.7.jar')
+    implementation 'com.github.devlight:infinitecycleviewpager:1.0.2'
     implementation 'com.github.florent37:materialtextfield:1.0.7'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
     implementation 'com.github.thomper:sweet-alert-dialog:1.4.0'
