@@ -34,24 +34,25 @@
             android:exported="true"
             android:label="Bionyx"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
         <!-- Login Form End -->
         <!-- Registration Form Start -->
         <activity
             android:name="com.example.king.mobile_app.RegisterActivity"
             android:label="Registration"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <!-- Registration Form End -->
         <!-- Dashboard Start -->
         <activity
             android:name="com.example.king.mobile_app.DashboardActivity"
-            android:label="@string/title_activity_dashboard"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="Dashboard"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name="com.example.king.mobile_app.DiseasesActivity" />
         <activity android:name="com.example.king.mobile_app.NailAssessmentActivity" />
         <activity android:name="com.example.king.mobile_app.HistoryActivity" />
@@ -86,11 +87,7 @@
         <activity android:name="com.example.king.mobile_app.disease_yellownails" />
         <activity android:name="com.example.king.mobile_app.SplashActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
