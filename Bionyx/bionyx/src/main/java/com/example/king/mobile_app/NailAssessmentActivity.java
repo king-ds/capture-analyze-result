@@ -19,13 +19,16 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -45,8 +48,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.theartofdev.edmodo.cropper.CropImage;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class NailAssessmentActivity extends BaseActivity {
+import static com.example.king.mobile_app.BaseActivity.currentIp;
+
+public class NailAssessmentActivity extends AppCompatActivity {
 
     //URL
     private String SERVER_URL = "http://"+currentIp+"/api/classifyImage/";
@@ -63,6 +69,7 @@ public class NailAssessmentActivity extends BaseActivity {
 
     //GUI ITEMS
     private static ProgressDialog mProgressDialog;
+    private SweetAlertDialog pDialog;
     Button CaptureImg, Upload;
     ImageView iCaptured;
 
@@ -73,10 +80,13 @@ public class NailAssessmentActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nail_assessment);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         ICM = new InternetConnectionManager();
-        Upload = (Button)findViewById(R.id.btnUpload);
-        CaptureImg = (Button)findViewById(R.id.btnCapture);
-        iCaptured = (ImageView)findViewById(R.id.ivCaptured);
+        Upload = findViewById(R.id.btnUpload);
+        CaptureImg = findViewById(R.id.btnCapture);
+        iCaptured = findViewById(R.id.ivCaptured);
 
         Upload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +105,9 @@ public class NailAssessmentActivity extends BaseActivity {
         this.token = prefs.getString("token", "");
         this.id = prefs.getString("id", "");
         askPermissions();
+
+        getSupportActionBar().setTitle("Assess Fingernail");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void askPermissions() {
@@ -256,6 +269,7 @@ public class NailAssessmentActivity extends BaseActivity {
 
             if (resultCode == RESULT_OK) {
                 mCurrentCroppedImageUri = result.getUri();
+                iCaptured.setImageResource(android.R.color.transparent);
                 iCaptured.setImageURI(mCurrentCroppedImageUri);
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mCurrentCroppedImageUri);
@@ -340,13 +354,9 @@ public class NailAssessmentActivity extends BaseActivity {
         protected void onPreExecute(){
 
             super.onPreExecute();
-            mProgressDialog = new ProgressDialog(NailAssessmentActivity.this);
-            mProgressDialog.setTitle("Fingernail Assessment");
-            mProgressDialog.setMessage("Processing...");
-            mProgressDialog.setIndeterminate(false);
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.setCanceledOnTouchOutside(false);
-            mProgressDialog.show();
+            pDialog = new SweetAlertDialog(NailAssessmentActivity.this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Processing");
+            pDialog.show();
+            pDialog.setCancelable(false);
         }
 
         @Override
@@ -356,7 +366,7 @@ public class NailAssessmentActivity extends BaseActivity {
                 String resp = uploadFile(paths[0]);
                 return ""+resp;
             }catch (Exception e){
-                return "Unable to upload image";
+                return "No Image";
             }
         }
 
@@ -464,7 +474,7 @@ public class NailAssessmentActivity extends BaseActivity {
                             String TerryNails = jsonObject.getString("Terry's Nails").trim();
                             String YellowNails = jsonObject.getString("Yellow Nail Syndrome").trim();
 
-                            Results = "Status: "+status;
+                            Results = status;
 
                         }catch (JSONException ex){
                             ex.printStackTrace();
@@ -478,7 +488,7 @@ public class NailAssessmentActivity extends BaseActivity {
                     else if (serverResponseCode == 400) {
 
                         Log.e("NailAssessmentActivity", "Invalid image");
-                        String message = "Invalid fingernail image";
+                        String message = "Bad Request";
                         Results = message;
                     }
 
@@ -502,26 +512,108 @@ public class NailAssessmentActivity extends BaseActivity {
         @Override
         protected void onPostExecute(String result) {
 
-            mProgressDialog.dismiss();
-            AlertDialog.Builder PopupWindow = new AlertDialog.Builder(NailAssessmentActivity.this);
-            View ResultView = getLayoutInflater().inflate(R.layout.activity_nail_result, null);
-            TextView ResultText = (TextView)ResultView.findViewById(R.id.tvResult);
-            Button OkayButton = (Button)ResultView.findViewById(R.id.btnOkay);
+            if(result.equals("Healthy")){
+                pDialog.dismiss();
+                new SweetAlertDialog(NailAssessmentActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Result")
+                        .setContentText("You're healthy")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismiss();
+                                NailAssessmentActivity.this.finish();
+                                Intent intent = new Intent(NailAssessmentActivity.this, NailAssessmentActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
+            } else if (result.equals("Unhealthy")) {
+                pDialog.dismiss();
+                new SweetAlertDialog(NailAssessmentActivity.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Result")
+                        .setContentText("You're unhealthy")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismiss();
+                                NailAssessmentActivity.this.finish();
+                                Intent intent = new Intent(NailAssessmentActivity.this, NailAssessmentActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
+            } else if (result.equals("No Image")){
+                pDialog.dismiss();
+                new SweetAlertDialog(NailAssessmentActivity.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Warning")
+                        .setContentText("No image to be processed")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismiss();
+                            }
+                        })
+                        .show();
 
-            PopupWindow.setView(ResultView);
-            final AlertDialog dialog = PopupWindow.create();
-            dialog.show();
-            ResultText.setText(result);
-            OkayButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                    NailAssessmentActivity.this.finish();
-                    Intent intent = new Intent(NailAssessmentActivity.this, NailAssessmentActivity.class);
-                    startActivity(intent);
-                }
-            });
+            } else if (result.equals("Bad Request")) {
+                pDialog.dismiss();
+                new SweetAlertDialog(NailAssessmentActivity.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error")
+                        .setContentText("Must be a fingernail")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismiss();
+                                NailAssessmentActivity.this.finish();
+                                Intent intent = new Intent(NailAssessmentActivity.this, NailAssessmentActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
+            }
+            else {
+                pDialog.dismiss();
+                new SweetAlertDialog(NailAssessmentActivity.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error")
+                        .setContentText("Please check your internet connection")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismiss();
+                                NailAssessmentActivity.this.finish();
+                                Intent intent = new Intent(NailAssessmentActivity.this, NailAssessmentActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
+            }
         }
+    }
+
+    /*
+    Action bar
+    */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.nail_assessment_menu, menu);
+        return true;
+    }
+
+    /*
+    Boolean for selected options in menu
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            /*
+            If home is selected
+             */
+            case android.R.id.home:
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

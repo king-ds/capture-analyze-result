@@ -12,10 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:elevation="10dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="20dp"
-        app:cardBackgroundColor="@color/colorPrimary"
         app:cardPreventCornerOverlap="false"
         app:cardUseCompatPadding="true">
 
@@ -30,6 +28,22 @@
                 android:id="@+id/ivButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tvSelection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:textSize="36sp"
+                android:text="Nail Assessment"
+                android:textColor="@color/colorBlack" />
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="12dp"
+                android:textColor="@color/colorGray"
+                android:text="Check the previous transaction"/>
 
         </LinearLayout>
     </android.support.v7.widget.CardView>

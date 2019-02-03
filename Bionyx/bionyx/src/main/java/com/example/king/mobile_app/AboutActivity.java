@@ -129,28 +129,6 @@ public class AboutActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.dashboard, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -159,11 +137,13 @@ public class AboutActivity extends AppCompatActivity
         switch (id){
             case R.id.nav_home:
                 Intent iHome = new Intent(AboutActivity.this, DashboardActivity.class);
+                AboutActivity.this.finish();
                 startActivity(iHome);
                 break;
 
             case R.id.nav_profile:
                 Intent iProfile = new Intent(AboutActivity.this, UserProfileActivity.class);
+                AboutActivity.this.finish();
                 startActivity(iProfile);
                 break;
 
@@ -171,6 +151,7 @@ public class AboutActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_logout:
+                AboutActivity.this.finish();
                 profile_photo_loader.clearCache();
                 historyPhotoLoader.clearCache();
                 SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);

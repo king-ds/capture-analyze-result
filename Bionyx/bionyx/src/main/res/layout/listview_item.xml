@@ -4,18 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:paddingStart="30dp"
-    android:paddingEnd="30dp"
+    android:paddingStart="5dp"
     android:paddingTop="15dp"
     android:paddingBottom="15dp"
-    android:layout_marginBottom="10dp"
+    android:layout_margin="30dp"
     android:background="@color/colorWhite">
 
     <ImageView
         android:id="@+id/image"
         android:layout_width="90dp"
         android:layout_height="90dp"
-
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"/>
 
@@ -28,7 +26,8 @@
         android:layout_toEndOf="@+id/image"
         android:text="Transaction ID :"
         android:textSize="15dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:fontFamily="@font/montserrat"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,8 +36,8 @@
         android:layout_marginStart="10dp"
         android:text="1"
         android:layout_alignTop="@+id/image"
-        android:textSize="15dp"/>
-
+        android:textSize="15dp"
+        android:fontFamily="@font/montserrat"/>
     <TextView
         android:id="@+id/resultlabel"
         android:layout_width="114dp"
@@ -48,7 +47,8 @@
         android:layout_toEndOf="@+id/image"
         android:text="Result :"
         android:textSize="15dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:fontFamily="@font/montserrat"/>
     <TextView
         android:id="@+id/result"
         android:layout_width="match_parent"
@@ -57,7 +57,8 @@
         android:layout_marginStart="10dp"
         android:layout_alignTop="@+id/resultlabel"
         android:text="Unhealthy"
-        android:textSize="15dp"/>
+        android:textSize="15dp"
+        android:fontFamily="@font/montserrat"/>
     <TextView
         android:id="@+id/uploadedlabel"
         android:layout_width="114dp"
@@ -67,7 +68,8 @@
         android:layout_toEndOf="@+id/image"
         android:text="Date &amp; time :"
         android:textSize="15dp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:fontFamily="@font/montserrat"/>
     <TextView
         android:id="@+id/uploaded"
         android:layout_width="match_parent"
@@ -76,6 +78,7 @@
         android:layout_marginStart="10dp"
         android:layout_alignTop="@+id/uploadedlabel"
         android:text="2019-01-28 - 1:24:12"
-        android:textSize="15dp"/>
+        android:textSize="15dp"
+        android:fontFamily="@font/montserrat"/>
 
 </RelativeLayout>

@@ -6,19 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/mainbackground"
+    android:background="@drawable/bg_entire"
     tools:context=".RegisterActivity">
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-        <!--
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/mainlogobionyx2"/>-->
+        android:layout_height="wrap_content">
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,11 +25,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_margin="@dimen/dimen_8">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="@font/montserrat"
@@ -72,7 +69,6 @@
                     android:fontFamily="@font/montserrat"
                     android:hint="  First Name"
                     android:inputType="textPersonName"
-
                     android:singleLine="true"
                     android:textColor="@color/colorWhite"
                     android:textColorHint="@color/colorGray" />
@@ -94,7 +90,6 @@
                     android:fontFamily="@font/montserrat"
                     android:hint="  Last Name"
                     android:inputType="textPersonName"
-
                     android:singleLine="true"
                     android:textColor="@color/colorWhite"
                     android:textColorHint="@color/colorGray" />

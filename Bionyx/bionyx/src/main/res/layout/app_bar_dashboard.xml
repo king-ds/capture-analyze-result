@@ -19,17 +19,18 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
+            android:background="@color/colorWhite"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            android:theme="@style/toolbarFont">
         </android.support.v7.widget.Toolbar>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/logo_bionyx"
-                android:scaleType="centerInside"
-                android:layout_gravity="center"
-                android:padding="10dp" />
+            <!--<ImageView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:src="@drawable/logo_bionyx"-->
+                <!--android:scaleType="centerInside"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:padding="10dp" />-->
 
         </FrameLayout>
 

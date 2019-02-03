@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="225dp"
-    android:background="@drawable/navdrawercolor"
+    android:background="@color/colorPrimary"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -30,6 +30,7 @@
 
         <TextView
             android:id="@+id/tv_Nav_UserName"
+            android:fontFamily="@font/montserrat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
@@ -42,6 +43,7 @@
 
         <TextView
             android:id="@+id/tv_Nav_Email"
+            android:fontFamily="@font/montserrat"
             android:layout_width="wrap_content"
             android:gravity="center"
             android:layout_height="wrap_content"

@@ -8,14 +8,15 @@ import java.util.HashMap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -85,6 +86,13 @@ public class ListViewAdapter extends BaseAdapter {
         uploaded = itemView.findViewById(R.id.uploaded);
         result = itemView.findViewById(R.id.result);
 
+        AssetManager am = context.getApplicationContext().getAssets();
+        Typeface custom_font = Typeface.createFromAsset(am, "fonts/montserrat.ttf");
+
+        transactionid.setTypeface(custom_font);
+        uploaded.setTypeface(custom_font);
+        result.setTypeface(custom_font);
+
         /*
         Locate the imageview in listview_item
          */
@@ -140,27 +148,38 @@ public class ListViewAdapter extends BaseAdapter {
                         /*
                         Pass all related data
                          */
-                        Intent intent = new Intent(context, SingleItemView.class);
-                        intent.putExtra("transactionid", resultp.get(HistoryActivity.TRANSACTIONID));
-                        intent.putExtra("owner", resultp.get(HistoryActivity.OWNER));
-                        intent.putExtra("uploaded", resultp.get(HistoryActivity.UPLOADED));
-                        intent.putExtra("BeauLines", resultp.get(HistoryActivity.BEAULINES));
-                        intent.putExtra("Healthy", resultp.get(HistoryActivity.HEALTHY));
-                        intent.putExtra("ClubbedNails", resultp.get(HistoryActivity.CLUBBEDNAILS));
-                        intent.putExtra("Splinter", resultp.get(HistoryActivity.SPLINTER));
-                        intent.putExtra("TerryNails", resultp.get(HistoryActivity.TERRYNAILS));
-                        intent.putExtra("YellowNails", resultp.get(HistoryActivity.YELLOWNAILS));
-                        intent.putExtra("image", resultp.get(HistoryActivity.IMAGE));
-                        intent.putExtra("status", resultp.get(HistoryActivity.STATUS));
-                        intent.putExtra("diseases", resultp.get(HistoryActivity.DISEASES));
-                        intent.putExtra("filtered_image", resultp.get(HistoryActivity.FILTERED_IMAGE));
-                        /*
-                        PDF Image
-                         */
-                        image.buildDrawingCache();
-                        Bitmap bitmap = image.getDrawingCache();
-                        intent.putExtra("bitmapImage", bitmap);
-                        context.startActivity(intent);
+                        String status = resultp.get(HistoryActivity.STATUS);
+
+                        if(status.equals("Healthy")){
+                            Intent healthy_intent = new Intent(context, HealthyViewAdapter.class);
+                            healthy_intent.putExtra("image", resultp.get(HistoryActivity.IMAGE));
+                            healthy_intent.putExtra("status", resultp.get(HistoryActivity.STATUS));
+                            healthy_intent.putExtra("transactionid", resultp.get(HistoryActivity.TRANSACTIONID));
+                            image.buildDrawingCache();
+                            Bitmap bitmap = image.getDrawingCache();
+                            healthy_intent.putExtra("bitmapImage", bitmap);
+                            context.startActivity(healthy_intent);
+
+                        } else if (status.equals("Unhealthy")){
+
+                            Intent unhealthy_intent = new Intent(context, UnhealthyViewAdapter.class);
+                            unhealthy_intent.putExtra("transactionid", resultp.get(HistoryActivity.TRANSACTIONID));
+                            unhealthy_intent.putExtra("owner", resultp.get(HistoryActivity.OWNER));
+                            unhealthy_intent.putExtra("uploaded", resultp.get(HistoryActivity.UPLOADED));
+                            unhealthy_intent.putExtra("BeauLines", resultp.get(HistoryActivity.BEAULINES));
+                            unhealthy_intent.putExtra("Healthy", resultp.get(HistoryActivity.HEALTHY));
+                            unhealthy_intent.putExtra("ClubbedNails", resultp.get(HistoryActivity.CLUBBEDNAILS));
+                            unhealthy_intent.putExtra("Splinter", resultp.get(HistoryActivity.SPLINTER));
+                            unhealthy_intent.putExtra("TerryNails", resultp.get(HistoryActivity.TERRYNAILS));
+                            unhealthy_intent.putExtra("YellowNails", resultp.get(HistoryActivity.YELLOWNAILS));
+                            unhealthy_intent.putExtra("image", resultp.get(HistoryActivity.IMAGE));
+                            unhealthy_intent.putExtra("status", resultp.get(HistoryActivity.STATUS));
+                            unhealthy_intent.putExtra("diseases", resultp.get(HistoryActivity.DISEASES));
+                            image.buildDrawingCache();
+                            Bitmap bitmap = image.getDrawingCache();
+                            unhealthy_intent.putExtra("bitmapImage", bitmap);
+                            context.startActivity(unhealthy_intent);
+                        }
 
                         break;
                     /*

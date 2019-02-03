@@ -168,7 +168,7 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
         boolean lengthFlag = false;
         boolean success = false;
 
-        if (password.length()> 8){
+        if (password.length() > 7){
             lengthFlag = true;
         }
 

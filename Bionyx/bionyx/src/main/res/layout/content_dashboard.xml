@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_dashboard"
+    android:background="#0898d1"
     tools:context=".DashboardActivity"
     tools:showIn="@layout/app_bar_dashboard">
 
@@ -18,7 +18,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"/>
+            android:layout_height="125dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/logo_bionyx" />
 
         <LinearLayout
             android:layout_width="match_parent"

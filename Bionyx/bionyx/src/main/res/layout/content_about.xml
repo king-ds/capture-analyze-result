@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mainbackground"
+    android:background="@drawable/bg_entire"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".zzzPangTryNiJover">
@@ -19,14 +19,15 @@
         <!--Logo ng Bionyx Start-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="280dp"
             android:paddingStart="40dp"
             android:paddingEnd="40dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/mainlogobionyx"/>
-        </LinearLayout>
+            </LinearLayout>
         <!--Logo ng Bionyx End-->
 
         <!--What is Bionyx Start-->

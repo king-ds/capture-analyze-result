@@ -1,17 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/mainbackground"
-    android:padding="@dimen/activity_margin"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".NailAssessmentActivity">
+    android:background="@color/colorPrimary"
+    android:layout_width="match_parent">
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorPrimary"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".NailAssessmentActivity">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorWhite"
+                android:theme="@style/toolbarFont">
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/activity_margin"
@@ -23,8 +42,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
+            android:layout_margin="15dp"
             android:adjustViewBounds="true"
-            android:background="@drawable/bt_bg"
+            android:background="@drawable/bg_focuswithwords"
             android:src="@drawable/focuswithwords"
             android:visibility="visible" />
 
@@ -45,7 +65,6 @@
 
     </LinearLayout>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,10 +78,10 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dimen_8"
             android:layout_weight="1"
-            android:background="@drawable/startbutton"
+            android:background="@color/colorWhite"
             android:foreground="?attr/selectableItemBackground"
             android:text="Take Picture"
-            android:textColor="@android:color/white"/>
+            android:textColor="@color/colorBlack"/>
 
         <Button
             android:id="@+id/btnUpload"
@@ -70,10 +89,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dimen_8"
             android:layout_weight="1"
-            android:background="@drawable/startbutton"
+            android:background="#fbff1e"
             android:foreground="?attr/selectableItemBackground"
             android:text="Process"
-            android:textColor="@android:color/white"/>
+            android:textColor="@color/colorBlack"/>
     </LinearLayout>
 
-</LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

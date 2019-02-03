@@ -21,7 +21,7 @@
             android:id="@+id/rellay1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/profilegrad"
+            android:background="@drawable/bg_entire"
             android:paddingBottom="20dp">
 
             <RelativeLayout
@@ -39,9 +39,9 @@
                     android:layout_margin="9dp"
                     android:padding="3dp"
                     android:layout_gravity="center"
+                    android:clickable="false"
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/liza"
-                    android:clickable="true"
                     android:id="@+id/iv_Avatar" />
 
 
@@ -55,7 +55,7 @@
                 android:layout_below="@+id/imgUser"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5sp"
-                android:fontFamily="sans-serif-light"
+                android:fontFamily="@font/montserrat"
                 android:textStyle="bold"
                 android:text="Username"
                 android:textColor="#ffffff"
@@ -77,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:background="#29abbb"
+                android:background="#0A90B5"
                 android:gravity="center"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp">
@@ -92,7 +92,7 @@
                         android:id="@+id/tv_UserID"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
+                        android:fontFamily="@font/montserrat"
                         android:textStyle="bold"
                         android:text="21"
                         android:textColor="#ffffff"
@@ -101,7 +101,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
+                        android:fontFamily="@font/montserrat"
                         android:text="ID"
                         android:textAllCaps="true"
                         android:textColor="#ffffff"
@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:background="#FF2FC1C7"
+                android:background="#089ac1"
                 android:gravity="center"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp">
@@ -131,7 +131,7 @@
                         android:id="@+id/tv_ProcessedImages"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
+                        android:fontFamily="@font/montserrat"
                         android:textStyle="bold"
                         android:text=""
                         android:textColor="#ffff"
@@ -140,7 +140,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
+                        android:fontFamily="@font/montserrat"
                         android:text="# of processed image"
                         android:textAllCaps="true"
                         android:textColor="#ffffff"
@@ -182,13 +182,14 @@
                             android:layout_height="wrap_content"
                             android:text="First Name"
                             android:textColor="#3797CF"
-                            android:textSize="13sp" />
+                            android:textSize="13sp"
+                            android:fontFamily="@font/montserrat"/>
 
                         <EditText
                             android:id="@+id/tv_FirstName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-light"
+                            android:fontFamily="@font/montserrat"
                             android:text=""
                             android:textColor="#000000"
                             android:textSize="18sp"
@@ -214,13 +215,14 @@
                             android:text="Last Name"
                             android:paddingTop="8dp"
                             android:textColor="#3797CF"
-                            android:textSize="13sp" />
+                            android:textSize="13sp"
+                            android:fontFamily="@font/montserrat"/>
 
                         <EditText
                             android:id="@+id/tv_LastName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-light"
+                            android:fontFamily="@font/montserrat"
                             android:text=""
                             android:textColor="#000000"
                             android:textSize="18sp"
@@ -246,13 +248,14 @@
                             android:paddingTop="8dp"
                             android:text="Email"
                             android:textColor="#3797CF"
-                            android:textSize="13sp" />
+                            android:textSize="13sp"
+                            android:fontFamily="@font/montserrat"/>
 
                         <EditText
                             android:id="@+id/tv_Email"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-light"
+                            android:fontFamily="@font/montserrat"
                             android:text=""
                             android:textColor="#000000"
                             android:textSize="18sp"
@@ -278,13 +281,14 @@
                             android:paddingTop="8dp"
                             android:text="Date Joined"
                             android:textColor="#3797CF"
-                            android:textSize="13sp" />
+                            android:textSize="13sp"
+                            android:fontFamily="@font/montserrat"/>
 
                         <TextView
                             android:id="@+id/tv_DateJoined"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-light"
+                            android:fontFamily="@font/montserrat"
                             android:text="0"
                             android:textColor="#000000"
                             android:textSize="18sp" />

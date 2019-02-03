@@ -1,260 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp"
-    android:background="@drawable/mainbackground"
-    tools:context=".DiseasesActivity">
+    android:id="@+id/fragmentContainer">
 
-    <LinearLayout
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <!--Beaus Line Start-->
-        <android.support.v7.widget.CardView
-            android:id="@+id/dis_beuasline"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
-            app:cardUseCompatPadding="true">
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorWhite"
+            android:theme="@style/toolbarFont">
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+    <android.support.v7.widget.RecyclerView
+        android:background="@drawable/bg_entire"
+        android:id="@+id/disorders_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-                <ImageView
-                    android:layout_width="125dp"
-                    android:layout_height="125dp"
-                    android:background="@drawable/disorder_beau_lines"
-                    />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:textColor="#000000"
-                        android:text="Beau's Lines"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:text="@string/beausline"
-                        android:maxLines="6"
-                        android:ellipsize="end"/>
-
-                </LinearLayout>
-            </LinearLayout>
-
-
-
-        </android.support.v7.widget.CardView>
-        <!--Beaus Line End-->
-
-        <!--Clubbed Nail Start-->
-        <android.support.v7.widget.CardView
-            android:id="@+id/dis_clubbednails"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
-            app:cardUseCompatPadding="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="125dp"
-                    android:layout_height="125dp"
-                    android:background="@drawable/disorder_clubbed_nails"
-                    />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:textColor="#000000"
-                        android:text="Clubbed Nail"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:text="@string/clubbed_nail"
-                        android:maxLines="4"
-                        android:ellipsize="end"/>
-
-                </LinearLayout>
-            </LinearLayout>
-
-
-
-        </android.support.v7.widget.CardView>
-        <!--Clubbed Nail End-->
-
-        <!--Splinter Start-->
-        <android.support.v7.widget.CardView
-            android:id="@+id/dis_splinter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
-
-            app:cardUseCompatPadding="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="125dp"
-                    android:layout_height="125dp"
-                    android:background="@drawable/disorder_splinter"
-                    />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:textColor="#000000"
-                        android:text="Splinter Haemorrhages"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:text="@string/splinter_nail"
-                        android:maxLines="4"
-                        android:ellipsize="end"/>
-
-                </LinearLayout>
-            </LinearLayout>
-
-
-
-        </android.support.v7.widget.CardView>
-        <!--Splinter End-->
-
-        <!--Terry's Nails Start-->
-        <android.support.v7.widget.CardView
-            android:id="@+id/dis_terrynail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
-            app:cardUseCompatPadding="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="125dp"
-                    android:layout_height="125dp"
-                    android:background="@drawable/disorder_terry_nails" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:textColor="#000000"
-                        android:text="Terry's Nails"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:text="@string/terry_nail"
-                        android:maxLines="4"
-                        android:ellipsize="end"/>
-
-                </LinearLayout>
-            </LinearLayout>
-
-
-
-        </android.support.v7.widget.CardView>
-        <!--Terry's Nails End-->
-
-        <!--Yellow Nail Syndrom Start-->
-        <android.support.v7.widget.CardView
-            android:id="@+id/dis_yellownails"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
-            android:layout_marginBottom="5dp"
-            app:cardUseCompatPadding="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="125dp"
-                    android:layout_height="125dp"
-                    android:background="@drawable/disorder_yellow_nail"
-                    />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:textColor="#000000"
-                        android:text="Yellow Nail Syndrom"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:text="@string/yello_nail"
-                        android:maxLines="4"
-                        android:ellipsize="end"/>
-
-                </LinearLayout>
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-        <!--Yellow Nail Syndrom End-->
-
-
-    </LinearLayout>
-
-</ScrollView>
+</android.support.design.widget.CoordinatorLayout>

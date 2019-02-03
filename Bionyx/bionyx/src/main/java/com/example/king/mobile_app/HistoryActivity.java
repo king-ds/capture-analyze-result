@@ -1,6 +1,5 @@
 package com.example.king.mobile_app;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import java.io.BufferedReader;
@@ -9,9 +8,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -63,6 +65,9 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
         new GetTransactionHistory().execute();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         historyPhotoLoader = new HistoryPhotoLoader(this);
         getSupportActionBar().setTitle("History");
@@ -129,7 +134,7 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
                             map.put("BeauLines", jsonobject.getString("beau_lines"));
                             map.put("ClubbedNails", jsonobject.getString("clubbed_nails"));
                             map.put("Healthy", jsonobject.getString("healthy"));
-                            map.put("Splinter", jsonobject.getString("splinter_hemorrhage"));
+                            map.put("Spoon", jsonobject.getString("splinter_hemorrhage"));
                             map.put("TerryNails", jsonobject.getString("terry_nails"));
                             map.put("YellowNails", jsonobject.getString("yellow_nails"));
                             map.put("status", jsonobject.getString("status"));
@@ -162,8 +167,6 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
                             public void onClick(SweetAlertDialog sDialog) {
                                 sDialog.dismiss();
                                 HistoryActivity.this.finish();
-                                Intent intent = new Intent(HistoryActivity.this, DashboardActivity.class);
-                                startActivity(intent);
                             }
                         })
                         .show();

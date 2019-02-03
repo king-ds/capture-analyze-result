@@ -3,9 +3,11 @@ package com.example.king.mobile_app;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -30,13 +32,9 @@ public class DashboardActivity extends AppCompatActivity
     NavigationView navigationView;
     Toolbar toolbar = null;
 
-<<<<<<< Bionyx/bionyx/src/main/java/com/example/king/mobile_app/DashboardActivity.java
-    private ImageLoader imgLoader, imageLoader;
-=======
     private HistoryPhotoLoader historyPhotoLoader;
     private ProfilePhotoLoader profile_photo_loader;
-    private ImageButton Assess, Diseases, History;
->>>>>>> Bionyx/bionyx/src/main/java/com/example/king/mobile_app/DashboardActivity.java
+
     private String token = "";
     private String user_id = "";
     private String username = "";
@@ -51,8 +49,7 @@ public class DashboardActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-
-
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         initData();
         HorizontalInfiniteCycleViewPager pager = findViewById(R.id.view_pager);
         DashboardAdapter adapter = new DashboardAdapter(lstImages, getBaseContext());
@@ -93,47 +90,28 @@ public class DashboardActivity extends AppCompatActivity
         Nav_UserName = headerView.findViewById(R.id.tv_Nav_UserName);
         Nav_Email = headerView.findViewById(R.id.tv_Nav_Email);
         ImageView Nav_Avatar = headerView.findViewById(R.id.tv_Nav_Avatar);
-
+        profile_photo_loader.DisplayImage(AVATAR_URL, Nav_Avatar);
         Nav_UserName.setText(username);
         Nav_Email.setText(email);
 
-        ImageView Nav_Avatar = (ImageView)headerView.findViewById(R.id.tv_Nav_Avatar);
-        profile_photo_loader.DisplayImage(AVATAR_URL, Nav_Avatar);
-
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-
+        getSupportActionBar().setTitle("Dashboard");
     }
 
     private void initData() {
-        lstImages.add(new Dashboard("A", R.drawable.dash_camera));
-        lstImages.add(new Dashboard("H", R.drawable.dash_history));
-        lstImages.add(new Dashboard("D", R.drawable.dash_disorders));
+        lstImages.add(new Dashboard("Assess Fingernail", "Capture and identify possible diseases", R.drawable.dash_camera_lb200dp));
+        lstImages.add(new Dashboard("History", "View the previous transaction", R.drawable.dash_history_yellow200dp));
+        lstImages.add(new Dashboard("Disorders", "List the different fingernail disorders", R.drawable.dash_disorders_red200dp));
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
 
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.dashboard, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

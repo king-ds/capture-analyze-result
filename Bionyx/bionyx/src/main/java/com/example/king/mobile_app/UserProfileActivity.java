@@ -31,6 +31,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
+
 import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
@@ -53,6 +55,7 @@ import static com.example.king.mobile_app.BaseActivity.currentIp;
 public class UserProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private SweetAlertDialog pDialog;
     private ProfilePhotoLoader profile_photo_loader;
     private String SERVER_URL = "http://"+currentIp+"/api/postAvatar/";
     private String UPDATE_USER = "http://"+currentIp+"/api/updateUser/";
@@ -90,9 +93,9 @@ public class UserProfileActivity extends AppCompatActivity
         Email = findViewById(R.id.tv_Email);
         Username = findViewById(R.id.tv_Username);
         UserID = findViewById(R.id.tv_UserID);
-        DateJoined = (TextView)findViewById(R.id.tv_DateJoined);
-        Profile_Pic = (ImageView) findViewById(R.id.iv_Avatar);
-        Processed_Images = (TextView)findViewById(R.id.tv_ProcessedImages);
+        DateJoined = findViewById(R.id.tv_DateJoined);
+        Profile_Pic = findViewById(R.id.iv_Avatar);
+        Processed_Images = findViewById(R.id.tv_ProcessedImages);
 
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
         this.username = prefs.getString("username","");
@@ -128,7 +131,6 @@ public class UserProfileActivity extends AppCompatActivity
         Nav_Avatar = headerView.findViewById(R.id.tv_Nav_Avatar);
         profile_photo_loader.DisplayImage(AVATAR_URL, Nav_Avatar);
 
-        Profile_Pic.bringToFront();
         Profile_Pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -394,13 +396,9 @@ public class UserProfileActivity extends AppCompatActivity
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mProgressDialog = new ProgressDialog(UserProfileActivity.this);
-            mProgressDialog.setTitle("Updating Profile Picture");
-            mProgressDialog.setMessage("Loading...");
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.setCanceledOnTouchOutside(false);
-            mProgressDialog.show();
+            pDialog = new SweetAlertDialog(UserProfileActivity.this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Loading");
+            pDialog.show();
+            pDialog.setCancelable(false);
         }
 
         @Override
@@ -538,7 +536,6 @@ public class UserProfileActivity extends AppCompatActivity
         protected void onPostExecute(String result) {
 
             String message;
-            mProgressDialog.dismiss();
 
             if (isSuccess == true) {
 
@@ -546,10 +543,11 @@ public class UserProfileActivity extends AppCompatActivity
                 profile_photo_loader.DisplayImage(AVATAR_URL, Profile_Pic);
                 profile_photo_loader.DisplayImage(AVATAR_URL, Nav_Avatar);
                 message = "Your profile photo has uploaded";
+                pDialog.dismiss();
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
             } else {
-                mProgressDialog.dismiss();
+                pDialog.dismiss();
                 message = "Please check your internet connection";
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
@@ -569,13 +567,9 @@ public class UserProfileActivity extends AppCompatActivity
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mProgressDialog = new ProgressDialog(UserProfileActivity.this);
-            mProgressDialog.setTitle("Profile");
-            mProgressDialog.setMessage("Updating...");
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.setCanceledOnTouchOutside(false);
-            mProgressDialog.show();
+            pDialog = new SweetAlertDialog(UserProfileActivity.this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Updating");
+            pDialog.show();
+            pDialog.setCancelable(false);
         }
 
         @Override
@@ -624,7 +618,6 @@ public class UserProfileActivity extends AppCompatActivity
             super.onPostExecute(aVoid);
 
             String message;
-            mProgressDialog.dismiss();
 
             if(isUpdated){
                 message = "User profile has updated";
@@ -635,13 +628,15 @@ public class UserProfileActivity extends AppCompatActivity
                 editor.putString("email", email);
                 editor.putString("username", username);
                 editor.apply();
-
+                pDialog.dismiss();
                 Intent refresh_intent = new Intent(UserProfileActivity.this, UserProfileActivity.class);
                 UserProfileActivity.this.finish();
                 startActivity(refresh_intent);
 
                 Toast.makeText(UserProfileActivity.this, message, Toast.LENGTH_SHORT).show();
             }else{
+
+                pDialog.dismiss();
                 message = "Check your internet connection";
                 Toast.makeText(UserProfileActivity.this, message, Toast.LENGTH_SHORT).show();
             }
@@ -706,7 +701,7 @@ public class UserProfileActivity extends AppCompatActivity
             case R.id.menu_edit:
 
                 setEnabledEditText();
-
+                Profile_Pic.setClickable(true);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(Username, InputMethodManager.SHOW_IMPLICIT);
 
@@ -717,7 +712,7 @@ public class UserProfileActivity extends AppCompatActivity
                 return true;
 
             case R.id.menu_cancel:
-
+                Profile_Pic.setClickable(false);
                 action.findItem(R.id.menu_edit).setVisible(true);
                 action.findItem(R.id.menu_cancel).setVisible(false);
                 action.findItem(R.id.menu_save).setVisible(false);
@@ -734,6 +729,7 @@ public class UserProfileActivity extends AppCompatActivity
                 action.findItem(R.id.menu_edit).setVisible(true);
                 action.findItem(R.id.menu_save).setVisible(false);
                 action.findItem(R.id.menu_cancel).setVisible(false);
+                Profile_Pic.setClickable(false);
 
                 setUserDetails();
                 setDisabledEditText();
@@ -741,6 +737,7 @@ public class UserProfileActivity extends AppCompatActivity
                 return true;
 
             default:
+                Profile_Pic.setClickable(false);
                 return super.onOptionsItemSelected(item);
         }
     }
@@ -756,6 +753,7 @@ public class UserProfileActivity extends AppCompatActivity
         switch (id){
 
             case R.id.nav_home:
+                UserProfileActivity.this.finish();
                 Intent iHome = new Intent(UserProfileActivity.this, DashboardActivity.class);
                 startActivity(iHome);
                 break;
@@ -764,11 +762,13 @@ public class UserProfileActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_about:
+                UserProfileActivity.this.finish();
                 Intent iAbout = new Intent(UserProfileActivity.this, AboutActivity.class);
                 startActivity(iAbout);
                 break;
 
             case R.id.nav_logout:
+                UserProfileActivity.this.finish();
                 SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
                 sharedPreferences.edit().clear().commit();
                 profile_photo_loader.clearCache();
