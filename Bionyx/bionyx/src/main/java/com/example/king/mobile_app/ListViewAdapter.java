@@ -148,9 +148,9 @@ public class ListViewAdapter extends BaseAdapter {
                         /*
                         Pass all related data
                          */
-                        String status = resultp.get(HistoryActivity.STATUS);
+                        String isHealthy = resultp.get(HistoryActivity.STATUS);
 
-                        if(status.equals("Healthy")){
+                        if(isHealthy.equals("Healthy")){
                             Intent healthy_intent = new Intent(context, HealthyViewAdapter.class);
                             healthy_intent.putExtra("image", resultp.get(HistoryActivity.IMAGE));
                             healthy_intent.putExtra("status", resultp.get(HistoryActivity.STATUS));
@@ -160,16 +160,15 @@ public class ListViewAdapter extends BaseAdapter {
                             healthy_intent.putExtra("bitmapImage", bitmap);
                             context.startActivity(healthy_intent);
 
-                        } else if (status.equals("Unhealthy")){
+                        } else if (isHealthy.equals("Unhealthy")){
 
                             Intent unhealthy_intent = new Intent(context, UnhealthyViewAdapter.class);
                             unhealthy_intent.putExtra("transactionid", resultp.get(HistoryActivity.TRANSACTIONID));
                             unhealthy_intent.putExtra("owner", resultp.get(HistoryActivity.OWNER));
                             unhealthy_intent.putExtra("uploaded", resultp.get(HistoryActivity.UPLOADED));
                             unhealthy_intent.putExtra("BeauLines", resultp.get(HistoryActivity.BEAULINES));
-                            unhealthy_intent.putExtra("Healthy", resultp.get(HistoryActivity.HEALTHY));
                             unhealthy_intent.putExtra("ClubbedNails", resultp.get(HistoryActivity.CLUBBEDNAILS));
-                            unhealthy_intent.putExtra("Splinter", resultp.get(HistoryActivity.SPLINTER));
+                            unhealthy_intent.putExtra("Spoon", resultp.get(HistoryActivity.SPOON));
                             unhealthy_intent.putExtra("TerryNails", resultp.get(HistoryActivity.TERRYNAILS));
                             unhealthy_intent.putExtra("YellowNails", resultp.get(HistoryActivity.YELLOWNAILS));
                             unhealthy_intent.putExtra("image", resultp.get(HistoryActivity.IMAGE));
@@ -250,6 +249,7 @@ public class ListViewAdapter extends BaseAdapter {
                             @Override
                             public void onClick(SweetAlertDialog sDialog) {
                                 sDialog.dismiss();
+                                ((HistoryActivity)context).finish();
                                 Intent intent = new Intent(context, HistoryActivity.class);
                                 context.startActivity(intent);
                             }

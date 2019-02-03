@@ -464,15 +464,8 @@ public class NailAssessmentActivity extends AppCompatActivity {
 
                         try{
 
-                            DecimalFormat df = new DecimalFormat("#0.00");
                             JSONObject jsonObject = new JSONObject(response);
                             String status = jsonObject.getString("Status").trim();
-                            String BeauLines = jsonObject.getString("Beau Lines").trim();
-                            String ClubbedNails = jsonObject.getString("Clubbed Nails").trim();
-                            String Healthy = jsonObject.getString("Healthy").trim();
-                            String Splinter = jsonObject.getString("Splinter Hemorrhage").trim();
-                            String TerryNails = jsonObject.getString("Terry's Nails").trim();
-                            String YellowNails = jsonObject.getString("Yellow Nail Syndrome").trim();
 
                             Results = status;
 
@@ -511,7 +504,7 @@ public class NailAssessmentActivity extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(String result) {
-
+            System.out.print(result);
             if(result.equals("Healthy")){
                 pDialog.dismiss();
                 new SweetAlertDialog(NailAssessmentActivity.this, SweetAlertDialog.SUCCESS_TYPE)

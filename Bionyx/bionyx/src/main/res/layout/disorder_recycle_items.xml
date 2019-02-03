@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/disorders_cardview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_entire"
+    android:layout_margin="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/ivDisorder"
+            android:layout_width="120dp"
+            android:layout_height="125dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/colorWhite"
+            android:scaleType="centerCrop"
+            android:src="@drawable/vector_spoon"/>
+
+        <TextView
+            android:id="@+id/tvDisorderTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/ivDisorder"
+            android:layout_alignTop="@id/ivDisorder"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat"
+            android:maxLines="1"
+            android:text="Beau lines"
+            android:textColor="@color/colorBlack"
+            android:textSize="23dp" />
+
+        <TextView
+            android:id="@+id/tvDisorderDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDisorderTitle"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/ivDisorder"
+            android:fontFamily="@font/montserrat"
+            android:text="Beau lines are indentations that run across the nails."
+            android:textColor="#000000"
+            android:textSize="17dp" />
+
+        <TextView
+            android:layout_marginTop="5dp"
+            android:id="@+id/tvCHTRM"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Click here to read more"
+            android:textColor="#A9A9A9"
+            android:layout_toRightOf="@id/ivDisorder"
+            android:layout_below="@id/tvDisorderDescription"
+            android:fontFamily="@font/montserrat"/>
+
+        <ImageView
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:id="@+id/ivViewDisorder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvDisorderDescription"
+            android:layout_toRightOf="@id/tvCHTRM"
+            android:src="@drawable/ic_chevron_right" />
+
+    </RelativeLayout>
+</FrameLayout>

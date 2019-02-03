@@ -48,8 +48,7 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
     static String RESULT = "result";
     static String BEAULINES = "BeauLines";
     static String CLUBBEDNAILS = "ClubbedNails";
-    static String HEALTHY = "Healthy";
-    static String SPLINTER = "Splinter";
+    static String SPOON = "Spoon";
     static String TERRYNAILS = "TerryNails";
     static String YELLOWNAILS = "YellowNails";
     static String IMAGE = "image";
@@ -61,7 +60,7 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
         this.username = prefs.getString("username", "");
-        this.TRANSACTION_HISTORY_URL = "http://"+currentIp+"/api/history/"+username;
+        this.TRANSACTION_HISTORY_URL = "http://"+currentIp+"/api/history/"+username+"/";
         new GetTransactionHistory().execute();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
@@ -133,8 +132,7 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
                             map.put("uploaded", jsonobject.getString("uploaded"));
                             map.put("BeauLines", jsonobject.getString("beau_lines"));
                             map.put("ClubbedNails", jsonobject.getString("clubbed_nails"));
-                            map.put("Healthy", jsonobject.getString("healthy"));
-                            map.put("Spoon", jsonobject.getString("splinter_hemorrhage"));
+                            map.put("Spoon", jsonobject.getString("spoon_nails"));
                             map.put("TerryNails", jsonobject.getString("terry_nails"));
                             map.put("YellowNails", jsonobject.getString("yellow_nails"));
                             map.put("status", jsonobject.getString("status"));
