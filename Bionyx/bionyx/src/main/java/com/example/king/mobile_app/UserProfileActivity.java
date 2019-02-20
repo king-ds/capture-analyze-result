@@ -4,7 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -59,6 +61,7 @@ public class UserProfileActivity extends AppCompatActivity
     private ProfilePhotoLoader profile_photo_loader;
     private String SERVER_URL = "http://"+currentIp+"/api/postAvatar/";
     private String UPDATE_USER = "http://"+currentIp+"/api/updateUser/";
+    private Button Take_Picture,Choose_from_gallery, View_photo, Cancel;
     private String AVATAR_URL = "";
     private String user_id = "";
     private String username = "";
@@ -78,16 +81,34 @@ public class UserProfileActivity extends AppCompatActivity
     private static ProgressDialog mProgressDialog;
     private InternetConnectionManager ICM;
     private Menu action;
+    private AlertDialog dialog;
+    private View SelectionView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        /*
+        Toolbar for user profile
+         */
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /*
+        Variable for internet connectivity
+         */
         ICM = new InternetConnectionManager();
+
+        /*
+        Profile picture loader
+         */
         profile_photo_loader = new ProfilePhotoLoader(this);
+
+        /*
+        All textview for this layout
+         */
         FirstName = findViewById(R.id.tv_FirstName);
         LastName = findViewById(R.id.tv_LastName);
         Email = findViewById(R.id.tv_Email);
@@ -97,6 +118,9 @@ public class UserProfileActivity extends AppCompatActivity
         Profile_Pic = findViewById(R.id.iv_Avatar);
         Processed_Images = findViewById(R.id.tv_ProcessedImages);
 
+        /*
+        Save locally the user details
+         */
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
         this.username = prefs.getString("username","");
         this.first_name = prefs.getString("first_name","");
@@ -109,20 +133,35 @@ public class UserProfileActivity extends AppCompatActivity
         this.processed_images = prefs.getString("processed_images", "");
         this.UPDATE_USER += user_id+"/";
 
+        /*
+        Set all the user details and disable the edit function
+         */
         setUserDetails();
         setDisabledEditText();
 
+        /*
+        Display the image fetched from api
+         */
         profile_photo_loader.DisplayImage(AVATAR_URL, Profile_Pic);
 
+        /*
+        Navigation drawer
+         */
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        /*
+        Side bar
+         */
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        /*
+        Header for side bar
+         */
         View headerView = navigationView.getHeaderView(0);
         TextView Nav_UserName = headerView.findViewById(R.id.tv_Nav_UserName);
         Nav_UserName.setText(username);
@@ -131,12 +170,33 @@ public class UserProfileActivity extends AppCompatActivity
         Nav_Avatar = headerView.findViewById(R.id.tv_Nav_Avatar);
         profile_photo_loader.DisplayImage(AVATAR_URL, Nav_Avatar);
 
+        /*
+        Selection view for profile photo
+         */
+        AlertDialog.Builder PopupWindow = new AlertDialog.Builder(UserProfileActivity.this);
+        SelectionView = getLayoutInflater().inflate(R.layout.activity_selection_imageview, null);
+        PopupWindow.setView(SelectionView);
+        dialog = PopupWindow.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Take_Picture = SelectionView.findViewById(R.id.btnTakePicture);
+        View_photo = SelectionView.findViewById(R.id.btnViewPicture);
+        Choose_from_gallery = SelectionView.findViewById(R.id.btnChooseFromGallery);
+        Cancel = SelectionView.findViewById(R.id.btnCancel);
+        Take_Picture.setVisibility(View.GONE);
+        Choose_from_gallery.setVisibility(View.GONE);
+        View_photo.setVisibility(View.VISIBLE);
+        Cancel.setVisibility(View.VISIBLE);
+
+        /*
+        If the profile photo image view is clicked
+         */
         Profile_Pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openSelection();
             }
         });
+
     }
 
     private void setUserDetails(){
@@ -175,15 +235,13 @@ public class UserProfileActivity extends AppCompatActivity
     }
 
     /*
-    Add/Update profile picture by using camera or gallery or view photo
+    Add/Update profile picture by using camera or gallery && view the current profile photo
      */
     private void openSelection(){
-        AlertDialog.Builder PopupWindow = new AlertDialog.Builder(UserProfileActivity.this);
-        View SelectionView = getLayoutInflater().inflate(R.layout.activity_selection_imageview, null);
-        PopupWindow.setView(SelectionView);
-        final AlertDialog dialog = PopupWindow.create();
+
         dialog.show();
-        Button Take_Picture = (Button)SelectionView.findViewById(R.id.btnTakePicture);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
         Take_Picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,7 +249,6 @@ public class UserProfileActivity extends AppCompatActivity
                 dialog.dismiss();
             }
         });
-        Button Choose_from_gallery = (Button)SelectionView.findViewById(R.id.btnChooseFromGallery);
         Choose_from_gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -199,10 +256,10 @@ public class UserProfileActivity extends AppCompatActivity
                 dialog.dismiss();
             }
         });
-        Button View_photo = (Button)SelectionView.findViewById(R.id.btnViewPicture);
         View_photo.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                dialog.dismiss();
                 AlertDialog.Builder PopupWindow = new AlertDialog.Builder(UserProfileActivity.this);
                 View view_photo = getLayoutInflater().inflate(R.layout.activity_view_photo, null);
                 PopupWindow.setView(view_photo);
@@ -210,6 +267,26 @@ public class UserProfileActivity extends AppCompatActivity
                 view_photo_dialog.show();
                 ImageView profile_photo = view_photo.findViewById(R.id.iv_ViewPhoto);
                 profile_photo_loader.DisplayImage(AVATAR_URL, profile_photo);
+                ImageView cancel_view_photo = view_photo.findViewById(R.id.ivCloseWindow);
+                cancel_view_photo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        view_photo_dialog.dismiss();
+                    }
+                });
+            }
+        });
+        Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        ImageView Close_window = SelectionView.findViewById(R.id.ivCloseWindow);
+        Close_window.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
     }
@@ -230,7 +307,6 @@ public class UserProfileActivity extends AppCompatActivity
         System.out.println(imgDir);
         return imgDir;
     }
-
 
     /*
     Create image file to be saved from directory
@@ -307,8 +383,8 @@ public class UserProfileActivity extends AppCompatActivity
         View ProfilePicView = getLayoutInflater().inflate(R.layout.activity_profile_pic, null);
 
         ImageView Temp_ProfilePic = (ImageView)ProfilePicView.findViewById(R.id.ivTemp_ProfilePic);
-        Button Upload = (Button)ProfilePicView.findViewById(R.id.btnUploadProfilePic);
-        Button Cancel = (Button)ProfilePicView.findViewById(R.id.btnCancelProfilePic);
+        Button Upload = ProfilePicView.findViewById(R.id.btnUploadProfilePic);
+        Button Cancel = ProfilePicView.findViewById(R.id.btnCancelProfilePic);
 
         PopupWindow.setView(ProfilePicView);
         final AlertDialog dialog = PopupWindow.create();
@@ -340,7 +416,6 @@ public class UserProfileActivity extends AppCompatActivity
                         }
                     }
                     Temp_ProfilePic.setImageURI(selectedImageUri);
-                    Temp_ProfilePic.setRotation(90);
                 }
                 break;
 
@@ -352,7 +427,6 @@ public class UserProfileActivity extends AppCompatActivity
                     selectedImageUri = mCurrentImageUri;
                     filePath = mCurrentPhotoPath;
                     Temp_ProfilePic.setImageURI(selectedImageUri);
-                    Temp_ProfilePic.setRotation(90);
                 } else if (resultCode == RESULT_CANCELED) {
                     Toast.makeText(this, "Picture was not taken", Toast.LENGTH_SHORT).show();
                 } else {
@@ -705,6 +779,10 @@ public class UserProfileActivity extends AppCompatActivity
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(Username, InputMethodManager.SHOW_IMPLICIT);
 
+                Take_Picture.setVisibility(View.VISIBLE);
+                Choose_from_gallery.setVisibility(View.VISIBLE);
+                View_photo.setVisibility(View.GONE);
+                Cancel.setVisibility(View.GONE);
                 action.findItem(R.id.menu_edit).setVisible(false);
                 action.findItem(R.id.menu_save).setVisible(true);
                 action.findItem(R.id.menu_cancel).setVisible(true);
@@ -712,7 +790,11 @@ public class UserProfileActivity extends AppCompatActivity
                 return true;
 
             case R.id.menu_cancel:
-                Profile_Pic.setClickable(false);
+
+                Take_Picture.setVisibility(View.GONE);
+                Choose_from_gallery.setVisibility(View.GONE);
+                View_photo.setVisibility(View.VISIBLE);
+                Cancel.setVisibility(View.VISIBLE);
                 action.findItem(R.id.menu_edit).setVisible(true);
                 action.findItem(R.id.menu_cancel).setVisible(false);
                 action.findItem(R.id.menu_save).setVisible(false);
@@ -726,10 +808,15 @@ public class UserProfileActivity extends AppCompatActivity
 
                 new UpdateUserInformation().execute();
 
+                Take_Picture.setVisibility(View.GONE);
+                Choose_from_gallery.setVisibility(View.GONE);
+                View_photo.setVisibility(View.VISIBLE);
+                Cancel.setVisibility(View.VISIBLE);
                 action.findItem(R.id.menu_edit).setVisible(true);
                 action.findItem(R.id.menu_save).setVisible(false);
                 action.findItem(R.id.menu_cancel).setVisible(false);
-                Profile_Pic.setClickable(false);
+
+
 
                 setUserDetails();
                 setDisabledEditText();
@@ -737,7 +824,7 @@ public class UserProfileActivity extends AppCompatActivity
                 return true;
 
             default:
-                Profile_Pic.setClickable(false);
+
                 return super.onOptionsItemSelected(item);
         }
     }
@@ -780,5 +867,4 @@ public class UserProfileActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }

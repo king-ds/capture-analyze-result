@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 
 import java.io.BufferedReader;
@@ -79,6 +80,7 @@ public class NailAssessmentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nail_assessment);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -281,6 +283,7 @@ public class NailAssessmentActivity extends AppCompatActivity {
         } else if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_CANCELED) {
             mCurrentCroppedImageUri = null;
             Toast.makeText(getApplicationContext(), "Crop image cancelled", Toast.LENGTH_SHORT).show();
+            System.out.println("CANCELED BOBO");
         } else if (requestCode == CAMERA_CAPTURE && resultCode == RESULT_CANCELED) {
             Toast.makeText(getApplicationContext(), "Capture image cancelled", Toast.LENGTH_SHORT).show();
         } else {

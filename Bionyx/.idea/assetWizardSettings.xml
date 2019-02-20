@@ -34,7 +34,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_delete_forever_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_cancel_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -44,7 +44,7 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_delete" />
+                                      <entry key="outputName" value="ic_cancel_profile" />
                                       <entry key="theme" value="CUSTOM" />
                                       <entry key="themeColor" value="000000" />
                                     </map>
@@ -93,7 +93,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_check_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_close_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -103,12 +103,12 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="1ae100" />
-                            <entry key="height" value="100" />
-                            <entry key="outputName" value="ic_healthy" />
+                            <entry key="color" value="e10600" />
+                            <entry key="height" value="75" />
+                            <entry key="outputName" value="ic_wrong" />
                             <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="C:\Users\King" />
-                            <entry key="width" value="100" />
+                            <entry key="width" value="75" />
                           </map>
                         </option>
                       </PersistentState>

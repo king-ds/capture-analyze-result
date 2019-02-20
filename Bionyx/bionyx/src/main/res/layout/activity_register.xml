@@ -185,10 +185,11 @@
             <!--Confirm Password End-->
 
             <CheckBox
+                android:id="@+id/cbTermsandAgreement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:checked="true"
+                android:checked="false"
                 android:fontFamily="sans-serif-condensed"
                 android:text="I agree to the Terms of Service"
                 android:textColor="#fff"

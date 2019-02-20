@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,8 +13,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,37 +46,103 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
     private UserRegisterTask mAuthTask = null;
 
     //For Registration Field
+    private CheckBox TermsAndAgreement;
     private EditText r_username, first_name, last_name, r_email, password, confirm_password;
     private Button Register;
+    private String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
     //For Views
-    private static ProgressDialog mProgressDialog;
+    private static SweetAlertDialog mProgressDialog;
     private View focusView = null;
+    private Boolean agree;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        agree = false;
         //Assign the declared variables.
         ICM = new InternetConnectionManager();
-        r_username = (EditText)findViewById(R.id.etUsername);
-        password = (EditText)findViewById(R.id.etPassword);
-        confirm_password = (EditText)findViewById(R.id.etConfirm_Password);
-        first_name = (EditText)findViewById(R.id.etFirstName);
-        last_name = (EditText)findViewById(R.id.etLastName);
-        r_email = (EditText)findViewById(R.id.etEmail);
-        Register = (Button)findViewById(R.id.btnRegister);
+        r_username = findViewById(R.id.etUsername);
+        password = findViewById(R.id.etPassword);
+        confirm_password = findViewById(R.id.etConfirm_Password);
+        first_name = findViewById(R.id.etFirstName);
+        last_name = findViewById(R.id.etLastName);
+        r_email = findViewById(R.id.etEmail);
+        Register = findViewById(R.id.btnRegister);
+        TermsAndAgreement = findViewById(R.id.cbTermsandAgreement);
 
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initiateRegister();
-
+                if (agree == true) {
+                    initiateRegister();
+                } else {
+                    mustAgree();
+                }
             }
         });
+        TermsAndAgreement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openTermsAndAgreement();
+            }
+        });
+
     }
 
+    private void mustAgree(){
+        final SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
+        dialog.setTitleText("Warning")
+                .setContentText("Must agree to the terms of service")
+                .setConfirmText("Okay")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    private void openTermsAndAgreement(){
+
+        final SweetAlertDialog dialog = new SweetAlertDialog(this);
+        dialog.setTitleText("End-User License Agreement")
+                .setContentText("Please read the User Agreement carefully before using the Bionyx mobile application operated by the Bionyx Company. \n" +
+                        "\n" +
+                        "Your access to use the service is conditioned on your acceptance of and compliance with the Conditions. These Conditions apply to all users who access or use the Service.\n" +
+                        "\n" +
+                        "Content\n" +
+                        "The application gathers personal information (Name, Email, and Images)\n" +
+                        "\n" +
+                        "By checking the Terms and Agreement, you allow the application to gather personal infomation such as Name, email and images for the best expereince in using the application\n" +
+                        "\n" +
+                        "Contact Us\n" +
+                        "If you have inquiries about these Conditions, please contact us at bionyx.developer@gmail.com")
+                .setConfirmText("Accept")
+                .setCancelText("Decline")
+                .showCancelButton(true)
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        dialog.dismiss();
+                        TermsAndAgreement.setChecked(true);
+                        agree = true;
+                    }
+                })
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        dialog.dismiss();
+                        TermsAndAgreement.setChecked(false);
+                        agree = false;
+                    }
+                })
+                .show();
+    }
     private void initiateRegister() {
 
         boolean cancel = false;
@@ -106,6 +176,11 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
         }
         else if (TextUtils.isEmpty(Email)) {
             r_email.setError("This field cannot be blank");
+            focusView = r_email;
+            cancel = true;
+        }
+        else if (!isEmailValid(Email)){
+            r_email.setError("Invalid email address");
             focusView = r_email;
             cancel = true;
         }
@@ -150,6 +225,9 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
         }
     }
 
+    private boolean isEmailValid(String email){
+        return email.matches(emailPattern);
+    }
 
     private boolean isPasswordMatch(String password, String confirm_password){
         return password.equals(confirm_password);
@@ -193,14 +271,13 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
 
     public void processFinish(String response){
         if(response == Success_Message){
-            Toast.makeText(RegisterActivity.this, Success_Message, Toast.LENGTH_SHORT).show();
+            System.out.println(Success_Message);
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             RegisterActivity.this.finish();
         }else{
             Toast.makeText(RegisterActivity.this, Failures_Message, Toast.LENGTH_SHORT).show();
             RegisterActivity.this.finish();
-
         }
     }
 
@@ -322,20 +399,9 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
-            //Create process dialog
-            mProgressDialog = new ProgressDialog(RegisterActivity.this);
-            //Set Progress dialog title
-            mProgressDialog.setTitle("Creating an account");
-            //Set progress dialog message
-            mProgressDialog.setMessage("Loading...");
-            //Set cancelable false
-            mProgressDialog.setCancelable(false);
-            //Set canceled on touch outside false
-            mProgressDialog.setCanceledOnTouchOutside(false);
-            //Set indeterminate false
-            mProgressDialog.setIndeterminate(false);
-            //Show progress dialog
+            mProgressDialog = new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Loading");
             mProgressDialog.show();
+            mProgressDialog.setCancelable(false);
 
         }
         @Override
@@ -353,16 +419,28 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
         @Override
         protected void onPostExecute(String response) {
             mAuthTask = null;
-            //showProgress(false);
             mProgressDialog.dismiss();
             if (this.success) {
-                delegate.processFinish(Success_Message);
+
+                new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Congratulations!")
+                        .setContentText("You have been successfully registered")
+                        .setConfirmText("Continue")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                delegate.processFinish(Success_Message);
+                                sDialog.dismiss();
+                                RegisterActivity.this.finish();
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
             }
             else{
-                Log.d("RegisterActivity", response);
-                delegate.processFinish(Failures_Message);
+                Toast.makeText(RegisterActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
             }
-
         }
         @Override
         protected void onCancelled(){
@@ -371,5 +449,10 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        Intent login_intent = new Intent(RegisterActivity.this, LoginActivity.class);
+        startActivity(login_intent);
+        RegisterActivity.this.finish();
+    }
 }

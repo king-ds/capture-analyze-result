@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,44 +72,33 @@ public class ListViewAdapter extends BaseAdapter {
         /*
         Declared variables
          */
-        TextView transactionid;
-        TextView uploaded;
+        final TextView transactionid;
+        final TextView uploaded;
         final TextView result;
         final ImageView image;
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View itemView = inflater.inflate(R.layout.listview_item, parent, false);
+
+        if (inflater == null)
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        if (convertView == null)
+            convertView = inflater.inflate(R.layout.listview_item, parent, false);
+
         resultp = data.get(position);
-
-        /*
-        Locate the textview in listview_item
-         */
-        transactionid = itemView.findViewById(R.id.transactionid);
-        uploaded = itemView.findViewById(R.id.uploaded);
-        result = itemView.findViewById(R.id.result);
-
+        transactionid = convertView.findViewById(R.id.transactionid);
+        uploaded = convertView.findViewById(R.id.uploaded);
+        result = convertView.findViewById(R.id.result);
         AssetManager am = context.getApplicationContext().getAssets();
         Typeface custom_font = Typeface.createFromAsset(am, "fonts/montserrat.ttf");
 
         transactionid.setTypeface(custom_font);
         uploaded.setTypeface(custom_font);
         result.setTypeface(custom_font);
-
-        /*
-        Locate the imageview in listview_item
-         */
-        image = itemView.findViewById(R.id.image);
-
-        /*
-        Capture the position and set the text to text view
-         */
+        image = convertView.findViewById(R.id.image);
         transactionid.setText(resultp.get(HistoryActivity.TRANSACTIONID));
         uploaded.setText(resultp.get(HistoryActivity.UPLOADED));
         result.setText(resultp.get(HistoryActivity.STATUS));
         historyPhotoLoader.DisplayImage(resultp.get(HistoryActivity.IMAGE), image);
 
-        /*
-        Create swipe menu instance
-         */
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
             @Override
@@ -130,12 +120,12 @@ public class ListViewAdapter extends BaseAdapter {
 
         /*
         Apply the created swipe menu instance to swipelistview
-         */
+        */
         HistoryActivity.listView.setMenuCreator(creator);
 
         /*
         If the swipe menu is clicked (Delete & Open)
-         */
+        */
         HistoryActivity.listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
@@ -143,14 +133,14 @@ public class ListViewAdapter extends BaseAdapter {
                 switch (index) {
                     /*
                     Open Case
-                     */
+                    */
                     case 0:
                         /*
                         Pass all related data
                          */
                         String isHealthy = resultp.get(HistoryActivity.STATUS);
 
-                        if(isHealthy.equals("Healthy")){
+                        if (isHealthy.equals("Healthy")) {
                             Intent healthy_intent = new Intent(context, HealthyViewAdapter.class);
                             healthy_intent.putExtra("image", resultp.get(HistoryActivity.IMAGE));
                             healthy_intent.putExtra("status", resultp.get(HistoryActivity.STATUS));
@@ -160,7 +150,7 @@ public class ListViewAdapter extends BaseAdapter {
                             healthy_intent.putExtra("bitmapImage", bitmap);
                             context.startActivity(healthy_intent);
 
-                        } else if (isHealthy.equals("Unhealthy")){
+                        } else if (isHealthy.equals("Unhealthy")) {
 
                             Intent unhealthy_intent = new Intent(context, UnhealthyViewAdapter.class);
                             unhealthy_intent.putExtra("transactionid", resultp.get(HistoryActivity.TRANSACTIONID));
@@ -179,21 +169,20 @@ public class ListViewAdapter extends BaseAdapter {
                             unhealthy_intent.putExtra("bitmapImage", bitmap);
                             context.startActivity(unhealthy_intent);
                         }
-
                         break;
                     /*
                     Delete Case
-                     */
+                    */
                     case 1:
 
                         String current_id = resultp.get(HistoryActivity.TRANSACTIONID);
-                        HISTORY_INSTANCE_URL =  "http://"+currentIp+"/api/delHistory/"+current_id+"/";
+                        HISTORY_INSTANCE_URL = "http://" + currentIp + "/api/delHistory/" + current_id + "/";
                         new DelHistoryInstance().execute();
                 }
                 return false;
             }
         });
-        return itemView;
+        return convertView;
     }
 
     /*
@@ -257,6 +246,7 @@ public class ListViewAdapter extends BaseAdapter {
                         .show();
             }
             else{
+                pDialog.dismiss();
                 Toast.makeText(context, "Check your internet connection", Toast.LENGTH_SHORT).show();
             }
         }

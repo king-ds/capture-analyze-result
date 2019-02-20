@@ -10,16 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Locale;
 
 public class DashboardAdapter extends PagerAdapter {
 
     List<Dashboard> lstImages;
     Context context;
     LayoutInflater layoutInflater;
+    InternetConnectionManager ICM = new InternetConnectionManager();
 
     public DashboardAdapter(List<Dashboard> lstImages, Context context){
         this.lstImages = lstImages;
@@ -64,11 +64,16 @@ public class DashboardAdapter extends PagerAdapter {
                     Intent assess_intent = new Intent(context, NailAssessmentActivity.class);
                     assess_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(assess_intent);
-                } else if (options.equals("History")) {
 
-                    Intent history_intent = new Intent(context, HistoryActivity.class);
-                    history_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(history_intent);
+                } else if (options.equals("History")) {
+                    if (ICM.isNetworkAvailable(context)) {
+                        Intent history_intent = new Intent(context, HistoryActivity.class);
+                        history_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(history_intent);
+                    } else {
+                        Toast.makeText(context, "Please check your internet connection", Toast.LENGTH_SHORT);
+                    }
+
                 } else if (options.equals("Disorders")) {
 
                     Intent disorders_intent = new Intent(context, DiseasesActivity.class);

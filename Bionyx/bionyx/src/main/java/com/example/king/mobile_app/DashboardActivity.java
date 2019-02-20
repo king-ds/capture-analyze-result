@@ -2,6 +2,7 @@ package com.example.king.mobile_app;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -49,6 +50,7 @@ public class DashboardActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         initData();
         HorizontalInfiniteCycleViewPager pager = findViewById(R.id.view_pager);

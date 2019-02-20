@@ -1,8 +1,10 @@
 package com.example.king.mobile_app;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -46,12 +48,13 @@ import java.util.Date;
 public class UnhealthyViewAdapter extends AppCompatActivity {
 
     // Other variables
-    private SweetAlertDialog pDialog;
-    private static ProgressDialog mProgressDialog;
     private String transactionid, owner, uploaded, image, position, bl, cn, h, sn, yn, tn, stat, diseases, first_name, last_name, email;
     private TextView txtbeaulines, txtclubnails, txtspoonnails, txtterrynails, txtyellownails, txtstatus, txtdiseases;
     private ImageView imagenail;
     private Bitmap bitmap;
+    private int counter;
+    private SweetAlertDialog pDialog;
+    private boolean success;
 
     // Image loader
     HistoryPhotoLoader historyPhotoLoader = new HistoryPhotoLoader(this);
@@ -66,9 +69,13 @@ public class UnhealthyViewAdapter extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.unhealthyview);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        counter = 0;
+        success = false;
 
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
         this.first_name = prefs.getString("first_name","");
@@ -107,11 +114,11 @@ public class UnhealthyViewAdapter extends AppCompatActivity {
     private void setResult(){
 
         txtdiseases.setText(diseases);
-        txtbeaulines.setText(bl);
-        txtclubnails.setText(cn);
-        txtspoonnails.setText(sn);
-        txtyellownails.setText(yn);
-        txtterrynails.setText(tn);
+        txtbeaulines.setText(df.format(Float.parseFloat(bl)));
+        txtclubnails.setText(df.format(Float.parseFloat(cn)));
+        txtspoonnails.setText(df.format(Float.parseFloat(sn)));
+        txtterrynails.setText(df.format(Float.parseFloat(tn)));
+        txtyellownails.setText(df.format(Float.parseFloat(yn)));
         txtstatus.setText(stat);
         historyPhotoLoader.DisplayImage(image, imagenail);
     }
@@ -124,9 +131,9 @@ public class UnhealthyViewAdapter extends AppCompatActivity {
         String strDataFormat = "hh:mm:ss a";
         DateFormat dateFormat = new SimpleDateFormat(strDataFormat);
         final String formattedDate = dateFormat.format(date);
-        boolean success;
-        success = false;
+
         try {
+
             //PDF CREATION
             //logo
             Resources res = this.getResources();
@@ -139,7 +146,7 @@ public class UnhealthyViewAdapter extends AppCompatActivity {
             logo.scaleAbsolute(173,61);
             logo.setAbsolutePosition(220f,700f);
 
-            String dest = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" +last_name +"_"+formattedDate+ ".pdf";
+            String dest = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Bionyx/" +last_name +"_"+formattedDate+ ".pdf";
             System.out.println(dest);
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(dest));
             //font types
@@ -209,14 +216,6 @@ public class UnhealthyViewAdapter extends AppCompatActivity {
             clubScore.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(clubScore);
 
-            PdfPCell healthyLbl = new PdfPCell(new Phrase("Healthy",font));
-            healthyLbl.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(healthyLbl);
-
-            PdfPCell healthyScore = new PdfPCell(new Phrase(df.format(Float.parseFloat(h)),font));
-            healthyScore.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(healthyScore);
-
             PdfPCell splintLbl = new PdfPCell(new Phrase("Spoon Nails",font));
             splintLbl.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(splintLbl);
@@ -271,26 +270,6 @@ public class UnhealthyViewAdapter extends AppCompatActivity {
             e.printStackTrace();
             success = false;
         }
-
-        if(success==true){
-            pDialog.dismiss();
-            UnhealthyViewAdapter.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(UnhealthyViewAdapter.this, last_name+"_"+formattedDate+".pdf is generated", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-        }else {
-            pDialog.dismiss();
-            UnhealthyViewAdapter.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(UnhealthyViewAdapter.this, "Failed to generate", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
     }
 
     /*
@@ -312,27 +291,95 @@ public class UnhealthyViewAdapter extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.save_item:
-                pDialog = new SweetAlertDialog(UnhealthyViewAdapter.this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Generating");
-                pDialog.show();
-                pDialog.setCancelable(false);
+                if(counter == 0) {
+                    final SweetAlertDialog dialog = new SweetAlertDialog(UnhealthyViewAdapter.this, SweetAlertDialog.NORMAL_TYPE);
+                    dialog.setTitleText("Confirmation")
+                            .setContentText("Do you want to generate it as PDF?")
+                            .setConfirmText("Save")
+                            .setCancelText("Don't save")
+                            .showCancelButton(true)
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    dialog.dismiss();
+                                    pDialog = new SweetAlertDialog(UnhealthyViewAdapter.this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Loading");
+                                    pDialog.show();
+                                    pDialog.setCancelable(false);
+                                    Thread thread = new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            generatePDF();
+                                            if (success) {
+                                                pDialog.dismiss();
+                                                UnhealthyViewAdapter.this.runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        new SweetAlertDialog(UnhealthyViewAdapter.this, SweetAlertDialog.SUCCESS_TYPE)
+                                                                .setTitleText("Awesome!")
+                                                                .setContentText("Your transaction has been saved as PDF")
+                                                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                                    @Override
+                                                                    public void onClick(SweetAlertDialog sDialog) {
+                                                                        sDialog.dismiss();
+                                                                        counter = +1;
+                                                                    }
+                                                                })
+                                                                .show();
+                                                    }
+                                                });
+                                            }else{
+                                                new SweetAlertDialog(UnhealthyViewAdapter.this, SweetAlertDialog.ERROR_TYPE)
+                                                        .setTitleText("Oh snap!")
+                                                        .setContentText("An error has occured while generating a PDF")
+                                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                            @Override
+                                                            public void onClick(SweetAlertDialog sDialog) {
+                                                                sDialog.dismiss();
+                                                                counter = +1;
+                                                            }
+                                                        })
+                                                        .show();
+                                            }
+                                        }
+                                    });
+                                    thread.start();
+                                    Handler handler = new Handler(){
+                                        public void handleMessage(android.os.Message msg){
+                                            pDialog.dismiss();
 
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        generatePDF();
-                    }
-                });
-                thread.start();
+                                        };
+                                    };
+                                }
+                            })
+                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
 
-                Handler handler = new Handler(){
-                    public void handleMessage(android.os.Message msg){
-                       pDialog.dismiss();
-
-                    };
-                };
-
+                }else {
+                    UnhealthyViewAdapter.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new SweetAlertDialog(UnhealthyViewAdapter.this, SweetAlertDialog.WARNING_TYPE)
+                                    .setTitleText("Warning")
+                                    .setContentText("You have already generated the PDF!")
+                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sDialog) {
+                                            sDialog.dismiss();
+                                        }
+                                    })
+                                    .show();
+                        }
+                    });
+                }
+                break;
             case android.R.id.home:
                 finish();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

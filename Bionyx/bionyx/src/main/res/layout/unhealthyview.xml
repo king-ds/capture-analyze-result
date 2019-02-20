@@ -19,58 +19,57 @@
         android:theme="@style/toolbarFont">
     </android.support.v7.widget.Toolbar>
 
-    <LinearLayout
-        android:id="@+id/rellay1"
-        android:layout_marginBottom="20dp"
-        android:layout_weight="2"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/bg_entire"
-        android:orientation="horizontal">
-
         <LinearLayout
-            android:layout_width="10dp"
-            android:layout_height="130dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:background="@drawable/startbutton"
-            android:layout_weight="1"
-            >
+            android:id="@+id/rellay1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="2"
+            android:background="@drawable/bg_entire"
+            android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/image"
-                android:src="@drawable/vector_yellow"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:padding="3dp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="180dp"
-            android:layout_height="150dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvStatus"
-                android:layout_width="180dp"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="10dp"
+                android:layout_height="130dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/montserrat"
-                android:paddingTop="50dp"
-                android:text="Unhealthy"
-                android:textColor="#ffff"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+                android:background="@drawable/startbutton">
 
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:padding="3dp"
+                    android:src="@drawable/vector_yellow" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="180dp"
+                android:layout_height="150dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvStatus"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/montserrat"
+                    android:paddingTop="50dp"
+                    android:text="Unhealthy"
+                    android:textColor="#ffff"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -346,19 +345,42 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_wrong"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="75dp"
+                    android:fontFamily="@font/montserrat"
+                    android:text="Analyzed fingernail is unhealthy"
+                    android:textColor="@color/colorBlack"
+                    android:textAlignment="center"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Possible Disease"
+                    android:text="Considering the highest nail disorder detected, there is a possibility that you might develop:"
                     android:fontFamily="@font/montserrat"
                     android:textColor="@color/colorBlack"
-                    android:textStyle="bold"
-                    android:textSize="30sp"
+                    android:textSize="20sp"
                     android:textAlignment="center"
                     app:layout_row="5"
-                    app:layout_column="0"/>
+                    app:layout_column="0"
+                    android:layout_marginBottom="15dp"/>
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
@@ -397,10 +419,6 @@
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
             </LinearLayout>
-
-
         </android.support.v7.widget.GridLayout>
-
     </LinearLayout>
-
 </ScrollView>

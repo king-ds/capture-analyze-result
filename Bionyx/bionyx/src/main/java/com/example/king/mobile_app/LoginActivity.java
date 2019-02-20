@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 
 
@@ -49,6 +50,7 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -108,6 +110,7 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
 
     private void register(){
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        LoginActivity.this.finish();
         startActivity(intent);
     }
 

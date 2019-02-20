@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -64,6 +65,7 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
         new GetTransactionHistory().execute();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -154,9 +156,8 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
 
         @Override
         protected void onPostExecute(Void args) {
-
+            pDialog.dismiss();
             if (isEmpty == true) {
-                pDialog.dismiss();
                 new SweetAlertDialog(HistoryActivity.this, SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("Warning")
                         .setContentText("No history yet")
@@ -169,11 +170,9 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
                         })
                         .show();
             } else {
-
                 listView = findViewById(R.id.listview);
                 adapter = new ListViewAdapter(HistoryActivity.this, arraylist);
                 listView.setAdapter(adapter);
-                pDialog.dismiss();
 
             }
         }
@@ -221,9 +220,8 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
+            pDialog.dismiss();
             if (isDeleted == true) {
-                pDialog.dismiss();
                 new SweetAlertDialog(HistoryActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText("History")
                         .setContentText("You have successfully clear the history. Click okay to proceed")
