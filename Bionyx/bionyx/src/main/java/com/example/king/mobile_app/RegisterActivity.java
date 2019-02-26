@@ -9,8 +9,11 @@ import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -33,8 +36,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.regex.Pattern;
 
+import static com.example.king.mobile_app.BaseActivity.currentIp;
 
-public class RegisterActivity extends BaseActivity implements AsyncResponse {
+
+public class RegisterActivity extends AppCompatActivity implements AsyncResponse {
 
     //Declare all variables needed.
     private InternetConnectionManager ICM;
@@ -61,6 +66,12 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setTitle("Registration");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         agree = false;
         //Assign the declared variables.
@@ -438,10 +449,8 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
                         })
                         .show();
             }
-            else{
-                Toast.makeText(RegisterActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
-            }
         }
+
         @Override
         protected void onCancelled(){
             mAuthTask = null;
@@ -454,5 +463,23 @@ public class RegisterActivity extends BaseActivity implements AsyncResponse {
         Intent login_intent = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(login_intent);
         RegisterActivity.this.finish();
+    }
+
+    /*
+    Boolean for selected options in menu
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+       /*
+            If home is selected
+             */
+            case android.R.id.home:
+                Intent login_intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(login_intent);
+                RegisterActivity.this.finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

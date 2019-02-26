@@ -139,6 +139,7 @@ public class ListViewAdapter extends BaseAdapter {
                         Pass all related data
                          */
                         String isHealthy = resultp.get(HistoryActivity.STATUS);
+                        String disorder = resultp.get(HistoryActivity.DISORDER);
 
                         if (isHealthy.equals("Healthy")) {
                             Intent healthy_intent = new Intent(context, HealthyViewAdapter.class);
@@ -152,22 +153,82 @@ public class ListViewAdapter extends BaseAdapter {
 
                         } else if (isHealthy.equals("Unhealthy")) {
 
-                            Intent unhealthy_intent = new Intent(context, UnhealthyViewAdapter.class);
-                            unhealthy_intent.putExtra("transactionid", resultp.get(HistoryActivity.TRANSACTIONID));
-                            unhealthy_intent.putExtra("owner", resultp.get(HistoryActivity.OWNER));
-                            unhealthy_intent.putExtra("uploaded", resultp.get(HistoryActivity.UPLOADED));
-                            unhealthy_intent.putExtra("BeauLines", resultp.get(HistoryActivity.BEAULINES));
-                            unhealthy_intent.putExtra("ClubbedNails", resultp.get(HistoryActivity.CLUBBEDNAILS));
-                            unhealthy_intent.putExtra("Spoon", resultp.get(HistoryActivity.SPOON));
-                            unhealthy_intent.putExtra("TerryNails", resultp.get(HistoryActivity.TERRYNAILS));
-                            unhealthy_intent.putExtra("YellowNails", resultp.get(HistoryActivity.YELLOWNAILS));
-                            unhealthy_intent.putExtra("image", resultp.get(HistoryActivity.IMAGE));
-                            unhealthy_intent.putExtra("status", resultp.get(HistoryActivity.STATUS));
-                            unhealthy_intent.putExtra("diseases", resultp.get(HistoryActivity.DISEASES));
-                            image.buildDrawingCache();
-                            Bitmap bitmap = image.getDrawingCache();
-                            unhealthy_intent.putExtra("bitmapImage", bitmap);
-                            context.startActivity(unhealthy_intent);
+                            if(disorder.equals("Beau Lines")){
+                                Intent beau_intent = new Intent(context, BeauViewAdapter.class);
+                                beau_intent.putExtra("transactionid", resultp.get(HistoryActivity.TRANSACTIONID));
+                                beau_intent.putExtra("owner", resultp.get(HistoryActivity.OWNER));
+                                beau_intent.putExtra("uploaded", resultp.get(HistoryActivity.UPLOADED));
+                                beau_intent.putExtra("image", resultp.get(HistoryActivity.IMAGE));
+                                beau_intent.putExtra("status", resultp.get(HistoryActivity.STATUS));
+                                beau_intent.putExtra("diseases", resultp.get(HistoryActivity.DISEASES));
+                                beau_intent.putExtra("disorder", resultp.get(HistoryActivity.DISORDER));
+                                image.buildDrawingCache();
+                                Bitmap bitmap = image.getDrawingCache();
+                                beau_intent.putExtra("bitmapImage", bitmap);
+                                context.startActivity(beau_intent);
+                            }
+
+                            else if (disorder.equals("Club Nails")){
+                                Intent club_intent = new Intent(context, ClubViewAdapter.class);
+                                club_intent.putExtra("transactionid", resultp.get(HistoryActivity.TRANSACTIONID));
+                                club_intent.putExtra("owner", resultp.get(HistoryActivity.OWNER));
+                                club_intent.putExtra("uploaded", resultp.get(HistoryActivity.UPLOADED));
+                                club_intent.putExtra("image", resultp.get(HistoryActivity.IMAGE));
+                                club_intent.putExtra("status", resultp.get(HistoryActivity.STATUS));
+                                club_intent.putExtra("diseases", resultp.get(HistoryActivity.DISEASES));
+                                club_intent.putExtra("disorder", resultp.get(HistoryActivity.DISORDER));
+                                image.buildDrawingCache();
+                                Bitmap bitmap = image.getDrawingCache();
+                                club_intent.putExtra("bitmapImage", bitmap);
+                                context.startActivity(club_intent);
+                            }
+
+                            else if (disorder.equals("Spoon Nails")){
+                                Intent spoon_intent = new Intent(context, SpoonViewAdapter.class);
+                                spoon_intent.putExtra("transactionid", resultp.get(HistoryActivity.TRANSACTIONID));
+                                spoon_intent.putExtra("owner", resultp.get(HistoryActivity.OWNER));
+                                spoon_intent.putExtra("uploaded", resultp.get(HistoryActivity.UPLOADED));
+                                spoon_intent.putExtra("image", resultp.get(HistoryActivity.IMAGE));
+                                spoon_intent.putExtra("status", resultp.get(HistoryActivity.STATUS));
+                                spoon_intent.putExtra("diseases", resultp.get(HistoryActivity.DISEASES));
+                                spoon_intent.putExtra("disorder", resultp.get(HistoryActivity.DISORDER));
+                                image.buildDrawingCache();
+                                Bitmap bitmap = image.getDrawingCache();
+                                spoon_intent.putExtra("bitmapImage", bitmap);
+                                context.startActivity(spoon_intent);
+                            }
+
+                            else if (disorder.equals("Terrys Nails")){
+                                Intent terrys_intent = new Intent(context, TerrysViewAdapter.class);
+                                terrys_intent.putExtra("transactionid", resultp.get(HistoryActivity.TRANSACTIONID));
+                                terrys_intent.putExtra("owner", resultp.get(HistoryActivity.OWNER));
+                                terrys_intent.putExtra("uploaded", resultp.get(HistoryActivity.UPLOADED));
+                                terrys_intent.putExtra("image", resultp.get(HistoryActivity.IMAGE));
+                                terrys_intent.putExtra("status", resultp.get(HistoryActivity.STATUS));
+                                terrys_intent.putExtra("diseases", resultp.get(HistoryActivity.DISEASES));
+                                terrys_intent.putExtra("disorder", resultp.get(HistoryActivity.DISORDER));
+                                image.buildDrawingCache();
+                                Bitmap bitmap = image.getDrawingCache();
+                                terrys_intent.putExtra("bitmapImage", bitmap);
+                                context.startActivity(terrys_intent);
+
+                            }
+
+                            else{
+                                Intent yellow_intent = new Intent(context, YellowViewAdapter.class);
+                                yellow_intent.putExtra("transactionid", resultp.get(HistoryActivity.TRANSACTIONID));
+                                yellow_intent.putExtra("owner", resultp.get(HistoryActivity.OWNER));
+                                yellow_intent.putExtra("uploaded", resultp.get(HistoryActivity.UPLOADED));
+                                yellow_intent.putExtra("image", resultp.get(HistoryActivity.IMAGE));
+                                yellow_intent.putExtra("status", resultp.get(HistoryActivity.STATUS));
+                                yellow_intent.putExtra("diseases", resultp.get(HistoryActivity.DISEASES));
+                                yellow_intent.putExtra("disorder", resultp.get(HistoryActivity.DISORDER));
+                                image.buildDrawingCache();
+                                Bitmap bitmap = image.getDrawingCache();
+                                yellow_intent.putExtra("bitmapImage", bitmap);
+                                context.startActivity(yellow_intent);
+                            }
+
                         }
                         break;
                     /*

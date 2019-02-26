@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -16,8 +17,11 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.MenuInflater;
+import android.view.SubMenu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -57,6 +61,7 @@ import static com.example.king.mobile_app.BaseActivity.currentIp;
 public class UserProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    /* start of declaring variables */
     private SweetAlertDialog pDialog;
     private ProfilePhotoLoader profile_photo_loader;
     private String SERVER_URL = "http://"+currentIp+"/api/postAvatar/";
@@ -76,13 +81,12 @@ public class UserProfileActivity extends AppCompatActivity
     private static final int PICK_IMAGE = 1;
     private static final int PICK_CAMERA_IMAGE = 2;
     private Uri mCurrentImageUri;
-    private String mCurrentPhotoPath;
-    private String mCurrentPhotoName;
-    private static ProgressDialog mProgressDialog;
+    private String mCurrentPhotoPath, mCurrentPhotoName;
     private InternetConnectionManager ICM;
     private Menu action;
     private AlertDialog dialog;
     private View SelectionView;
+    /* end of declaring variables */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,25 +94,18 @@ public class UserProfileActivity extends AppCompatActivity
         setContentView(R.layout.activity_user_profile);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        /*
-        Toolbar for user profile
-         */
+        /* start of assigning toolbar */
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        /* end of assigning toolbar */
 
-        /*
-        Variable for internet connectivity
-         */
+        /* start of declaring new import classes */
         ICM = new InternetConnectionManager();
-
-        /*
-        Profile picture loader
-         */
         profile_photo_loader = new ProfilePhotoLoader(this);
+        /* end of declaring new import classes  */
 
-        /*
-        All textview for this layout
-         */
+
+        /* start of assigning all text views */
         FirstName = findViewById(R.id.tv_FirstName);
         LastName = findViewById(R.id.tv_LastName);
         Email = findViewById(R.id.tv_Email);
@@ -117,10 +114,9 @@ public class UserProfileActivity extends AppCompatActivity
         DateJoined = findViewById(R.id.tv_DateJoined);
         Profile_Pic = findViewById(R.id.iv_Avatar);
         Processed_Images = findViewById(R.id.tv_ProcessedImages);
+        /* end of assingning all text views */
 
-        /*
-        Save locally the user details
-         */
+        /* start of shared prefences for user details */
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
         this.username = prefs.getString("username","");
         this.first_name = prefs.getString("first_name","");
@@ -132,36 +128,43 @@ public class UserProfileActivity extends AppCompatActivity
         this.AVATAR_URL = prefs.getString("avatar_url", "");
         this.processed_images = prefs.getString("processed_images", "");
         this.UPDATE_USER += user_id+"/";
+        /* end of shared prereferences for user details */
 
-        /*
-        Set all the user details and disable the edit function
-         */
+        /* start of set all user details and disable all edit text */
         setUserDetails();
         setDisabledEditText();
+        /* end of set all user details and disable all edit text */
 
-        /*
-        Display the image fetched from api
-         */
-        profile_photo_loader.DisplayImage(AVATAR_URL, Profile_Pic);
-
-        /*
-        Navigation drawer
-         */
+        /* start of creating drawer */
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        /* end of creating drawer */
 
-        /*
-        Side bar
-         */
+        /* start of navigation bar */
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        /*
-        Header for side bar
-         */
+        /* applying custom font to menu item */
+        Menu m = navigationView.getMenu();
+        for (int i=0;i<m.size();i++) {
+            MenuItem mi = m.getItem(i);
+
+            SubMenu subMenu = mi.getSubMenu();
+            if (subMenu!=null && subMenu.size() >0 ) {
+                for (int j=0; j <subMenu.size();j++) {
+                    MenuItem subMenuItem = subMenu.getItem(j);
+                    applyFontToMenuItem(subMenuItem);
+                }
+            }
+
+            applyFontToMenuItem(mi);
+        }
+        /* end of navigation bar */
+
+        /* start of header view and set all user details */
         View headerView = navigationView.getHeaderView(0);
         TextView Nav_UserName = headerView.findViewById(R.id.tv_Nav_UserName);
         Nav_UserName.setText(username);
@@ -169,10 +172,9 @@ public class UserProfileActivity extends AppCompatActivity
         Nav_Email.setText(email);
         Nav_Avatar = headerView.findViewById(R.id.tv_Nav_Avatar);
         profile_photo_loader.DisplayImage(AVATAR_URL, Nav_Avatar);
+        /* end of header view and set all user details */
 
-        /*
-        Selection view for profile photo
-         */
+        /* start of dialog for selection view of profile photo */
         AlertDialog.Builder PopupWindow = new AlertDialog.Builder(UserProfileActivity.this);
         SelectionView = getLayoutInflater().inflate(R.layout.activity_selection_imageview, null);
         PopupWindow.setView(SelectionView);
@@ -186,19 +188,29 @@ public class UserProfileActivity extends AppCompatActivity
         Choose_from_gallery.setVisibility(View.GONE);
         View_photo.setVisibility(View.VISIBLE);
         Cancel.setVisibility(View.VISIBLE);
+        /* end of dialog for selection view of profile photo */
 
-        /*
-        If the profile photo image view is clicked
-         */
+        /* start of on click listener for profile photo image view */
         Profile_Pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openSelection();
             }
         });
-
+        /* end of on click listener for profile photo image view */
     }
 
+    /* start of function for applying custom font to menu items */
+    private void applyFontToMenuItem(MenuItem mi) {
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/montserrat.ttf");
+        SpannableString mNewTitle = new SpannableString(mi.getTitle());
+        mNewTitle.setSpan(new CustomTypefaceSpan("" , font), 0 , mNewTitle.length(),  Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        mi.setTitle(mNewTitle);
+    }
+    /* end of function for applying custom font to menu items */
+
+
+    /* start of function for set all user details including photo */
     private void setUserDetails(){
 
         FirstName.setText(first_name);
@@ -208,8 +220,11 @@ public class UserProfileActivity extends AppCompatActivity
         Username.setText(username);
         DateJoined.setText(datejoined);
         Processed_Images.setText(processed_images);
+        profile_photo_loader.DisplayImage(AVATAR_URL, Profile_Pic);
     }
+    /* end of function for set all user details including photo */
 
+    /* start of function for disabling all edit text */
     private void setDisabledEditText(){
 
         FirstName.setEnabled(false);
@@ -221,7 +236,9 @@ public class UserProfileActivity extends AppCompatActivity
         Email.setFocusable(false);
         Username.setFocusable(false);
     }
+    /* end of function for disabling all edit text */
 
+    /* start of function for enabling all edit text */
     private void setEnabledEditText(){
 
         FirstName.setEnabled(true);
@@ -233,10 +250,10 @@ public class UserProfileActivity extends AppCompatActivity
         Email.setFocusableInTouchMode(true);
         Username.setFocusableInTouchMode(true);
     }
+    /* end of function for enabling all edit text */
 
-    /*
-    Add/Update profile picture by using camera or gallery && view the current profile photo
-     */
+    /* start of function for add/update profile photo by using
+    either camera or gallery and view current profile photo */
     private void openSelection(){
 
         dialog.show();
@@ -290,10 +307,10 @@ public class UserProfileActivity extends AppCompatActivity
             }
         });
     }
+    /* end of function for add/update profile photo by using
+    either camera or gallery and view current profile photo */
 
-    /*
-    Create file directory for profile picture
-     */
+    /* start of creation for profile photo directory */
     private File createFileDirectory() throws IOException{
 
         String folder = "Bionyx/DCIM/Profile_Pic";
@@ -307,10 +324,9 @@ public class UserProfileActivity extends AppCompatActivity
         System.out.println(imgDir);
         return imgDir;
     }
+    /* end of creation for profile photo directory */
 
-    /*
-    Create image file to be saved from directory
-     */
+    /* start of creation for image file */
     private File createImageFile() throws IOException {
 
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -320,10 +336,9 @@ public class UserProfileActivity extends AppCompatActivity
 
         return imageF;
     }
+    /* end of creation for image file */
 
-    /*
-    Setup the created image to get uri and path
-     */
+    /* start of configuration for generated image file to get both uri and path */
     private File setUpPhotoFile() throws IOException {
 
         File f = createImageFile();
@@ -332,10 +347,9 @@ public class UserProfileActivity extends AppCompatActivity
         mCurrentImageUri = FileProvider.getUriForFile(UserProfileActivity.this, "com.example.king.mobile_app.provider", f );
         return f;
     }
+    /* end of configuration for generated image file to get both uri and path */
 
-    /*
-    Function for accessing camera
-     */
+    /* start of function for accessing mobile phone's camera */
     public void openCamera(int actionCode){
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -358,20 +372,19 @@ public class UserProfileActivity extends AppCompatActivity
         }
         startActivityForResult(takePictureIntent, PICK_CAMERA_IMAGE);
     }
+    /* end of function for accessing mobile phone's camera */
 
-    /*
-    Function for accessing gallery
-     */
+    /* start of function for opening gallery */
     public void openGallery(){
 
         mCurrentImageUri = null;
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
     }
+    /* end of function for opening gallery */
 
-    /*
-    After capturing image from camera or picking image from gallery
-     */
+
+    /* start of override function for camera and gallery result */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
@@ -449,10 +462,9 @@ public class UserProfileActivity extends AppCompatActivity
             }
         });
     }
+    /* end of override function for camera and gallery result */
 
-    /*
-    Preparation for uploading image
-     */
+    /* start of function for uploading image */
     private void uploadImg(String filepath){
 
         final String selectedFilePath = filepath;
@@ -460,9 +472,9 @@ public class UserProfileActivity extends AppCompatActivity
             new UserProfileActivity.UploadProfilePicTask().execute(selectedFilePath);
         }
     }
-    /*
-    Asynchronous task for uploading image to django rest api
-     */
+    /* end of function for uploading image */
+
+    /* start of asynchronous task for uploading image to django rest api */
     private class UploadProfilePicTask extends AsyncTask<String, String, String> {
 
         boolean isSuccess = false;
@@ -627,7 +639,9 @@ public class UserProfileActivity extends AppCompatActivity
             }
         }
     }
+    /* end of asynchronous task for uploading image to django rest api */
 
+    /* start of asynchronous task for updating user information */
     private class UpdateUserInformation extends AsyncTask<Void, Void, Void>{
 
         boolean isUpdated = false;
@@ -716,10 +730,9 @@ public class UserProfileActivity extends AppCompatActivity
             }
         }
     }
+    /* end of asynchronous task for updating user information */
 
-    /*
-    Function for getting path from uri
-     */
+    /* start of function for getting path from uri */
     public String getPath(Uri uri) {
         String[] projection = { MediaStore.Images.Media.DATA };
         Cursor cursor = managedQuery(uri, projection, null, null, null);
@@ -733,23 +746,24 @@ public class UserProfileActivity extends AppCompatActivity
         } else
             return null;
     }
+    /* end of function for getting path from uri */
 
-    /*
-    Override function for touching/clicking back button from phone
-     */
+    /* start of override function for clicking back button of phone */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            Intent dashboard_intent = new Intent(UserProfileActivity.this, DashboardActivity.class);
+            startActivity(dashboard_intent);
+            UserProfileActivity.this.finish();
         }
     }
+    /* end of override function for clicking back button of phone */
 
-    /*
-    Side bar menu
-     */
+
+    /* start of override function for menu options edit, save and cancel */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -763,9 +777,7 @@ public class UserProfileActivity extends AppCompatActivity
         return true;
     }
 
-    /*
-    Option selected from menu item
-     */
+    /* start of override function for the options selected from menu */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -828,10 +840,9 @@ public class UserProfileActivity extends AppCompatActivity
                 return super.onOptionsItemSelected(item);
         }
     }
+    /* end of override function for the options selected from menu */
 
-    /*
-    Get the selected option from menu
-     */
+    /* start of override function for selected options from navigation bar menu */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -840,31 +851,32 @@ public class UserProfileActivity extends AppCompatActivity
         switch (id){
 
             case R.id.nav_home:
-                UserProfileActivity.this.finish();
                 Intent iHome = new Intent(UserProfileActivity.this, DashboardActivity.class);
                 startActivity(iHome);
+                UserProfileActivity.this.finish();
                 break;
 
             case R.id.nav_profile:
                 break;
 
             case R.id.nav_about:
-                UserProfileActivity.this.finish();
                 Intent iAbout = new Intent(UserProfileActivity.this, AboutActivity.class);
                 startActivity(iAbout);
+                UserProfileActivity.this.finish();
                 break;
 
             case R.id.nav_logout:
-                UserProfileActivity.this.finish();
                 SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
                 sharedPreferences.edit().clear().commit();
                 profile_photo_loader.clearCache();
                 Intent iLogin = new Intent(UserProfileActivity.this, LoginActivity.class);
                 startActivity(iLogin);
+                UserProfileActivity.this.finish();
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    /* end of override function for selected options from navigation bar menu */
 }

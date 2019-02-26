@@ -46,12 +46,8 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
     static String TRANSACTIONID = "id";
     static String OWNER = "owner";
     static String UPLOADED = "uploaded";
+    static String DISORDER = "disorder";
     static String RESULT = "result";
-    static String BEAULINES = "BeauLines";
-    static String CLUBBEDNAILS = "ClubbedNails";
-    static String SPOON = "Spoon";
-    static String TERRYNAILS = "TerryNails";
-    static String YELLOWNAILS = "YellowNails";
     static String IMAGE = "image";
     static String STATUS = "status";
     static String DISEASES = "diseases";
@@ -132,11 +128,7 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
                             map.put("image", jsonobject.getString("image"));
                             map.put("owner", jsonobject.getString("owner"));
                             map.put("uploaded", jsonobject.getString("uploaded"));
-                            map.put("BeauLines", jsonobject.getString("beau_lines"));
-                            map.put("ClubbedNails", jsonobject.getString("clubbed_nails"));
-                            map.put("Spoon", jsonobject.getString("spoon_nails"));
-                            map.put("TerryNails", jsonobject.getString("terry_nails"));
-                            map.put("YellowNails", jsonobject.getString("yellow_nails"));
+                            map.put("disorder", jsonobject.getString("disorder"));
                             map.put("status", jsonobject.getString("status"));
                             map.put("diseases", jsonobject.getString("diseases"));
                             map.put("filtered_image", jsonobject.getString("filtered_image"));

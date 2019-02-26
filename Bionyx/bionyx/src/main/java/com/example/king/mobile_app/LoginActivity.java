@@ -110,8 +110,8 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
 
     private void register(){
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-        LoginActivity.this.finish();
         startActivity(intent);
+        LoginActivity.this.finish();
     }
 
     private void startLogin(){
