@@ -202,6 +202,7 @@ public class SpoonViewAdapter extends AppCompatActivity {
             Font header = new Font(Font.FontFamily.COURIER, 22, Font.BOLD);
             Font info = new Font(Font.FontFamily.COURIER,14,Font.BOLD);
             Font font = new Font(Font.FontFamily.COURIER,12);
+            Font answer = new Font(Font.FontFamily.COURIER, 12, Font.BOLD);
             Paragraph space = new Paragraph();
             for (int i = 0; i < 4; i++){
                 space.add(new Paragraph(" "));
@@ -234,62 +235,10 @@ public class SpoonViewAdapter extends AppCompatActivity {
             captured.setAbsolutePosition(220f,405f);
             document.add(captured);
 
-            PdfPTable table = new PdfPTable(2);
-            table.setWidthPercentage(80);
-            table.setSpacingAfter(30f);
-            table.setSpacingBefore(30f);
-            float[] columnWidths  = {3f,2f};
-            table.setWidths(columnWidths);
-            //table headers
-            PdfPCell disorderHead = new PdfPCell(new Phrase("Type of Disorder",info));
-            disorderHead.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(disorderHead);
-            PdfPCell percentageHead = new PdfPCell(new Phrase("Percentage",info));
-            percentageHead.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(percentageHead);
+            Paragraph disorder = new Paragraph("Disorder: Spoon Nails", info);
+            document.add(space);
+            document.add(disorder);
 
-            //actual results
-            PdfPCell beauLbl = new PdfPCell(new Phrase("Beau Lines",font));
-            beauLbl.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(beauLbl);
-
-            PdfPCell beauScore = new PdfPCell(new Phrase(df.format(Float.parseFloat(bl)),font));
-            beauScore.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(beauScore);
-
-            PdfPCell clubLbl = new PdfPCell(new Phrase("Clubbing",font));
-            clubLbl.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(clubLbl);
-
-            PdfPCell clubScore = new PdfPCell(new Phrase(df.format(Float.parseFloat(cn)),font));
-            clubScore.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(clubScore);
-
-            PdfPCell splintLbl = new PdfPCell(new Phrase("Spoon Nails",font));
-            splintLbl.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(splintLbl);
-
-            PdfPCell splintScore = new PdfPCell(new Phrase(df.format(Float.parseFloat(sn)),font));
-            splintScore.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(splintScore);
-
-            PdfPCell terryLbl = new PdfPCell(new Phrase("Terry's Nails",font));
-            terryLbl.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(terryLbl);
-
-            PdfPCell terryScore = new PdfPCell(new Phrase(df.format(Float.parseFloat(tn)),font));
-            terryScore.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(terryScore);
-
-            PdfPCell yellowLbl = new PdfPCell(new Phrase("Yellow Nail Syndrome",font));
-            yellowLbl.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(yellowLbl);
-
-            PdfPCell yellowScore = new PdfPCell(new Phrase(df.format(Float.parseFloat(yn)),font));
-            yellowScore.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(yellowScore);
-
-            document.add(table);
             document.add(new Paragraph("Diseases: "));
             Paragraph deas = new Paragraph(diseases);
             String[] parts = diseases.split("-");
@@ -299,10 +248,75 @@ public class SpoonViewAdapter extends AppCompatActivity {
 
             document.add(new Paragraph("Status: "));
             document.add(new Paragraph(stat));
+            document.add(space);
             String note = "** All results of the possible diseases analyzed by the system are the predicted diseases , based on the fingernail features. **";
             Paragraph reminder = new Paragraph(note);
             reminder.setAlignment(Element.ALIGN_CENTER);
             document.add(reminder);
+            document.add(space);
+            document.add(space);
+
+            Paragraph questionnaire = new Paragraph("Questionnaire", info);
+            document.add(questionnaire);
+
+            String A1 = final_answer_1.getText().toString();
+            System.out.println(A1);
+            Paragraph question1 = new Paragraph("1.) When did you first ever have a problem like this?", font);
+            Paragraph answer1 = new Paragraph("Answer: "+A1, answer);
+            document.add(question1);
+            document.add(answer1);
+
+            String A2 = final_answer_2.getText().toString();
+            System.out.println(A2);
+            Paragraph question2 = new Paragraph("2.) Do you have any medical problem in the past or even now?", font);
+            Paragraph answer2 = new Paragraph("Answer: "+A2, answer);
+            document.add(question2);
+            document.add(answer2);
+
+            String A3 = final_answer_3.getText().toString();
+            System.out.println(A3);
+            Paragraph question3 = new Paragraph("3.) List any medications that you have been taken in the past few months or years.", font);
+            Paragraph answer3 = new Paragraph("Answer: "+A3, answer);
+            document.add(question3);
+            document.add(answer3);
+
+            String A4 = final_answer_4.getText().toString();
+            System.out.println(A4);
+            Paragraph question4 = new Paragraph("4.) Do you eat enough food that provide nutrition in the body or are you malnourished?", font);
+            Paragraph answer4 = new Paragraph("Answer: "+A4, answer);
+            document.add(question4);
+            document.add(answer4);
+
+            String A5 = final_answer_5.getText().toString();
+            System.out.println(A5);
+            Paragraph question5 = new Paragraph("5.) Have you ever traumatized or injured any of the involved nails (stubbed your nail, hit the nail with a hammer, caught it in a door etc.)?", font);
+            Paragraph answer5 = new Paragraph("Answer: "+A5, answer);
+            document.add(question5);
+            document.add(answer5);
+
+            String A6 = final_answer_6.getText().toString();
+            System.out.println(A6);
+            Paragraph question6 = new Paragraph("6.) What kind of work do you do?" +
+                    "\n\ta.) Do you do anything to affect the tip of your fingernails?" +
+                    "\n\tb.) Contact with chemicals or irritants, such as strong soap, hair straightener, lye, etc.?" +
+                    "\n\tc.) Do your hands stay moist because of sweating or other reasons?", font);
+            Paragraph answer6 = new Paragraph("Answer: "+A6, answer);
+            document.add(question6);
+            document.add(answer6);
+
+            String A7 = final_answer_7.getText().toString();
+            System.out.println(A7);
+            Paragraph question7 = new Paragraph("7.) Do you think it is getting worse?", font);
+            Paragraph answer7 = new Paragraph("Answer: "+A7, answer);
+            document.add(question7);
+            document.add(answer7);
+
+            String A8 = final_answer_8.getText().toString();
+            System.out.println(A8);
+            Paragraph question8 = new Paragraph("8.) What other symptoms do you have?", font);
+            Paragraph answer8 = new Paragraph("Answer: "+A8, answer);
+            document.add(question8);
+            document.add(answer8);
 
             document.close();
             success = true;
