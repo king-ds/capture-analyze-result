@@ -7,17 +7,24 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -33,10 +40,15 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
+import org.json.JSONObject;
+
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
@@ -44,16 +56,30 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.example.king.mobile_app.BaseActivity.currentIp;
+
 public class BeauViewAdapter extends AppCompatActivity {
 
-    // Other variables
-    private String transactionid, disorder, uploaded, image, position, bl, cn, h, sn, yn, tn, stat, diseases, first_name, last_name, email;
-    private TextView txtquestion1, txtquestion2, txtquestion3, txtquestion4, txtanswer1, txtanswer2, txtanswer3, txtanswer4, txtstatus, txtdiseases;
+    // string variables
+    private String transactionid, is_answered, disorder, uploaded, image, position, bl, cn, h, sn, yn, tn, stat, diseases, first_name, last_name, email;
+    private String A1, A2, A3, A4, A5, A6, A7, A8;
+
+    // GUI staff
+    private TextView txtstatus, txtdiseases;
+    private TextView answer_1, answer_2, answer_3, answer_4, answer_5, answer_6, answer_7, answer_8;
+    private TextView final_answer_1, final_answer_2, final_answer_3, final_answer_4, final_answer_5, final_answer_6, final_answer_7, final_answer_8;
+    private Button okay;
+    private View focusView;
     private ImageView imagenail;
     private Bitmap bitmap;
-    private int counter;
     private SweetAlertDialog pDialog;
+
+    // other variables
+    private int counter;
     private boolean success;
+
+    // URL server
+    private String UPDATE_ANSWER = "http://" + currentIp + "/api/updateAnswer/";
 
     // Image loader
     HistoryPhotoLoader historyPhotoLoader = new HistoryPhotoLoader(this);
@@ -82,36 +108,65 @@ public class BeauViewAdapter extends AppCompatActivity {
         this.email = prefs.getString("email", "");
 
         Intent beau_intent = getIntent();
+
         transactionid = beau_intent.getStringExtra("transactionid");
         uploaded = beau_intent.getStringExtra("uploaded");
         disorder = beau_intent.getStringExtra("disorder");
         stat = beau_intent.getStringExtra("status");
         diseases = beau_intent.getStringExtra("diseases");
         image = beau_intent.getStringExtra("image");
+
+        A1 = beau_intent.getStringExtra("answer_1");
+        A2 = beau_intent.getStringExtra("answer_2");
+        A3 = beau_intent.getStringExtra("answer_3");
+        A4 = beau_intent.getStringExtra("answer_4");
+        A5 = beau_intent.getStringExtra("answer_5");
+        A6 = beau_intent.getStringExtra("answer_6");
+        A7 = beau_intent.getStringExtra("answer_7");
+        A8 = beau_intent.getStringExtra("answer_8");
+        is_answered = beau_intent.getStringExtra("isAnswered");
+
         bitmap = beau_intent.getParcelableExtra("bitmapImage");
 
-        txtquestion1 = findViewById(R.id.tvQ1);
-        txtquestion2 = findViewById(R.id.tvQ2);
-        txtquestion3 = findViewById(R.id.tvQ3);
-        txtquestion4 = findViewById(R.id.tvQ4);
+        UPDATE_ANSWER+= transactionid+"/";
 
-        txtanswer1 = findViewById(R.id.tvA1);
-        txtanswer2 = findViewById(R.id.tvA2);
-        txtanswer3 = findViewById(R.id.tvA3);
-        txtanswer4 = findViewById(R.id.tvA4);
+        final_answer_1 = findViewById(R.id.tvA1);
+        final_answer_2 = findViewById(R.id.tvA2);
+        final_answer_3 = findViewById(R.id.tvA3);
+        final_answer_4 = findViewById(R.id.tvA4);
+        final_answer_5 = findViewById(R.id.tvA5);
+        final_answer_6 = findViewById(R.id.tvA6);
+        final_answer_7 = findViewById(R.id.tvA7);
+        final_answer_8 = findViewById(R.id.tvA8);
 
         txtstatus = findViewById(R.id.tvStatus);
         txtdiseases = findViewById(R.id.tvDiseases);
         imagenail = findViewById(R.id.image);
 
-        setResult();
+        setDetails();
+        if(is_answered.equals("true")) {
+            setAnswer();
+        }
 
         getSupportActionBar().setTitle("Transaction #: "+transactionid);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
-    private void setResult(){
+    private void setAnswer(){
+
+        final_answer_1.setText(A1);
+        final_answer_2.setText(A2);
+        final_answer_3.setText(A3);
+        final_answer_4.setText(A4);
+        final_answer_5.setText(A5);
+        final_answer_6.setText(A6);
+        final_answer_7.setText(A7);
+        final_answer_8.setText(A8);
+    }
+
+    private void setDetails(){
+
         txtdiseases.setText(diseases);
         txtstatus.setText(stat);
         historyPhotoLoader.DisplayImage(image, imagenail);
@@ -286,72 +341,78 @@ public class BeauViewAdapter extends AppCompatActivity {
 
             case R.id.save_item:
                 if(counter == 0) {
-                    final SweetAlertDialog dialog = new SweetAlertDialog(BeauViewAdapter.this, SweetAlertDialog.NORMAL_TYPE);
-                    dialog.setTitleText("Confirmation")
-                            .setContentText("Do you want to generate it as PDF?")
-                            .setConfirmText("Save")
-                            .setCancelText("Don't save")
-                            .showCancelButton(true)
-                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                @Override
-                                public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                    dialog.dismiss();
-                                    pDialog = new SweetAlertDialog(BeauViewAdapter.this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Loading");
-                                    pDialog.show();
-                                    pDialog.setCancelable(false);
-                                    Thread thread = new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            generatePDF();
-                                            if (success) {
-                                                pDialog.dismiss();
-                                                BeauViewAdapter.this.runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        new SweetAlertDialog(BeauViewAdapter.this, SweetAlertDialog.SUCCESS_TYPE)
-                                                                .setTitleText("Awesome!")
-                                                                .setContentText("Your transaction has been saved as PDF")
-                                                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                                                    @Override
-                                                                    public void onClick(SweetAlertDialog sDialog) {
-                                                                        sDialog.dismiss();
-                                                                        counter = +1;
-                                                                    }
-                                                                })
-                                                                .show();
-                                                    }
-                                                });
-                                            }else{
-                                                new SweetAlertDialog(BeauViewAdapter.this, SweetAlertDialog.ERROR_TYPE)
-                                                        .setTitleText("Oh snap!")
-                                                        .setContentText("An error has occured while generating a PDF")
-                                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                                            @Override
-                                                            public void onClick(SweetAlertDialog sDialog) {
-                                                                sDialog.dismiss();
-                                                                counter = +1;
-                                                            }
-                                                        })
-                                                        .show();
+                    if(is_answered.equals("false")) {
+                        openBeauLinesQuestionnaire();
+                    } else {
+                        final SweetAlertDialog dialog = new SweetAlertDialog(BeauViewAdapter.this, SweetAlertDialog.NORMAL_TYPE);
+                        dialog.setTitleText("Confirmation")
+                                .setContentText("Do you want to generate it as PDF?")
+                                .setConfirmText("Save")
+                                .setCancelText("Don't save")
+                                .showCancelButton(true)
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        dialog.dismiss();
+                                        pDialog = new SweetAlertDialog(BeauViewAdapter.this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Loading");
+                                        pDialog.show();
+                                        pDialog.setCancelable(false);
+                                        Thread thread = new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                generatePDF();
+                                                if (success) {
+                                                    pDialog.dismiss();
+                                                    BeauViewAdapter.this.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            new SweetAlertDialog(BeauViewAdapter.this, SweetAlertDialog.SUCCESS_TYPE)
+                                                                    .setTitleText("Awesome!")
+                                                                    .setContentText("Your transaction has been saved as PDF")
+                                                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                                        @Override
+                                                                        public void onClick(SweetAlertDialog sDialog) {
+                                                                            sDialog.dismiss();
+                                                                            counter = +1;
+                                                                        }
+                                                                    })
+                                                                    .show();
+                                                        }
+                                                    });
+                                                } else {
+                                                    new SweetAlertDialog(BeauViewAdapter.this, SweetAlertDialog.ERROR_TYPE)
+                                                            .setTitleText("Oh snap!")
+                                                            .setContentText("An error has occured while generating a PDF")
+                                                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                                @Override
+                                                                public void onClick(SweetAlertDialog sDialog) {
+                                                                    sDialog.dismiss();
+                                                                    counter = +1;
+                                                                }
+                                                            })
+                                                            .show();
+                                                }
                                             }
-                                        }
-                                    });
-                                    thread.start();
-                                    Handler handler = new Handler(){
-                                        public void handleMessage(android.os.Message msg){
-                                            pDialog.dismiss();
+                                        });
+                                        thread.start();
+                                        Handler handler = new Handler() {
+                                            public void handleMessage(android.os.Message msg) {
+                                                pDialog.dismiss();
 
+                                            }
+
+                                            ;
                                         };
-                                    };
-                                }
-                            })
-                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                @Override
-                                public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .show();
+                                    }
+                                })
+                                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
+                    }
 
                 }else {
                     BeauViewAdapter.this.runOnUiThread(new Runnable() {
@@ -376,6 +437,212 @@ public class BeauViewAdapter extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void resetErrors(){
+
+        answer_1.setError(null);
+        answer_2.setError(null);
+        answer_3.setError(null);
+        answer_4.setError(null);
+        answer_5.setError(null);
+        answer_6.setError(null);
+        answer_7.setError(null);
+        answer_8.setError(null);
+    }
+
+    private void openBeauLinesQuestionnaire() {
+
+        AlertDialog.Builder beau_questionnaire = new AlertDialog.Builder(BeauViewAdapter.this);
+        View BeauQuestionView = getLayoutInflater().inflate(R.layout.beau_lines_questionnaire, null);
+        beau_questionnaire.setView(BeauQuestionView);
+        final AlertDialog view_beau_questionnaire = beau_questionnaire.create();
+        view_beau_questionnaire.show();
+
+        answer_1 = view_beau_questionnaire.findViewById(R.id.etAnswer1);
+        answer_2 = view_beau_questionnaire.findViewById(R.id.etAnswer2);
+        answer_3 = view_beau_questionnaire.findViewById(R.id.etAnswer3);
+        answer_4 = view_beau_questionnaire.findViewById(R.id.etAnswer4);
+        answer_5 = view_beau_questionnaire.findViewById(R.id.etAnswer5);
+        answer_6 = view_beau_questionnaire.findViewById(R.id.etAnswer6);
+        answer_7 = view_beau_questionnaire.findViewById(R.id.etAnswer7);
+        answer_8 = view_beau_questionnaire.findViewById(R.id.etAnswer8);
+
+        okay = view_beau_questionnaire.findViewById(R.id.btnSubmit);
+
+        okay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String A1 = answer_1.getText().toString();
+                String A2 = answer_2.getText().toString();
+                String A3 = answer_3.getText().toString();
+                String A4 = answer_4.getText().toString();
+                String A5 = answer_5.getText().toString();
+                String A6 = answer_6.getText().toString();
+                String A7 = answer_7.getText().toString();
+                String A8 = answer_8.getText().toString();
+
+                System.out.println(A1);
+
+                boolean cancel = false;
+                resetErrors();
+                if (TextUtils.isEmpty(A1)) {
+                    answer_1.setError("This field cannot be blank");
+                    focusView = answer_1;
+                    cancel = true;
+                } else if (TextUtils.isEmpty(A2)) {
+                    answer_2.setError("This field cannot be blank");
+                    focusView = answer_2;
+                    cancel = true;
+                } else if (TextUtils.isEmpty(A3)) {
+                    answer_3.setError("This field cannot be blank");
+                    focusView = answer_3;
+                    cancel = true;
+                } else if (TextUtils.isEmpty(A4)) {
+                    answer_4.setError("This field cannot be blank");
+                    focusView = answer_4;
+                    cancel = true;
+                } else if (TextUtils.isEmpty(A5)) {
+                    answer_5.setError("This field cannot be blank");
+                    focusView = answer_5;
+                    cancel = true;
+                } else if (TextUtils.isEmpty(A6)) {
+                    answer_6.setError("This field cannot be blank");
+                    focusView = answer_6;
+                    cancel = true;
+                } else if (TextUtils.isEmpty(A7)) {
+                    answer_7.setError("This field cannot be blank");
+                    focusView = answer_7;
+                    cancel = true;
+                } else if (TextUtils.isEmpty(A8)) {
+                    answer_8.setError("This field cannot be blank");
+                    focusView = answer_8;
+                    cancel = true;
+                }
+                if (cancel) {
+                    focusView.requestFocus();
+                } else {
+                    new UpdateQuestionnaireAnswer().execute();
+                    view_beau_questionnaire.dismiss();
+                }
+            }
+        });
+    }
+
+    private class UpdateQuestionnaireAnswer extends AsyncTask<Void, Void, Void> {
+
+        boolean isUpdated = false;
+        int response_code = 0;
+        String response_message;
+        final String A1 = answer_1.getText().toString();
+        final String A2 = answer_2.getText().toString();
+        final String A3 = answer_3.getText().toString();
+        final String A4 = answer_4.getText().toString();
+        final String A5 = answer_5.getText().toString();
+        final String A6 = answer_6.getText().toString();
+        final String A7 = answer_7.getText().toString();
+        final String A8 = answer_8.getText().toString();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new SweetAlertDialog(BeauViewAdapter.this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Sending");
+            pDialog.show();
+            pDialog.setCancelable(false);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            JSONfunctions parser = new JSONfunctions();
+            JSONObject update = parser.getBeauAnswerObject(true, A1, A2, A3, A4, A5, A6, A7, A8);
+            String message = update.toString();
+            System.out.println(message);
+
+            try {
+                URL myUrl = new URL(UPDATE_ANSWER);
+                //Create a connection
+                HttpURLConnection connection = (HttpURLConnection) myUrl.openConnection();
+                //Set methods and timeouts
+                connection.setRequestMethod("PUT");
+                connection.setReadTimeout(15000);
+                connection.setConnectTimeout(15000);
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                connection.setFixedLengthStreamingMode(message.getBytes().length);
+                connection.setRequestProperty("Content-Type", "application/json");
+
+                OutputStream os = new BufferedOutputStream(connection.getOutputStream());
+                System.out.println(os);
+                os.write(message.getBytes());
+                os.flush();
+                os.close();
+
+                //Connect to url
+                connection.connect();
+                response_code = connection.getResponseCode();
+                response_message = connection.getResponseMessage();
+                if (response_code == 200) {
+                    isUpdated = true;
+                    Log.e("BeauViewAdapter", "Server response message : " + response_message);
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            if(isUpdated){
+                pDialog.dismiss();
+                BeauViewAdapter.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new SweetAlertDialog(BeauViewAdapter.this, SweetAlertDialog.SUCCESS_TYPE)
+                                .setTitleText("Awesome!")
+                                .setContentText("You have submitted the answer")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        final_answer_1.setText(answer_1.getText());
+                                        final_answer_2.setText(answer_2.getText());
+                                        final_answer_3.setText(answer_3.getText());
+                                        final_answer_4.setText(answer_4.getText());
+                                        final_answer_5.setText(answer_5.getText());
+                                        final_answer_6.setText(answer_6.getText());
+                                        final_answer_7.setText(answer_7.getText());
+                                        final_answer_8.setText(answer_8.getText());
+                                        is_answered = "true";
+                                        sDialog.dismiss();
+                                    }
+                                })
+                                .show();
+                    }
+                });
+            }else{
+
+                pDialog.dismiss();
+                BeauViewAdapter.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new SweetAlertDialog(BeauViewAdapter.this, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Error!")
+                                .setContentText("Please check your internet connection")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        sDialog.dismiss();
+                                    }
+                                })
+                                .show();
+                    }
+                });
+            }
+        }
     }
 
 }

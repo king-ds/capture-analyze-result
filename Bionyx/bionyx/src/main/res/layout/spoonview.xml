@@ -22,11 +22,10 @@
         <LinearLayout
             android:id="@+id/rellay1"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginBottom="20dp"
-            android:layout_weight="2"
             android:background="@drawable/bg_entire"
             android:orientation="horizontal">
 
@@ -125,213 +124,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat"
-                        android:text="SPOON NAILS"
+                        android:text="Spoon Nails"
                         android:textAlignment="center"
                         android:textColor="@color/colorBlack"
-                        android:textSize="20sp"
+                        android:textSize="25sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
 
 
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_row="1"
-                app:layout_column="0"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="20dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="8dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="16dp"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/vector_clubbing" />
-
-                    <TextView
-                        android:id="@+id/tvQ1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat"
-                        android:text="Question #1"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvA1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat"
-                        android:text="Answer #1"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="18sp" />
-
-                </LinearLayout>
-
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_column="0"
-                app:layout_row="2"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="20dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="8dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="16dp"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/vector_spoon" />
-
-                    <TextView
-                        android:id="@+id/tvQ2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat"
-                        android:text="Question #2"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvA2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat"
-                        android:text="Answer #2"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="18sp" />
-
-                </LinearLayout>
-
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="20dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="8dp"
-                app:layout_row="3"
-                app:layout_column="0">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="16dp"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/vector_yellow" />
-
-                    <TextView
-                        android:id="@+id/tvQ3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat"
-                        android:text="Question #3"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvA3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat"
-                        android:text="Answer #3"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="18sp" />
-
-                </LinearLayout>
-
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="20dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="8dp"
-                app:layout_row="4"
-                app:layout_column="0">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="16dp"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/vector_terry_s" />
-
-                    <TextView
-                        android:id="@+id/tvQ4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat"
-                        android:text="Question #4"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvA4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat"
-                        android:text="Answer #4"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="18sp" />
-
-                </LinearLayout>
             </android.support.v7.widget.CardView>
 
             <LinearLayout
@@ -380,7 +181,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:layout_marginBottom="60dp"
+                    android:layout_marginBottom="10dp"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="8dp"
                     app:layout_column="0"
@@ -410,6 +211,225 @@
                             android:textStyle="bold" />
 
                     </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_row="2"
+                    app:layout_column="0"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:layout_margin="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat"
+                            android:text="Questionnaire"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="10dp"/>
+
+                        <TextView
+                            android:id="@+id/tvQ1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat"
+                            android:text="1.) When did you first ever have a problem like this?"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp"
+                            android:layout_marginBottom="10dp"/>
+
+                        <TextView
+                            android:id="@+id/tvA1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:fontFamily="@font/montserrat"
+                            android:hint="Answer"
+                            android:textAlignment="center"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/tvQ2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat"
+                            android:text="2.) Do you have any medical problem in the past or even now?"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/tvA2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:fontFamily="@font/montserrat"
+                            android:hint="Answer"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorBlack"
+                            android:textStyle="bold"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/tvQ3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat"
+                            android:text="3.) List any medications that you have been taken in the past few months or years."
+                            android:textAlignment="textStart"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp"
+                            android:layout_marginBottom="10dp"/>
+
+                        <TextView
+                            android:id="@+id/tvA3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:fontFamily="@font/montserrat"
+                            android:hint="Answer"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorBlack"
+                            android:textStyle="bold"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/tvQ4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat"
+                            android:text="4.) Do you eat enough food that provide nutrition in the body / are you malnourished?"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp"
+                            android:layout_marginBottom="10dp"/>
+
+                        <TextView
+                            android:id="@+id/tvA4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:fontFamily="@font/montserrat"
+                            android:hint="Answer"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorBlack"
+                            android:textStyle="bold"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/tvQ5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat"
+                            android:text="5.) Have you ever traumatized or injured any of the involved nails (stubbed your nail, hit the nail with a hammer, caught it in a door etc.)"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp"
+                            android:layout_marginBottom="10dp"/>
+
+                        <TextView
+                            android:id="@+id/tvA5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:fontFamily="@font/montserrat"
+                            android:hint="Answer"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorBlack"
+                            android:textStyle="bold"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/tvQ6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat"
+                            android:text="6.) What kind of work do you do?
+	\na.) Do you do anything to affect the tip of your fingernails?
+	\nb.) Contact with chemicals or irritants, such as strong soap, hair straightener, lye, etc.?
+	\nc.) Do your hands stay moist because of sweating or other reasons?"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp"
+                            android:layout_marginBottom="10dp"/>
+
+                        <TextView
+                            android:id="@+id/tvA6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:fontFamily="@font/montserrat"
+                            android:hint="Answer"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorBlack"
+                            android:textStyle="bold"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/tvQ7"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat"
+                            android:text="7.) Do you think it is getting worse?"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp"
+                            android:layout_marginBottom="10dp"/>
+
+                        <TextView
+                            android:id="@+id/tvA7"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat"
+                            android:hint="Answer"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorBlack"
+                            android:textStyle="bold"
+                            android:textSize="18sp"
+                            android:layout_marginBottom="10dp"/>
+
+                        <TextView
+                            android:id="@+id/tvQ8"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat"
+                            android:text="8.) What other symptoms do you have?"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp"
+                            android:layout_marginBottom="10dp"/>
+
+                        <TextView
+                            android:id="@+id/tvA8"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:fontFamily="@font/montserrat"
+                            android:hint="Answer"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorBlack"
+                            android:textStyle="bold"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
                 </android.support.v7.widget.CardView>
             </LinearLayout>
         </android.support.v7.widget.GridLayout>

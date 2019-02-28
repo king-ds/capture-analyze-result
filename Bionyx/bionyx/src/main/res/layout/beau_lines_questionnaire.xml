@@ -1,0 +1,191 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingStart="5dp"
+    android:paddingBottom="15dp"
+    android:layout_margin="30dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:fontFamily="@font/montserrat"
+        android:layout_marginBottom="10dp"
+        android:textSize="20sp"
+        android:text="Questionnaire: "/>
+
+    <TextView
+        android:id="@+id/tvQ1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="1.) When did you first ever have a problem like this?"
+        android:textSize="15dp"
+        android:textColor="@color/colorBlack"
+        android:fontFamily="@font/montserrat"/>
+
+    <EditText
+        android:id="@+id/etAnswer1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:hint="Answer"
+        android:textCursorDrawable="@color/colorBlack"
+        android:backgroundTint="@color/colorBlack"
+        android:fontFamily="@font/montserrat"/>
+
+    <TextView
+        android:id="@+id/tvQ2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2.) Do you have any medical problem in the past or even now?"
+        android:textSize="15dp"
+        android:textColor="@color/colorBlack"
+        android:fontFamily="@font/montserrat"/>
+
+    <EditText
+        android:id="@+id/etAnswer2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:hint="Answer"
+        android:textCursorDrawable="@color/colorBlack"
+        android:backgroundTint="@color/colorBlack"
+        android:fontFamily="@font/montserrat"/>
+
+    <TextView
+        android:id="@+id/tvQ3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="3.) List any medications that you have been taken in the past few months or years"
+        android:textSize="15dp"
+        android:textColor="@color/colorBlack"
+        android:fontFamily="@font/montserrat"/>
+
+    <EditText
+        android:id="@+id/etAnswer3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvQ3"
+        android:layout_alignBottom="@+id/tvQ3"
+        android:textColor="@color/colorBlack"
+        android:hint="Answer"
+        android:textCursorDrawable="@color/colorBlack"
+        android:backgroundTint="@color/colorBlack"
+        android:fontFamily="@font/montserrat"/>
+
+    <TextView
+        android:id="@+id/tvQ4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="4.) Do you eat enough food that provide nutrition in the body / are you malnourished?"
+        android:textSize="15dp"
+        android:textColor="@color/colorBlack"
+        android:fontFamily="@font/montserrat"/>
+
+    <EditText
+        android:id="@+id/etAnswer4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:hint="Answer"
+        android:textCursorDrawable="@color/colorBlack"
+        android:backgroundTint="@color/colorBlack"
+        android:fontFamily="@font/montserrat"/>
+
+    <TextView
+        android:id="@+id/tvQ5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="5.) Have you ever traumatized or injured any of the involved nails (stubbed your nail, hit the nail with a hammer, caught it in a door etc.)"
+        android:textSize="15dp"
+        android:textColor="@color/colorBlack"
+        android:fontFamily="@font/montserrat"/>
+
+    <EditText
+        android:id="@+id/etAnswer5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:hint="Answer"
+        android:textCursorDrawable="@color/colorBlack"
+        android:backgroundTint="@color/colorBlack"
+        android:fontFamily="@font/montserrat"/>
+
+    <TextView
+        android:id="@+id/tvQ6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="6.) What kind of work do you do? \na.) Do you do anything to affect the tip of your fingernails?\nb.) Contact with chemicals or irritants, such as strong soap, hair straightener, lye, etc.?\nc.) Do your hands stay moist because of sweating or other reasons?"
+        android:textSize="15dp"
+        android:textColor="@color/colorBlack"
+        android:fontFamily="@font/montserrat"/>
+
+    <EditText
+        android:id="@+id/etAnswer6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:hint="Answer"
+        android:textCursorDrawable="@color/colorBlack"
+        android:backgroundTint="@color/colorBlack"
+        android:fontFamily="@font/montserrat"/>
+
+    <TextView
+        android:id="@+id/tvQ7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="7.) Do you think it is getting worse?"
+        android:textSize="15dp"
+        android:textColor="@color/colorBlack"
+        android:fontFamily="@font/montserrat"/>
+
+    <EditText
+        android:id="@+id/etAnswer7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:hint="Answer"
+        android:textCursorDrawable="@color/colorBlack"
+        android:backgroundTint="@color/colorBlack"
+        android:fontFamily="@font/montserrat"/>
+
+    <TextView
+        android:id="@+id/tvQ8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="8.) What other symptoms do you have?"
+        android:textSize="15dp"
+        android:textColor="@color/colorBlack"
+        android:fontFamily="@font/montserrat"/>
+
+    <EditText
+        android:id="@+id/etAnswer8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:hint="Answer"
+        android:textCursorDrawable="@color/colorBlack"
+        android:backgroundTint="@color/colorBlack"
+        android:fontFamily="@font/montserrat"/>
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:text="Submit"
+        android:fontFamily="@font/montserrat"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:background="@drawable/bg_loginbtn"/>
+
+</LinearLayout>
+</ScrollView>

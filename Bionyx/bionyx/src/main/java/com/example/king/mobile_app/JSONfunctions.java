@@ -44,6 +44,120 @@ public class JSONfunctions {
         return null;
     }
 
+    public static JSONObject getBeauAnswerObject(boolean isAnswered, String answer_1, String answer_2, String answer_3, String answer_4, String answer_5,
+                                                    String answer_6, String answer_7, String answer_8){
+
+        try{
+            JSONObject temp = new JSONObject();
+            temp.put("isAnswered", isAnswered);
+            temp.put("answer_1", answer_1);
+            temp.put("answer_2", answer_2);
+            temp.put("answer_3", answer_3);
+            temp.put("answer_4", answer_4);
+            temp.put("answer_5", answer_5);
+            temp.put("answer_6", answer_6);
+            temp.put("answer_7", answer_7);
+            temp.put("answer_8", answer_8);
+
+            Log.d(DEBUG_TAG, "JSON Beau Lines Object Created");
+            return temp;
+        }catch (JSONException ex){
+            Log.e(ERROR_TAG, "Something went wrong with data creation");
+        }
+        return null;
+    }
+
+    public static JSONObject getCLubAnswerObject(boolean isAnswered, String answer_1, String answer_2, String answer_3, String answer_4, String answer_5,
+                                                 String answer_6, String answer_7){
+
+        try{
+            JSONObject temp = new JSONObject();
+            temp.put("isAnswered", isAnswered);
+            temp.put("answer_1", answer_1);
+            temp.put("answer_2", answer_2);
+            temp.put("answer_3", answer_3);
+            temp.put("answer_4", answer_4);
+            temp.put("answer_5", answer_5);
+            temp.put("answer_6", answer_6);
+            temp.put("answer_7", answer_7);
+
+            Log.d(DEBUG_TAG, "JSON Club Nails Object Created");
+            return temp;
+        }catch (JSONException ex){
+            Log.e(ERROR_TAG, "Something went wrong with data creation");
+        }
+        return null;
+    }
+
+    public static JSONObject getSpoonAnswerObject(boolean isAnswered, String answer_1, String answer_2, String answer_3, String answer_4, String answer_5,
+                                                 String answer_6, String answer_7, String answer_8){
+
+        try{
+            JSONObject temp = new JSONObject();
+            temp.put("isAnswered", isAnswered);
+            temp.put("answer_1", answer_1);
+            temp.put("answer_2", answer_2);
+            temp.put("answer_3", answer_3);
+            temp.put("answer_4", answer_4);
+            temp.put("answer_5", answer_5);
+            temp.put("answer_6", answer_6);
+            temp.put("answer_7", answer_7);
+            temp.put("answer_8", answer_8);
+
+            Log.d(DEBUG_TAG, "JSON Spoon Nails Object Created");
+            return temp;
+        }catch (JSONException ex){
+            Log.e(ERROR_TAG, "Something went wrong with data creation");
+        }
+        return null;
+    }
+
+    public static JSONObject getTerryAnswerObject(boolean isAnswered, String answer_1, String answer_2, String answer_3, String answer_4, String answer_5,
+                                                  String answer_6, String answer_7){
+
+        try{
+            JSONObject temp = new JSONObject();
+            temp.put("isAnswered", isAnswered);
+            temp.put("answer_1", answer_1);
+            temp.put("answer_2", answer_2);
+            temp.put("answer_3", answer_3);
+            temp.put("answer_4", answer_4);
+            temp.put("answer_5", answer_5);
+            temp.put("answer_6", answer_6);
+            temp.put("answer_7", answer_7);
+
+            Log.d(DEBUG_TAG, "JSON Terrys Nails Answer Object Created");
+            return temp;
+        }catch (JSONException ex){
+            Log.e(ERROR_TAG, "Something went wrong with data creation");
+        }
+        return null;
+    }
+
+    public static JSONObject getYellowAnswerObject(boolean isAnswered, String answer_1, String answer_2, String answer_3, String answer_4, String answer_5,
+                                                  String answer_6, String answer_7, String answer_8, String answer_9){
+
+        try{
+            JSONObject temp = new JSONObject();
+            temp.put("isAnswered", isAnswered);
+            temp.put("answer_1", answer_1);
+            temp.put("answer_2", answer_2);
+            temp.put("answer_3", answer_3);
+            temp.put("answer_4", answer_4);
+            temp.put("answer_5", answer_5);
+            temp.put("answer_6", answer_6);
+            temp.put("answer_7", answer_7);
+            temp.put("answer_8", answer_8);
+            temp.put("answer_9", answer_9);
+
+            Log.d(DEBUG_TAG, "JSON Yellow Nails Answer Object Created");
+            return temp;
+        }catch (JSONException ex){
+            Log.e(ERROR_TAG, "Something went wrong with data creation");
+        }
+        return null;
+    }
+
     public static JSONObject getLoginObject(String username, String password){
         try{
             JSONObject temp = new JSONObject();

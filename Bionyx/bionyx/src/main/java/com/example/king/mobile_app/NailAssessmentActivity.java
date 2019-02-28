@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
@@ -21,6 +22,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -30,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -40,6 +43,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -56,12 +60,13 @@ import static com.example.king.mobile_app.BaseActivity.currentIp;
 public class NailAssessmentActivity extends AppCompatActivity {
 
     //URL
-    private String SERVER_URL = "http://"+currentIp+"/api/classifyImage/";
+    private String SERVER_URL = "http://" + currentIp + "/api/classifyImage/";
 
     //REQUEST
     private String token;
     private String id;
     private InternetConnectionManager ICM;
+    private String Disorder;
 
     //STORAGE
     Uri mCurrentImageUri, mCurrentCroppedImageUri;
@@ -142,13 +147,13 @@ public class NailAssessmentActivity extends AppCompatActivity {
     /*
     Function for creating file directory (original image)
     */
-    private File createFileDirectory() throws IOException{
+    private File createFileDirectory() throws IOException {
 
         String folder = "DCIM/Bionyx";
         File imgDir = new File(Environment.getExternalStorageDirectory(), folder);
 
-        if(!imgDir.exists()){
-            if(!imgDir.mkdir()){
+        if (!imgDir.exists()) {
+            if (!imgDir.mkdir()) {
                 Log.e("NailAssessmentActivity", "Failed to create DCIM/Bionyx directory");
                 return null;
             }
@@ -178,7 +183,7 @@ public class NailAssessmentActivity extends AppCompatActivity {
         mCurrentPhotoPath = f.getAbsolutePath();
         mCurrentPhotoName = f.getName();
 //        mCurrentImageUri = Uri.fromFile(f);
-        mCurrentImageUri = FileProvider.getUriForFile(NailAssessmentActivity.this, "com.example.king.mobile_app.provider", f );
+        mCurrentImageUri = FileProvider.getUriForFile(NailAssessmentActivity.this, "com.example.king.mobile_app.provider", f);
 
         return f;
 
@@ -193,7 +198,7 @@ public class NailAssessmentActivity extends AppCompatActivity {
         mCurrentThumbPath = f.getAbsolutePath();
         mCurrentCroppedPhotoName = f.getName();
 //        mCurrentCroppedImageUri = Uri.fromFile(f);
-        mCurrentCroppedImageUri = FileProvider.getUriForFile(NailAssessmentActivity.this, "com.example.king.mobile_app.provider", f );
+        mCurrentCroppedImageUri = FileProvider.getUriForFile(NailAssessmentActivity.this, "com.example.king.mobile_app.provider", f);
 
         return f;
     }
@@ -214,13 +219,13 @@ public class NailAssessmentActivity extends AppCompatActivity {
     /*
     Function for creating file directory (Cropped Image)
      */
-    private File createCroppedFileDirectory() throws IOException{
+    private File createCroppedFileDirectory() throws IOException {
 
         String folder = "DCIM/Bionyx/Crop";
         File imgDir = new File(Environment.getExternalStorageDirectory(), folder);
 
-        if(!imgDir.exists()){
-            if(!imgDir.mkdir()){
+        if (!imgDir.exists()) {
+            if (!imgDir.mkdir()) {
                 Log.e("NailAssessmentActivity", "Failed to create DCIM/Bionyx/Crop directory");
                 return null;
             }
@@ -245,7 +250,7 @@ public class NailAssessmentActivity extends AppCompatActivity {
                     f = setUpPhotoFile();
                     mCurrentPhotoPath = f.getAbsolutePath();
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentImageUri);
-                    takePictureIntent.putExtra("return-data",true);
+                    takePictureIntent.putExtra("return-data", true);
                 } catch (IOException e) {
                     e.printStackTrace();
                     mCurrentPhotoPath = null;
@@ -262,7 +267,7 @@ public class NailAssessmentActivity extends AppCompatActivity {
     Override function for getting the result from captured and cropped image
      */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == CAMERA_CAPTURE && resultCode == RESULT_OK) {
             performCrop();
@@ -280,7 +285,7 @@ public class NailAssessmentActivity extends AppCompatActivity {
                     ex.printStackTrace();
                 }
             }
-        } else if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_CANCELED) {
+        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_CANCELED) {
             mCurrentCroppedImageUri = null;
             Toast.makeText(getApplicationContext(), "Crop image cancelled", Toast.LENGTH_SHORT).show();
             System.out.println("CANCELED BOBO");
@@ -294,7 +299,7 @@ public class NailAssessmentActivity extends AppCompatActivity {
     /*
     Function for cropping image
      */
-    private void performCrop(){
+    private void performCrop() {
         mCurrentCroppedImageUri = null;
         CropImage.activity(mCurrentImageUri).start(this);
     }
@@ -304,46 +309,46 @@ public class NailAssessmentActivity extends AppCompatActivity {
      */
     private void saveCropImage(Bitmap image) {
 
-    try {
-        File f = setUpCroppedFile();
-        if (f == null) {
-            Log.d("NailAssessmentActivity",
-                    "Error creating media file, check storage permissions: ");
-            return;
-        }
-
         try {
-            FileOutputStream fos = new FileOutputStream(f);
-            image.compress(Bitmap.CompressFormat.PNG, 90, fos);
-            fos.close();
-        } catch (FileNotFoundException e) {
-            Log.d("NailAssessmentActivity", "File not found: " + e.getMessage());
-        } catch (IOException e) {
-            Log.d("NailAssessmentActivity", "Error accessing file: " + e.getMessage());
-        }
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-        values.put(MediaStore.MediaColumns.DATA, f.getPath());
+            File f = setUpCroppedFile();
+            if (f == null) {
+                Log.d("NailAssessmentActivity",
+                        "Error creating media file, check storage permissions: ");
+                return;
+            }
 
-        getApplicationContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-    }catch (IOException ex){
-        ex.printStackTrace();
+            try {
+                FileOutputStream fos = new FileOutputStream(f);
+                image.compress(Bitmap.CompressFormat.PNG, 90, fos);
+                fos.close();
+            } catch (FileNotFoundException e) {
+                Log.d("NailAssessmentActivity", "File not found: " + e.getMessage());
+            } catch (IOException e) {
+                Log.d("NailAssessmentActivity", "Error accessing file: " + e.getMessage());
+            }
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+            values.put(MediaStore.MediaColumns.DATA, f.getPath());
+
+            getApplicationContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
     }
 
-   /*
-   Function for uploading image
-   */
-    private void uploadImg(){
+    /*
+    Function for uploading image
+    */
+    private void uploadImg() {
 
         final String selectedFilePath = mCurrentThumbPath;
-        if(ICM.isNetworkAvailable(this)){
+        if (ICM.isNetworkAvailable(this)) {
             new UploadImageTask().execute(selectedFilePath);
         }
     }
@@ -351,10 +356,10 @@ public class NailAssessmentActivity extends AppCompatActivity {
     /*
     Asynctask for uploading image to server (django-rest api)
      */
-    private class UploadImageTask extends AsyncTask<String, String, String>{
+    private class UploadImageTask extends AsyncTask<String, String, String> {
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
 
             super.onPreExecute();
             pDialog = new SweetAlertDialog(NailAssessmentActivity.this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Processing");
@@ -363,18 +368,18 @@ public class NailAssessmentActivity extends AppCompatActivity {
         }
 
         @Override
-        protected String doInBackground(String... paths){
+        protected String doInBackground(String... paths) {
 
-            try{
+            try {
                 String resp = uploadFile(paths[0]);
-                return ""+resp;
-            }catch (Exception e){
+                return "" + resp;
+            } catch (Exception e) {
                 return "No Image";
             }
         }
 
 
-        public String uploadFile(final String selectedFilePath){
+        public String uploadFile(final String selectedFilePath) {
 
             int serverResponseCode = 0;
             String Results = "";
@@ -386,15 +391,15 @@ public class NailAssessmentActivity extends AppCompatActivity {
 
             int bytesRead, bytesAvailable, bufferSize;
             byte[] buffer;
-            int maxBufferSize = 5*1024*1024;
+            int maxBufferSize = 5 * 1024 * 1024;
             File selectedFile = new File(selectedFilePath);
 
             String[] parts = selectedFilePath.split("/");
             final String fileName = parts[parts.length - 1];
 
-            if(!selectedFile.isFile()){
+            if (!selectedFile.isFile()) {
 
-                Log.e("NailAssessmentActivity", "Source File Doesn't Exist: "+selectedFilePath);
+                Log.e("NailAssessmentActivity", "Source File Doesn't Exist: " + selectedFilePath);
                 return selectedFilePath;
 
             } else {
@@ -421,13 +426,13 @@ public class NailAssessmentActivity extends AppCompatActivity {
                     dataOutputStream.writeBytes(lineEnd);
 
                     bytesAvailable = fileInputStream.available();
-                    System.out.println("Bytes Available "+bytesAvailable);
+                    System.out.println("Bytes Available " + bytesAvailable);
                     bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                    System.out.println("Buffer Size: "+bufferSize);
+                    System.out.println("Buffer Size: " + bufferSize);
                     buffer = new byte[bufferSize];
 
                     bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-                    System.out.println("Total bytes: "+bytesRead);
+                    System.out.println("Total bytes: " + bytesRead);
 
                     while (bytesRead > 0) {
                         try {
@@ -460,19 +465,19 @@ public class NailAssessmentActivity extends AppCompatActivity {
                         StringBuilder sb = new StringBuilder();
                         String output;
                         Log.e("NailAssessmentActivity", "File upload completed.\n\n" + fileName);
-                        while((output = br.readLine()) != null){
+                        while ((output = br.readLine()) != null) {
                             sb.append(output);
                         }
                         String response = sb.toString();
 
-                        try{
+                        try {
 
                             JSONObject jsonObject = new JSONObject(response);
                             String status = jsonObject.getString("Status").trim();
 
                             Results = status;
 
-                        }catch (JSONException ex){
+                        } catch (JSONException ex) {
                             ex.printStackTrace();
                             return "";
                         }
@@ -492,23 +497,24 @@ public class NailAssessmentActivity extends AppCompatActivity {
                     dataOutputStream.flush();
                     dataOutputStream.close();
 
-                }catch (FileNotFoundException e){
+                } catch (FileNotFoundException e) {
                     e.printStackTrace();
                     Log.e("NailAssessmentActivity", "File Not Found");
-                }catch (MalformedURLException e){
+                } catch (MalformedURLException e) {
                     e.printStackTrace();
                     Log.e("NailAssessmentActivity", "URL Error!");
-                }catch (IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                     Log.e("NailAssessmentActivity", "Cannot Read/Write File");
                 }
                 return Results;
             }
         }
+
         @Override
         protected void onPostExecute(String result) {
             System.out.print(result);
-            if(result.equals("Healthy")){
+            if (result.equals("Healthy")) {
                 pDialog.dismiss();
                 new SweetAlertDialog(NailAssessmentActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText("Result")
@@ -538,7 +544,7 @@ public class NailAssessmentActivity extends AppCompatActivity {
                             }
                         })
                         .show();
-            } else if (result.equals("No Image")){
+            } else if (result.equals("No Image")) {
                 pDialog.dismiss();
                 new SweetAlertDialog(NailAssessmentActivity.this, SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("Warning")
@@ -566,8 +572,7 @@ public class NailAssessmentActivity extends AppCompatActivity {
                             }
                         })
                         .show();
-            }
-            else {
+            } else {
                 pDialog.dismiss();
                 new SweetAlertDialog(NailAssessmentActivity.this, SweetAlertDialog.ERROR_TYPE)
                         .setTitleText("Error")
@@ -612,4 +617,5 @@ public class NailAssessmentActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
+
 

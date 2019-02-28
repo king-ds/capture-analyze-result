@@ -51,7 +51,16 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
     static String IMAGE = "image";
     static String STATUS = "status";
     static String DISEASES = "diseases";
-    static String FILTERED_IMAGE = "filtered_image";
+    static String ISANSWERED = "isAnswered";
+    static String ANSWER_1 = "answer_1";
+    static String ANSWER_2 = "answer_2";
+    static String ANSWER_3 = "answer_3";
+    static String ANSWER_4 = "answer_4";
+    static String ANSWER_5 = "answer_5";
+    static String ANSWER_6 = "answer_6";
+    static String ANSWER_7 = "answer_7";
+    static String ANSWER_8 = "answer_8";
+    static String ANSWER_9 = "answer_9";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +140,16 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
                             map.put("disorder", jsonobject.getString("disorder"));
                             map.put("status", jsonobject.getString("status"));
                             map.put("diseases", jsonobject.getString("diseases"));
-                            map.put("filtered_image", jsonobject.getString("filtered_image"));
+                            map.put("isAnswered", jsonobject.getString("isAnswered"));
+                            map.put("answer_1", jsonobject.getString("answer_1"));
+                            map.put("answer_2", jsonobject.getString("answer_2"));
+                            map.put("answer_3", jsonobject.getString("answer_3"));
+                            map.put("answer_4", jsonobject.getString("answer_4"));
+                            map.put("answer_5", jsonobject.getString("answer_5"));
+                            map.put("answer_6", jsonobject.getString("answer_6"));
+                            map.put("answer_7", jsonobject.getString("answer_7"));
+                            map.put("answer_8", jsonobject.getString("answer_8"));
+                            map.put("answer_9", jsonobject.getString("answer_9"));
                             arraylist.add(map);
                         }
                     } catch (JSONException e) {
