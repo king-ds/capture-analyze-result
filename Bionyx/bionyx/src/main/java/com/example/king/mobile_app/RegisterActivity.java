@@ -95,6 +95,7 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
                 }
             }
         });
+
         TermsAndAgreement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
