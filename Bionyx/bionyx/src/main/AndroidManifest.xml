@@ -32,37 +32,41 @@
 
         <!-- Login Form Start -->
         <activity
-            android:name="com.example.king.mobile_app.LoginActivity"
+            android:name=".LoginActivity"
             android:exported="true"
             android:label="Bionyx"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <!-- Login Form End -->
         <!-- Registration Form Start -->
         <activity
-            android:name="com.example.king.mobile_app.RegisterActivity"
+            android:name=".RegisterActivity"
             android:label="Registration"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <!-- Registration Form End -->
         <!-- Dashboard Start -->
         <activity
-            android:name="com.example.king.mobile_app.DashboardActivity"
+            android:name=".DashboardActivity"
             android:label="Dashboard"
             android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name="com.example.king.mobile_app.DiseasesActivity" />
-        <activity android:name="com.example.king.mobile_app.NailAssessmentActivity" />
-        <activity android:name="com.example.king.mobile_app.HistoryActivity" />
-        <activity android:name="com.example.king.mobile_app.UnhealthyViewAdapter" />
-        <activity android:name="com.example.king.mobile_app.HealthyViewAdapter" />
-        <activity android:name="com.example.king.mobile_app.BeauViewAdapter" />
-        <activity android:name="com.example.king.mobile_app.ClubViewAdapter" />
-        <activity android:name="com.example.king.mobile_app.SpoonViewAdapter" />
-        <activity android:name="com.example.king.mobile_app.TerrysViewAdapter" />
-        <activity android:name="com.example.king.mobile_app.YellowViewAdapter" />
-
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" android:theme="@style/Base.Theme.AppCompat"/>
+        <activity android:name=".DiseasesActivity" />
+        <activity android:name=".NailAssessmentActivity" />
+        <activity android:name=".HistoryActivity" />
+        <activity android:name=".UnhealthyViewAdapter" />
+        <activity android:name=".HealthyViewAdapter" />
+        <activity android:name=".BeauViewAdapter" />
+        <activity android:name=".ClubViewAdapter" />
+        <activity android:name=".SpoonViewAdapter" />
+        <activity android:name=".TerrysViewAdapter" />
+        <activity android:name=".YellowViewAdapter" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -77,26 +81,23 @@
         </provider>
 
         <activity
-            android:name="com.example.king.mobile_app.AboutActivity"
+            android:name=".AboutActivity"
             android:label="@string/title_activity_about"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.example.king.mobile_app.UserProfileActivity"
+            android:name=".UserProfileActivity"
             android:label="@string/title_activity_user_profile"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.example.king.mobile_app.DisorderBeau" />
-        <activity android:name="com.example.king.mobile_app.DisorderClubbed" />
-        <activity android:name="com.example.king.mobile_app.DisorderSpoon" />
-        <activity android:name="com.example.king.mobile_app.DisorderTerry" />
-        <activity android:name="com.example.king.mobile_app.DisorderYellow" />
-        <activity android:name="com.example.king.mobile_app.SplashActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".DisorderBeau" />
+        <activity android:name=".DisorderClubbed" />
+        <activity android:name=".DisorderSpoon" />
+        <activity android:name=".DisorderTerry" />
+        <activity android:name=".DisorderYellow" />
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".RemindersActivity" />
+        <activity android:name=".InstructionActivity"></activity>
     </application>
 
 </manifest>

@@ -61,7 +61,7 @@ public class DashboardAdapter extends PagerAdapter {
             public void onClick(View v) {
                 String options = lstImages.get(position).getSelection();
                 if (options.equals("Assess")) {
-                    Intent assess_intent = new Intent(context, NailAssessmentActivity.class);
+                    Intent assess_intent = new Intent(context, RemindersActivity.class);
                     assess_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(assess_intent);
 
