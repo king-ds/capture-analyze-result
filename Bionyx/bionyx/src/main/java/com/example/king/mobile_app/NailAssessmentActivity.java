@@ -86,7 +86,6 @@ public class NailAssessmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nail_assessment);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        remindersBeforeTakePicture();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -234,57 +233,7 @@ public class NailAssessmentActivity extends AppCompatActivity {
         return imgDir;
     }
 
-    /*
-    Function for reminders before taking picture
-    */
-    private void remindersBeforeTakePicture(){
-        final SweetAlertDialog dialog = new SweetAlertDialog(this);
-        dialog.setTitleText("Reminders")
-                .setContentText("Please read the reminders carefully. \n" +
-                        "\n" +
-                        "Before taking picture:\n" +
-                        "•There should be an adequate lightning without glare. Sunlight or daylight is the preferred source\n" +
-                        "•All nail polish, lacquer or other topical substances should be removed\n" +
-                        "•The surface of the fingernail should be cleansed with solvent such as alcohol or acetone\n" +
-                        "\n" +
-                        "Take note\n" +
-                        "When taking picture, the patient’s fingernail should be relaxed and not pressed against any surface\n")
-                .setConfirmText("Noted")
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        dialog.dismiss();
-                        instruction();
-                    }
-                })
-                .show();
-    }
 
-    /*
-    Function for Instruction
-    */
-    private void instruction(){
-        final SweetAlertDialog dialog = new SweetAlertDialog(this);
-        dialog.setTitleText("Instruction")
-                .setContentText("Please read the instruction carefully. \n" +
-                        "\n" +
-                        "When taking picture, the patient’s fingernail should be relaxed and not pressed against any surface" +
-                        "after taking picture, crop image to the fingernail surface preferably\n" +
-                        "tap the process button to process the fingernail image\n" +
-                        "wait for the result\n" +
-                        "\n" +
-                        "Take note\n" +
-                        "the complete result is recorded to the history of the application\n")
-                .setConfirmText("Noted")
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        dialog.dismiss();
-
-                    }
-                })
-                .show();
-    }
     /*
     Function for accessing camera
      */

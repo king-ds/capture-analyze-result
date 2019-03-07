@@ -42,7 +42,8 @@ public class RemindersActivity extends AppCompatActivity {
         layouts = new int[]{
                 R.layout.reminders_slide1,
                 R.layout.reminders_slide2,
-                R.layout.reminders_slide3};
+                R.layout.reminders_slide3,
+                R.layout.reminders_slide4};
         // adding bottom dots
         addBottomDots(0);
 

@@ -41,7 +41,8 @@ public class InstructionActivity extends AppCompatActivity {
         layouts = new int[]{
                 R.layout.instruction_slide1,
                 R.layout.instruction_slide2,
-                R.layout.instruction_slide3};
+                R.layout.instruction_slide3,
+                R.layout.instruction_slide4};
         // adding bottom dots
         addBottomDots(0);
 
