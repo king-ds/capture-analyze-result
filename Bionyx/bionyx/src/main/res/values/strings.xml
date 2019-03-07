@@ -8,6 +8,16 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">GOT IT</string>
+    <string name="reminders">REMINDERS</string>
+    <string name="beforeTakePicture">Before Taking picture of fingernail:</string>
+    <string name="warning">WARNING!</string>
+    <string name="instructions">INSTRUCTIONS</string>
+    <string name="read_instructions">Please read the instruction carefully.</string>
+    <string name="disclaimer">DISCLAIMER</string>
+    <string name="takenote">Take note</string>
     <string name="beausline">
         \t\tBeaus lines are indentations that run across the nails. The indentations can appear when growth at the area under the cuticle is interrupted by injury or severe illness.\n
         \n\t\tConditions associated with Beaus lines include uncontrolled diabetes and peripheral vascular disease, as well as illnesses associated with a high fever, such as scarlet fever, measles, mumps and pneumonia. Beaus lines can also be a sign of zinc deficiency.\n
@@ -39,6 +49,40 @@
     <string name="about_bionyx">
         \t\tBionyx is an application that captures fingernail images to analyze nail color and patterns for possible disease identification.\n
     </string>
+
+    <string name="lighting">
+        \t\tThere should be an adequate lightning without glare. Sunlight or daylight is the preferred source\n
+    </string>
+
+    <string name="no_nailpolish">
+        \t\tAll nail polish, lacquer or other topical substances should be removed\n
+    </string>
+
+    <string name="acetone">
+        \t\tThe surface of the fingernail should be cleansed with solvent such as alcohol or acetone\n
+    </string>
+
+    <string name="not_pressed">
+        \t\tWhen taking picture, the patient’s fingernail should be relaxed and not pressed against any surface\n
+    </string>
+
+    <string name="crop_image">
+        \t\tAfter taking picture, crop image to the fingernail surface preferably\n
+    </string>
+
+    <string name="process_image">
+        \t\tTap the process button to process the fingernail image and wait for the result\n
+    </string>
+
+    <string name="take_note">
+        \t\tThe result of prognosis is not final. It is still preferred to consult a doctor\n
+    </string>
+
+    <string name="do_not_capture">
+        \t\tAny images aside from fingernail image is prohibited for it may alter the result of the prognosis.\n
+    </string>
+
+
 
 
     <string name="title_activity_about">About Bionyx</string>

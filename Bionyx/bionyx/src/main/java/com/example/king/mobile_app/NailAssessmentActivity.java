@@ -233,6 +233,7 @@ public class NailAssessmentActivity extends AppCompatActivity {
         return imgDir;
     }
 
+
     /*
     Function for accessing camera
      */
