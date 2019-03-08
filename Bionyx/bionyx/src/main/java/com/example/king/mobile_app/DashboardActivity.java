@@ -68,6 +68,8 @@ public class DashboardActivity extends AppCompatActivity
         profile_photo_loader = new ProfilePhotoLoader(this);
         /* end of declaring new variables from import classes */
 
+
+
         /* start of toolbar configuration */
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

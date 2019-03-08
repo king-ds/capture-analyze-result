@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -19,7 +17,7 @@
         android:id="@+id/rellay1"
         android:layout_width="match_parent"
         android:layout_height="225dp"
-        android:background="@drawable/disorder_splinter"
+        android:background="@drawable/spoon_nails"
         android:paddingBottom="20dp">
 
     </RelativeLayout>
@@ -108,7 +106,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat"
-                        android:text="@string/splinter_nail"
+                        android:text="@string/spoon_nail"
                         android:textColor="#000000"
                         android:textSize="15sp"
                         />

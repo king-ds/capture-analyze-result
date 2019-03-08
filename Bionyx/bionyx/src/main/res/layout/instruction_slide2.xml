@@ -15,9 +15,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat"
             android:text="@string/instructions"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/slide_title"
+            android:textSize="35dp"
             android:textStyle="bold"
             android:paddingBottom="20dp"/>
 
@@ -32,9 +33,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat"
             android:text="@string/read_instructions"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/slide_subtitle"
+            android:textSize="18dp"
             android:textStyle="bold"
             android:paddingBottom="10dp"/>
 
@@ -43,6 +45,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat"
             android:layout_marginTop="20dp"
             android:paddingLeft="@dimen/desc_padding"
             android:paddingRight="@dimen/desc_padding"

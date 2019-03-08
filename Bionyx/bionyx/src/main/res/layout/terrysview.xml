@@ -204,7 +204,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/montserrat"
-                            android:text="Heart Failure"
+                            android:text="Diabetes-Heart Disease"
                             android:textAlignment="center"
                             android:textColor="@color/colorBlack"
                             android:textSize="18sp"

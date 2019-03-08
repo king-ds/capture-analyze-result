@@ -37,6 +37,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chootdev.csnackbar.Duration;
+import com.chootdev.csnackbar.Snackbar;
+import com.chootdev.csnackbar.Type;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.json.JSONObject;
@@ -419,12 +422,19 @@ public class UserProfileActivity extends AppCompatActivity
                             } else if (filemanagerstring != null) {
                                 filePath = filemanagerstring;
                             } else {
-                                Toast.makeText(getApplicationContext(), "Unknown path",
-                                        Toast.LENGTH_LONG).show();
+                                Snackbar.with(UserProfileActivity.this,null)
+                                        .type(Type.ERROR)
+                                        .message("Unknown path")
+                                        .duration(Duration.SHORT)
+                                        .show();
                                 Log.e("Bitmap", "Unknown path");
                             }
                         }catch (Exception e){
-                            Toast.makeText(getApplicationContext(), "Internal error", Toast.LENGTH_LONG).show();
+                            Snackbar.with(UserProfileActivity.this,null)
+                                    .type(Type.ERROR)
+                                    .message("Internal Error")
+                                    .duration(Duration.LONG)
+                                    .show();
                             Log.e(e.getClass().getName(), e.getMessage(), e);
                         }
                     }
@@ -441,9 +451,17 @@ public class UserProfileActivity extends AppCompatActivity
                     filePath = mCurrentPhotoPath;
                     Temp_ProfilePic.setImageURI(selectedImageUri);
                 } else if (resultCode == RESULT_CANCELED) {
-                    Toast.makeText(this, "Picture was not taken", Toast.LENGTH_SHORT).show();
+                    Snackbar.with(UserProfileActivity.this,null)
+                            .type(Type.ERROR)
+                            .message("Picture was not taken")
+                            .duration(Duration.SHORT)
+                            .show();
                 } else {
-                    Toast.makeText(this, "Picture was not taken", Toast.LENGTH_SHORT).show();
+                    Snackbar.with(UserProfileActivity.this,null)
+                            .type(Type.ERROR)
+                            .message("Picture was not taken")
+                            .duration(Duration.SHORT)
+                            .show();
                 }
                 break;
              }
@@ -451,8 +469,10 @@ public class UserProfileActivity extends AppCompatActivity
         Upload.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
-                     uploadImg(selectedFilePath);
-                     dialog.dismiss();
+                     if(ICM.isNetworkAvailable(UserProfileActivity.this)) {
+                         uploadImg(selectedFilePath);
+                         dialog.dismiss();
+                     }
                  }
              });
 
@@ -565,7 +585,11 @@ public class UserProfileActivity extends AppCompatActivity
                             //write the bytes read from inputstream
                             dataOutputStream.write(buffer, 0, bufferSize);
                         } catch (OutOfMemoryError e) {
-                            Toast.makeText(UserProfileActivity.this, "Insufficient Memory", Toast.LENGTH_SHORT).show();
+                            Snackbar.with(UserProfileActivity.this,null)
+                                    .type(Type.ERROR)
+                                    .message("Insufficient Memory")
+                                    .duration(Duration.SHORT)
+                                    .show();
                         }
                         bytesAvailable = fileInputStream.available();
                         bufferSize = Math.min(bytesAvailable, maxBufferSize);
@@ -579,7 +603,11 @@ public class UserProfileActivity extends AppCompatActivity
                         serverResponseCode = connection.getResponseCode();
 
                     } catch (OutOfMemoryError e) {
-                        Toast.makeText(UserProfileActivity.this, "Memory Insufficient", Toast.LENGTH_SHORT).show();
+                        Snackbar.with(UserProfileActivity.this,null)
+                                .type(Type.ERROR)
+                                .message("Insufficient Memory")
+                                .duration(Duration.SHORT)
+                                .show();;
                     }
                     String serverResponseMessage = connection.getResponseMessage();
                     Log.i("UserProfileActivity", "Server Response is " + serverResponseMessage + ": " + serverResponseCode);
@@ -628,14 +656,22 @@ public class UserProfileActivity extends AppCompatActivity
                 profile_photo_loader.clearCache();
                 profile_photo_loader.DisplayImage(AVATAR_URL, Profile_Pic);
                 profile_photo_loader.DisplayImage(AVATAR_URL, Nav_Avatar);
-                message = "Your profile photo has uploaded";
+                message = "Your profile photo has uploaded.";
                 pDialog.dismiss();
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                Snackbar.with(UserProfileActivity.this,null)
+                        .type(Type.SUCCESS)
+                        .message(message)
+                        .duration(Duration.SHORT)
+                        .show();
 
             } else {
                 pDialog.dismiss();
-                message = "Please check your internet connection";
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                message = "Cannot connect to server.";
+                Snackbar.with(UserProfileActivity.this,null)
+                        .type(Type.ERROR)
+                        .message(message)
+                        .duration(Duration.SHORT)
+                        .show();
             }
         }
     }
@@ -708,7 +744,7 @@ public class UserProfileActivity extends AppCompatActivity
             String message;
 
             if(isUpdated){
-                message = "User profile has updated";
+                message = "User profile has updated.";
                 SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("first_name", first_name);
@@ -721,12 +757,20 @@ public class UserProfileActivity extends AppCompatActivity
                 UserProfileActivity.this.finish();
                 startActivity(refresh_intent);
 
-                Toast.makeText(UserProfileActivity.this, message, Toast.LENGTH_SHORT).show();
+                Snackbar.with(UserProfileActivity.this,null)
+                        .type(Type.SUCCESS)
+                        .message(message)
+                        .duration(Duration.SHORT)
+                        .show();
             }else{
 
                 pDialog.dismiss();
-                message = "Check your internet connection";
-                Toast.makeText(UserProfileActivity.this, message, Toast.LENGTH_SHORT).show();
+                message = "Cannot connect to server.";
+                Snackbar.with(UserProfileActivity.this,null)
+                        .type(Type.ERROR)
+                        .message(message)
+                        .duration(Duration.SHORT)
+                        .show();
             }
         }
     }
@@ -818,8 +862,9 @@ public class UserProfileActivity extends AppCompatActivity
 
             case R.id.menu_save:
 
-                new UpdateUserInformation().execute();
-
+                if(ICM.isNetworkAvailable(UserProfileActivity.this)) {
+                    new UpdateUserInformation().execute();
+                }
                 Take_Picture.setVisibility(View.GONE);
                 Choose_from_gallery.setVisibility(View.GONE);
                 View_photo.setVisibility(View.VISIBLE);

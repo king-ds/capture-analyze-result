@@ -66,16 +66,11 @@ public class DashboardAdapter extends PagerAdapter {
                     context.startActivity(assess_intent);
 
                 } else if (options.equals("History")) {
-                    if (ICM.isNetworkAvailable(context)) {
-                        Intent history_intent = new Intent(context, HistoryActivity.class);
-                        history_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(history_intent);
-                    } else {
-                        Toast.makeText(context, "Please check your internet connection", Toast.LENGTH_SHORT);
-                    }
+                    Intent history_intent = new Intent(context, HistoryActivity.class);
+                    history_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(history_intent);
 
                 } else if (options.equals("Disorders")) {
-
                     Intent disorders_intent = new Intent(context, DiseasesActivity.class);
                     disorders_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(disorders_intent);

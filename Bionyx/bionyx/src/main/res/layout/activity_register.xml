@@ -202,7 +202,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
                 android:checked="false"
-                android:fontFamily="sans-serif-condensed"
+                android:fontFamily="@font/montserrat"
                 android:text="I agree to the Terms of Service"
                 android:textColor="#fff"
                 android:textSize="15sp"

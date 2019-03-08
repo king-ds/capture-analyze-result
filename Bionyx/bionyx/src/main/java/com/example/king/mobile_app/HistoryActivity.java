@@ -13,6 +13,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -21,6 +22,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.chootdev.csnackbar.Duration;
+import com.chootdev.csnackbar.Snackbar;
+import com.chootdev.csnackbar.Type;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +41,7 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
     private static String TRANSACTION_HISTORY_URL = "";
     private SweetAlertDialog pDialog;
     HistoryPhotoLoader historyPhotoLoader;
+    InternetConnectionManager ICM;
 
     static SwipeMenuListView listView;
     ArrayList<HashMap<String, String>> arraylist;
@@ -75,6 +80,7 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ICM = new InternetConnectionManager();
         historyPhotoLoader = new HistoryPhotoLoader(this);
         getSupportActionBar().setTitle("History");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -167,23 +173,34 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
         @Override
         protected void onPostExecute(Void args) {
             pDialog.dismiss();
-            if (isEmpty == true) {
-                new SweetAlertDialog(HistoryActivity.this, SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("Warning")
-                        .setContentText("No history yet")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                sDialog.dismiss();
-                                HistoryActivity.this.finish();
-                            }
-                        })
-                        .show();
-            } else {
-                listView = findViewById(R.id.listview);
-                adapter = new ListViewAdapter(HistoryActivity.this, arraylist);
-                listView.setAdapter(adapter);
+            if (ICM.isNetworkAvailable(HistoryActivity.this)) {
 
+                if (isEmpty == true) {
+                    new SweetAlertDialog(HistoryActivity.this, SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Warning")
+                            .setContentText("No history yet")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.dismiss();
+                                    HistoryActivity.this.finish();
+                                }
+                            })
+                            .show();
+                } else {
+                    listView = findViewById(R.id.listview);
+                    adapter = new ListViewAdapter(HistoryActivity.this, arraylist);
+                    listView.setAdapter(adapter);
+
+                }
+            } else {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        HistoryActivity.this.finish();
+                    }
+                }, 2000);
             }
         }
     }
@@ -244,6 +261,12 @@ public class HistoryActivity extends AppCompatActivity implements AsyncResponse 
                                 startActivity(intent);
                             }
                         })
+                        .show();
+            } else {
+                        Snackbar.with(HistoryActivity.this,null)
+                        .type(Type.ERROR)
+                        .message("Cannot connect to server.")
+                        .duration(Duration.SHORT)
                         .show();
             }
         }

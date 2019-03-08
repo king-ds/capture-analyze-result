@@ -15,9 +15,12 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONObject;
@@ -45,6 +48,7 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
     private TextView Register;
     private Button Login;
     private View LoginForm, ProgressView;
+    private ImageView ivLogo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,17 +88,35 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
         });
 
         ICM = new InternetConnectionManager();
+
+        ivLogo = findViewById(R.id.logo);
+        Animation animation = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.blink_anim);
+        ivLogo.startAnimation(animation);
+
         Login = findViewById(R.id.btnLogin);
+        Animation login_animation = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.fadein);
+        Login.startAnimation(login_animation);
+
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Animation login_onclick = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.fadein);
+                Login.startAnimation(login_onclick);
                 startLogin();
             }
         });
+
         Register = findViewById(R.id.tvRegister);
+        Animation register_animation = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.fadein);
+        Register.startAnimation(register_animation);
+
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Animation register_onclick = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.fadeout);
+                Register.startAnimation(register_onclick);
                 register();
             }
         });

@@ -25,7 +25,7 @@ public class DisordersFragment extends Fragment {
     String disorders_title[] = {"Beau lines", "Nail clubbing", "Spoon nails", "Terry's nails", "Yellow nails"};
     String disorders_description[] = {"Beau lines are indentations that run accross the nails.",
             "Nail clubbing occurs when the tips of the fingers enlarge and the nails curve around fingertips",
-            "Spoon nails causes a person to have longitudinal streaks down the nails",
+            "Spoon nails are thin and soft and shaped like a little spoon that is often capable of holding a drop of water.",
             "Most of the nails appear white except for a narrow pink band at the tip",
             "Yellow nails results in a yellowish and thicken nails"};
     int disorder_image[] = {R.drawable.vector_beau, R.drawable.vector_clubbing, R.drawable.vector_spoon,
@@ -100,6 +100,33 @@ public class DisordersFragment extends Fragment {
                     }
                 }
             });
+
+            holder.disorder_CHTRM.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String options = disorder_list.get(position).getDisorder_title();
+                    if(options.equals("Beau lines")){
+                        Intent beau_intent = new Intent(getContext(), DisorderBeau.class);
+                        getContext().startActivity(beau_intent);
+
+                    } else if (options.equals("Nail clubbing")){
+                        Intent club_intent = new Intent(getContext(), DisorderClubbed.class);
+                        getContext().startActivity(club_intent);
+
+                    } else if (options.equals("Spoon nails")){
+                        Intent spoon_intent = new Intent(getContext(), DisorderSpoon.class);
+                        getContext().startActivity(spoon_intent);
+
+                    } else if (options.equals("Terry's nails")){
+                        Intent terry_intent = new Intent(getContext(), DisorderTerry.class);
+                        getContext().startActivity(terry_intent);
+
+                    } else if (options.equals("Yellow nails")){
+                        Intent yellow_intent = new Intent(getContext(), DisorderYellow.class);
+                        getContext().startActivity(yellow_intent);
+                    }
+                }
+            });
         }
 
         @Override
@@ -114,6 +141,7 @@ public class DisordersFragment extends Fragment {
         public TextView disorder_description_view;
         public ImageView disorder_image_view;
         public ImageView disorder_view;
+        public TextView disorder_CHTRM;
 
         public DisorderViewHolder(View v){
 
@@ -123,6 +151,7 @@ public class DisordersFragment extends Fragment {
             disorder_description_view = v.findViewById(R.id.tvDisorderDescription);
             disorder_image_view = v.findViewById(R.id.ivDisorder);
             disorder_view = v.findViewById(R.id.ivViewDisorder);
+            disorder_CHTRM = v.findViewById(R.id.tvCHTRM);
 
         }
     }

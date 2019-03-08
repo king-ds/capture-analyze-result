@@ -5,6 +5,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
+import com.chootdev.csnackbar.Duration;
+import com.chootdev.csnackbar.Snackbar;
+import com.chootdev.csnackbar.Type;
+
 
 public class InternetConnectionManager {
 
@@ -22,8 +26,10 @@ public class InternetConnectionManager {
             }
         } else {
             hasInternet = false;
-            Toast.makeText(context,
-                    "No internet connection", Toast.LENGTH_SHORT)
+            Snackbar.with(context,null)
+                    .type(Type.ERROR)
+                    .message("Cannot connect to server.")
+                    .duration(Duration.SHORT)
                     .show();
         }
         return hasInternet;

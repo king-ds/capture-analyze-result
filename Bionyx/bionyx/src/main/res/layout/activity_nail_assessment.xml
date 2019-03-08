@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/activity_margin"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:orientation="vertical">
 
         <ImageView
@@ -44,9 +44,19 @@
             android:layout_centerHorizontal="true"
             android:layout_margin="15dp"
             android:adjustViewBounds="true"
-            android:background="@drawable/bg_focuswithwords"
-            android:src="@drawable/focuswithwords"
-            android:visibility="visible" />
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvPlaceFingernail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableTop="@drawable/vector_nail_assessment_fingernail"
+            android:text="PLACE FINGERNAIL AT THE CENTER OF THE CAMERA"
+            android:textColor="@color/colorWhite"
+            android:textSize="30dp"
+            android:visibility="visible"
+            android:layout_margin="15dp"
+            android:textAlignment="center"/>
 
         <TextView
             android:id="@+id/tvFileName"
@@ -68,31 +78,36 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="25dp"
-        android:weightSum="2">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnCapture"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dimen_8"
             android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_marginRight="2dp"
+            android:paddingTop="5dp"
             android:background="@color/colorWhite"
-            android:foreground="?attr/selectableItemBackground"
             android:text="Take Picture"
-            android:textColor="@color/colorBlack"/>
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/colorBlack"
+            android:textSize="15dp"
+            android:drawableTop="@drawable/vector_nail_assessment_camera"/>
 
         <Button
             android:id="@+id/btnUpload"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dimen_8"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#fbff1e"
-            android:foreground="?attr/selectableItemBackground"
+            android:layout_marginLeft="2dp"
+            android:paddingTop="5dp"
+            android:background="@color/colorWhite"
             android:text="Process"
+            android:fontFamily="@font/montserrat"
+            android:textSize="15dp"
+            android:drawableTop="@drawable/vector_nail_assessment_process"
             android:textColor="@color/colorBlack"/>
+
     </LinearLayout>
 
     </LinearLayout>

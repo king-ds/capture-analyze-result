@@ -12,10 +12,10 @@
     <string name="skip">SKIP</string>
     <string name="start">GOT IT</string>
     <string name="reminders">REMINDERS</string>
-    <string name="beforeTakePicture">Before Taking picture of fingernail:</string>
+    <string name="beforeTakePicture">Before taking fingernail images:</string>
     <string name="warning">WARNING!</string>
     <string name="instructions">INSTRUCTIONS</string>
-    <string name="read_instructions">Please read the instruction carefully.</string>
+    <string name="read_instructions">Please read the instructions carefully.</string>
     <string name="disclaimer">DISCLAIMER</string>
     <string name="takenote">Take note</string>
     <string name="beausline">
@@ -28,11 +28,10 @@
         \n\t\tNail clubbing is sometimes the result of low oxygen in the blood and could be a sign of various types of lung disease. Nail clubbing is also associated with inflammatory bowel disease, cardiovascular disease, liver disease and AIDS.\n
     </string>
 
-
-    <string name="splinter_nail">
-        \t\tA splinter hemorrhage causes a person to have longitudinal streaks down the nails, which usually appear as small red blood vessels or streaks under the nails.\n
-        \n\t\tA persons fingernails are composed mostly of a protein called keratin, which gives them their strength and flexibility.\n
-        </string>
+    <string name="spoon_nail">
+        \t\tSpoon-shaped or spooning fingernails refers to a concavity in the fingernail itself, resulting in a depression in the nail that gives an appearance of a spoon shape to the entire nail. This growth disturbance in the nail is medically known as koilonychia. The spooning is typically such that a water droplet may be placed and held in the depression within the nail.\n
+        \n\t\tThis pattern can sometimes be seen in normal infants, but it disappears as the child ages. Koilonychia is a component of the nail-patella syndrome, a genetic disease characterized by numerous abnormalities including musculoskeletal and kidney abnormalities.Spooning fingernails can also result from trauma, exposure to certain solvents, or it may be associated with chronic medical conditions. In particular, koilonychias is associated with iron deficiency.\n
+    </string>
 
 
     <string name="terry_nail">
@@ -51,31 +50,31 @@
     </string>
 
     <string name="lighting">
-        \t\tThere should be an adequate lightning without glare. Sunlight or daylight is the preferred source\n
+        \t\tThere should be an adequate lighting. Sunlight or daylight is the preferred source. Prevent capturing images with glare.\n
     </string>
 
     <string name="no_nailpolish">
-        \t\tAll nail polish, lacquer or other topical substances should be removed\n
+        \t\tAll nail polish, lacquer or other topical substances should be removed.\n
     </string>
 
     <string name="acetone">
-        \t\tThe surface of the fingernail should be cleansed with solvent such as alcohol or acetone\n
+        \t\tThe surface of the fingernail should be cleansed with solution such as alcohol or acetone.\n
     </string>
 
     <string name="not_pressed">
-        \t\tWhen taking picture, the patient’s fingernail should be relaxed and not pressed against any surface\n
+        \t\tWhen taking picture, the patient’s finger should be relaxed and not pressed hardly against any surface.\n
     </string>
 
     <string name="crop_image">
-        \t\tAfter taking picture, crop image to the fingernail surface preferably\n
+        \t\tCrop the image of the fingernail\'s surface.\n
     </string>
 
     <string name="process_image">
-        \t\tTap the process button to process the fingernail image and wait for the result\n
+        \t\tTap the process button to process the fingernail image and wait for the result.\n
     </string>
 
     <string name="take_note">
-        \t\tThe result of prognosis is not final. It is still preferred to consult a doctor\n
+        \t\tThe result of prognosis is not final. It is still advised to consult a doctor.\n
     </string>
 
     <string name="do_not_capture">
@@ -92,5 +91,10 @@
     <string name="profile">Profile</string>
     <string name="about">About</string>
     <string name="developer">Developer</string>
+    <string name="picture">Picture</string>
+    <string name="description_info">Info</string>
+    <string name="request_permission">This sample needs camera permission.</string>
+    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+    <string name="intro_message">Hello</string>
 </resources>
 

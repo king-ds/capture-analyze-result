@@ -16,8 +16,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/reminders"
+            android:fontFamily="@font/montserrat"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/slide_title"
+            android:textSize="35dp"
             android:textStyle="bold"
             android:paddingBottom="20dp"/>
 
@@ -36,7 +37,9 @@
             android:layout_height="wrap_content"
             android:text="@string/beforeTakePicture"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/slide_title"
+            android:textSize="18dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/montserrat"
             android:textAlignment="center"
             android:paddingBottom="10dp"/>
 
@@ -50,6 +53,7 @@
             android:paddingRight="@dimen/desc_padding"
             android:text="@string/acetone"
             android:textAlignment="center"
+            android:fontFamily="@font/montserrat"
             android:textColor="@android:color/white"
             android:textSize="@dimen/slide_desc" />
 

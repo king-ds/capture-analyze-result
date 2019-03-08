@@ -160,7 +160,7 @@ public class TerrysViewAdapter extends AppCompatActivity {
     }
     private void setDetails(){
 
-        txtdiseases.setText(diseases);
+        //txtdiseases.setText(diseases);
         txtstatus.setText(stat);
         historyPhotoLoader.DisplayImage(image, imagenail);
     }

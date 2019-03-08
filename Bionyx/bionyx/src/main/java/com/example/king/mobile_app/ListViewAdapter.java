@@ -28,6 +28,9 @@ import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.chootdev.csnackbar.Duration;
+import com.chootdev.csnackbar.Snackbar;
+import com.chootdev.csnackbar.Type;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import static com.example.king.mobile_app.BaseActivity.currentIp;
@@ -177,7 +180,7 @@ public class ListViewAdapter extends BaseAdapter {
                                 context.startActivity(beau_intent);
                             }
 
-                            else if (disorder.equals("Club Nails")){
+                            else if (disorder.equals("Clubbed Nails")){
                                 Intent club_intent = new Intent(context, ClubViewAdapter.class);
                                 club_intent.putExtra("transactionid", resultp.get(HistoryActivity.TRANSACTIONID));
                                 club_intent.putExtra("owner", resultp.get(HistoryActivity.OWNER));
@@ -352,7 +355,11 @@ public class ListViewAdapter extends BaseAdapter {
             }
             else{
                 pDialog.dismiss();
-                Toast.makeText(context, "Check your internet connection", Toast.LENGTH_SHORT).show();
+                Snackbar.with(context,null)
+                        .type(Type.ERROR)
+                        .message("Cannot connect to server.")
+                        .duration(Duration.SHORT)
+                        .show();
             }
         }
     }
