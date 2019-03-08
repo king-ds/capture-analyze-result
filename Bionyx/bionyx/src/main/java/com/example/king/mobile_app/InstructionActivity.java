@@ -40,7 +40,7 @@ public class InstructionActivity extends AppCompatActivity {
         // add few more layouts if you want
         layouts = new int[]{
                 R.layout.instruction_slide1,
-                R.layout.instruction_slide2,
+               /* R.layout.instruction_slide2,*/
                 R.layout.instruction_slide3,
                 R.layout.instruction_slide4,
                 R.layout.instruction_slide5};
