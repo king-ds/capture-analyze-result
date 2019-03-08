@@ -15,11 +15,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/instructions"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/disclaimer"
             android:textColor="@android:color/white"
             android:textSize="35dp"
             android:textStyle="bold"
-            android:fontFamily="@font/montserrat"
             android:paddingBottom="20dp"/>
 
 
@@ -27,18 +27,18 @@
         <ImageView
             android:layout_width="218dp"
             android:layout_height="225dp"
-            android:src="@drawable/white_backgrounf" />
+            android:src="@drawable/exclamation3" />
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/read_instructions"
+            android:fontFamily="@font/montserrat"
             android:layout_marginTop="20dp"
+            android:text="@string/takenote"
             android:textColor="@android:color/white"
             android:textSize="18dp"
             android:textStyle="bold"
-            android:fontFamily="@font/montserrat"
             android:paddingBottom="10dp"/>
 
 
@@ -46,13 +46,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat"
             android:layout_marginTop="20dp"
             android:paddingLeft="@dimen/desc_padding"
             android:paddingRight="@dimen/desc_padding"
-            android:text="@string/white_background"
+            android:text="@string/take_note"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:fontFamily="@font/montserrat"
             android:textSize="@dimen/slide_desc" />
 
     </LinearLayout>
