@@ -74,11 +74,17 @@
     </string>
 
     <string name="take_note">
-        \t\tThe result of prognosis is not final. It is still advised to consult a doctor.\n
+        \t\tThis procedure is similar to other laboratory tests that are requested by physicians.
+        It is meant to help assist in arriving at an impression or a diagnosis; however, the final disposition of the patient remains with the doctor.
+        Whatever result this app shows, it is best to consult a physician.\n
     </string>
 
     <string name="do_not_capture">
         \t\tAny images aside from fingernail image is prohibited for it may alter the result of the prognosis.\n
+    </string>
+
+    <string name="white_background">
+        \t\tUse white background.\n
     </string>
 
 

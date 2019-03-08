@@ -17,13 +17,23 @@
         android:orientation="vertical">
 
         <LinearLayout
+
             android:id="@+id/logo"
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="130dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="70dp"
             android:layout_marginBottom="30dp"
-            android:background="@drawable/logo_bionyx" />
+             >
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_8"
+                android:adjustViewBounds="true"
+                android:src="@drawable/logo_bionyx" />
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"

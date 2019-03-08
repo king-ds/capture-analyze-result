@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
@@ -133,9 +134,17 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
                         "By checking the Terms and Agreement, you allow the application to gather personal infomation such as Name, email and images for the best expereince in using the application\n" +
                         "\n" +
                         "Contact Us\n" +
-                        "If you have inquiries about these Conditions, please contact us at bionyx.developer@gmail.com")
+                        "If you have inquiries about these Conditions, please contact us at bionyx.developer@gmail.com" +
+                        "\n\n" +
+                        "Disclaimer\n" +
+                        "The procedure of capturing fingernail image is similar to other laboratory tests that are requested by physicians.  " +
+                                "It is meant to help assist in arriving at an impression or a diagnosis; however, the final disposition of the patient remains with the doctor." +
+                                "Whatever result this app shows, it is best to consult a physician."
+                        )
+
                 .setConfirmText("Accept")
                 .setCancelText("Decline")
+
                 .showCancelButton(true)
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
@@ -153,7 +162,10 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
                         agree = false;
                     }
                 })
+
+
                 .show();
+
     }
     private void initiateRegister() {
 
