@@ -241,9 +241,9 @@ public class TerrysViewAdapter extends AppCompatActivity {
 
             document.add(new Paragraph("Status: "));
             document.add(new Paragraph(stat));
-            String note = "** This procedure is similar to other laboratory tests that are requested by physicians." +
-                    "It is meant to help assist in arriving at an impression or a diagnosis; however, the final disposition of the patient remains with the doctor." +
-                    "Whatever result this app shows, it is best to consult a physician. **";
+            String note = "** This procedure is similar to other laboratory tests that are requested by physicians.  " +
+                    "It is meant to help assist in arriving at an impression or a diagnosis; however, the final disposition of the patient remains with the doctor.  " +
+                    "Whatever result this app shows, it is best to consult a physician.**";
             Paragraph reminder = new Paragraph(note);
             reminder.setAlignment(Element.ALIGN_JUSTIFIED);
             document.add(reminder);

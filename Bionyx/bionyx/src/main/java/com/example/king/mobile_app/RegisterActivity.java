@@ -160,8 +160,6 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
                         agree = false;
                     }
                 })
-
-
                 .show();
 
     }
