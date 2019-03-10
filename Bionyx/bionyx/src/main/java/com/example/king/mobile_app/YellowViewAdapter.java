@@ -254,7 +254,7 @@ public class YellowViewAdapter extends AppCompatActivity {
                     "It is meant to help assist in arriving at an impression or a diagnosis; however, the final disposition of the patient remains with the doctor.  " +
                     "Whatever result this app shows, it is best to consult a physician.**";
             Paragraph reminder = new Paragraph(note);
-            reminder.setAlignment(Element.ALIGN_CENTER);
+            reminder.setAlignment(Element.ALIGN_JUSTIFIED);
             document.add(reminder);
             document.add(space);
             document.add(space);

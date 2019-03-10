@@ -21,6 +21,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chootdev.csnackbar.Duration;
+import com.chootdev.csnackbar.Snackbar;
+import com.chootdev.csnackbar.Type;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.json.JSONException;
@@ -293,8 +296,11 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
             startActivity(intent);
             RegisterActivity.this.finish();
         }else{
-            Toast.makeText(RegisterActivity.this, Failures_Message, Toast.LENGTH_SHORT).show();
-            RegisterActivity.this.finish();
+            Snackbar.with(RegisterActivity.this,null)
+                    .type(Type.ERROR)
+                    .message(Failures_Message)
+                    .duration(Duration.SHORT)
+                    .show();
         }
     }
 
@@ -379,7 +385,12 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
 
                                 @Override
                                 public void run() {
-                                    r_username.setError("Username is already used");
+                                    r_username.setError("");
+                                    Snackbar.with(RegisterActivity.this,null)
+                                            .type(Type.ERROR)
+                                            .message("Username is already used")
+                                            .duration(Duration.SHORT)
+                                            .show();;
                                     focusView = r_username;
                                 }
                             });
@@ -390,6 +401,11 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
                                 @Override
                                 public void run() {
                                     r_email.setError("Email is already used");
+                                    Snackbar.with(RegisterActivity.this,null)
+                                            .type(Type.ERROR)
+                                            .message("Email is already used")
+                                            .duration(Duration.SHORT)
+                                            .show();;
                                     focusView = r_email;
                                 }
                             });

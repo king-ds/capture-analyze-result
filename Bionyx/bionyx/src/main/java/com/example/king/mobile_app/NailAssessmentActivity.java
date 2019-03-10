@@ -73,7 +73,7 @@ public class NailAssessmentActivity extends AppCompatActivity {
     private String token;
     private String id;
     private InternetConnectionManager ICM;
-    private String Disorder;
+    private String disorder, diseases;
 
     //STORAGE
     Uri mCurrentImageUri, mCurrentCroppedImageUri;
@@ -298,6 +298,9 @@ public class NailAssessmentActivity extends AppCompatActivity {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
             if (resultCode == RESULT_OK) {
+                tvPlaceFingernail.clearAnimation();
+                iCaptured.setVisibility(View.VISIBLE);
+                tvPlaceFingernail.setVisibility(View.GONE);
                 mCurrentCroppedImageUri = result.getUri();
                 iCaptured.setImageResource(android.R.color.transparent);
                 iCaptured.setImageURI(mCurrentCroppedImageUri);
@@ -501,6 +504,8 @@ public class NailAssessmentActivity extends AppCompatActivity {
 
                             JSONObject jsonObject = new JSONObject(response);
                             String status = jsonObject.getString("status").trim();
+                            disorder = jsonObject.getString("disorder").trim();
+                            diseases = jsonObject.getString("diseases").trim();
 
                             Results = status;
 
@@ -560,7 +565,13 @@ public class NailAssessmentActivity extends AppCompatActivity {
                 pDialog.dismiss();
                 new SweetAlertDialog(NailAssessmentActivity.this, SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("Result")
-                        .setContentText("You're unhealthy")
+                        .setContentText("You're unhealthy \n\n" +
+                                "Disorder: "+disorder+"\n\n" +
+                                "Considering the highest nail disorder detected, there is a possibility that you might develop: \n"+diseases+"\n\n" +
+                                "Disclaimer\n" +
+                                "This procedure is similar to other laboratory tests that are requested by physicians.\n" +
+                                "        It is meant to help assist in arriving at an impression or a diagnosis; however, the final disposition of the patient remains with the doctor.\n" +
+                                "        Whatever result this app shows, it is best to consult a physician.")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sDialog) {
@@ -778,9 +789,6 @@ public class NailAssessmentActivity extends AppCompatActivity {
             System.out.print(result);
             pDialog.dismiss();
             if (result.equals("successful")) {
-                tvPlaceFingernail.clearAnimation();
-                iCaptured.setVisibility(View.VISIBLE);
-                tvPlaceFingernail.setVisibility(View.GONE);
                 performCrop();
             } else if (result.equals("failed")){
                 Snackbar.with(NailAssessmentActivity.this,null)

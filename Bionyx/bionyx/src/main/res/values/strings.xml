@@ -80,7 +80,8 @@
     </string>
 
     <string name="do_not_capture">
-        \t\tAny images aside from fingernail image is prohibited for it may alter the result of the prognosis.\n
+        \t\tAny images aside from fingernail image is prohibited.
+        Injured and painted fingernail is also prohobited since it may alter the result of the prognosis.\n
     </string>
 
     <string name="white_background">
