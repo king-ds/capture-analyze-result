@@ -233,7 +233,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat"
                         android:text="@string/take_note"
-                        android:textAlignment="center"
+                        android:textAlignment="textStart"
                         android:textColor="@color/colorBlack"
                         android:textSize="18sp"
                         android:textStyle="bold" />

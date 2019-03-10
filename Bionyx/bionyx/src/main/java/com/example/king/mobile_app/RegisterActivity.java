@@ -21,6 +21,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chootdev.csnackbar.Duration;
+import com.chootdev.csnackbar.Snackbar;
+import com.chootdev.csnackbar.Type;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.json.JSONException;
@@ -134,12 +137,7 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
                         "By checking the Terms and Agreement, you allow the application to gather personal infomation such as Name, email and images for the best expereince in using the application\n" +
                         "\n" +
                         "Contact Us\n" +
-                        "If you have inquiries about these Conditions, please contact us at bionyx.developer@gmail.com" +
-                        "\n\n" +
-                        "Disclaimer\n" +
-                        "The procedure of capturing fingernail image is similar to other laboratory tests that are requested by physicians.  " +
-                                "It is meant to help assist in arriving at an impression or a diagnosis; however, the final disposition of the patient remains with the doctor." +
-                                "Whatever result this app shows, it is best to consult a physician."
+                        "If you have inquiries about these Conditions, please contact us at bionyx.developer@gmail.com"
                         )
 
                 .setConfirmText("Accept")
@@ -300,8 +298,11 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
             startActivity(intent);
             RegisterActivity.this.finish();
         }else{
-            Toast.makeText(RegisterActivity.this, Failures_Message, Toast.LENGTH_SHORT).show();
-            RegisterActivity.this.finish();
+            Snackbar.with(RegisterActivity.this,null)
+                    .type(Type.ERROR)
+                    .message(Failures_Message)
+                    .duration(Duration.SHORT)
+                    .show();
         }
     }
 
@@ -386,7 +387,12 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
 
                                 @Override
                                 public void run() {
-                                    r_username.setError("Username is already used");
+                                    r_username.setError("");
+                                    Snackbar.with(RegisterActivity.this,null)
+                                            .type(Type.ERROR)
+                                            .message("Username is already used")
+                                            .duration(Duration.SHORT)
+                                            .show();;
                                     focusView = r_username;
                                 }
                             });
@@ -397,6 +403,11 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
                                 @Override
                                 public void run() {
                                     r_email.setError("Email is already used");
+                                    Snackbar.with(RegisterActivity.this,null)
+                                            .type(Type.ERROR)
+                                            .message("Email is already used")
+                                            .duration(Duration.SHORT)
+                                            .show();;
                                     focusView = r_email;
                                 }
                             });

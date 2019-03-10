@@ -23,6 +23,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.chootdev.csnackbar.Duration;
+import com.chootdev.csnackbar.Snackbar;
+import com.chootdev.csnackbar.Type;
+
 import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
@@ -148,32 +152,11 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
         String username = Username.getText().toString();
         String password = Password.getText().toString();
 
-        boolean cancel = false;
-        View focusView = null;
-
-        if(TextUtils.isEmpty(password)){
-            Password.setError("This field cannot be blank");
-            focusView = Password;
-            cancel = true;
-        }
-
-        if(TextUtils.isEmpty(username)){
-            Username.setError("This field cannot be blank");
-            focusView = Username;
-            cancel = true;
-        }
-
-        if(cancel){
-            focusView.requestFocus();
-
-        } else {
-
             if(ICM.isNetworkAvailable(this)) {
                 showProgress(true);
                 mAuthTask = new UserLoginTask(username, password, this);
                 mAuthTask.execute((Void) null);
             }
-        }
     }
 
     @Override
@@ -353,8 +336,11 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
                 }
             }else {
                 Log.d("LoginActivity", response);
-                Password.setError("Incorrect Password");
-                Password.requestFocus();
+                Snackbar.with(LoginActivity.this,null)
+                        .type(Type.CUSTOM, 0xff000000)
+                        .message("Incorrect username or password")
+                        .duration(Duration.SHORT)
+                        .show();
             }
         }
 
