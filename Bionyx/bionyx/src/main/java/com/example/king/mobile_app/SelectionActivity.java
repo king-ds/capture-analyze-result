@@ -69,7 +69,7 @@ public class SelectionActivity extends AppCompatActivity {
     }
 
     private void openRealTime(){
-        Intent intent = new Intent(SelectionActivity.this, RealTimeActivity.class);
+        Intent intent = new Intent(SelectionActivity.this, RT_RemindersActivity.class);
         startActivity(intent);
     }
 

@@ -96,6 +96,8 @@
         </activity>
         <activity android:name=".RemindersActivity" />
         <activity android:name=".InstructionActivity" />
+        <activity android:name=".RT_RemindersActivity" />
+        <activity android:name=".RT_InstructionActivity" />
         <activity android:name=".SelectionActivity" />
         <activity android:name=".GalleryAssessActivity"></activity>
     </application>

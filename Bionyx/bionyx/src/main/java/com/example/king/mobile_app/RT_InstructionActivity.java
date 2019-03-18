@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +18,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class RemindersActivity extends AppCompatActivity {
+public class RT_InstructionActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private MyViewPagerAdapter myViewPagerAdapter;
@@ -26,11 +26,10 @@ public class RemindersActivity extends AppCompatActivity {
     private TextView[] dots;
     private int[] layouts;
     private Button btnSkip, btnNext;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome);
+        setContentView(R.layout.activity_instruction);
 
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
@@ -40,18 +39,18 @@ public class RemindersActivity extends AppCompatActivity {
         // layouts of all welcome sliders
         // add few more layouts if you want
         layouts = new int[]{
-                R.layout.reminders_slide1,
-                R.layout.reminders_slide2,
-                R.layout.reminders_slide3,
-                R.layout.reminders_slide4,
-                R.layout.reminders_slide5};
+                R.layout.rt_instruction_slide1,
+                R.layout.rt_instruction_slide2,
+                R.layout.rt_instruction_slide3,
+                R.layout.rt_instruction_slide4,
+                R.layout.rt_instruction_slide5};
         // adding bottom dots
         addBottomDots(0);
 
         // making notification bar transparent
         changeStatusBarColor();
 
-        myViewPagerAdapter = new MyViewPagerAdapter();
+        myViewPagerAdapter = new RT_InstructionActivity.MyViewPagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
@@ -103,7 +102,7 @@ public class RemindersActivity extends AppCompatActivity {
 
     private void launchHomeScreen() {
         //prefManager.setFirstTimeLaunch(false);
-        startActivity(new Intent(RemindersActivity.this, InstructionActivity.class));
+        startActivity(new Intent(RT_InstructionActivity.this, RealTimeActivity.class));
         finish();
     }
 
@@ -184,5 +183,4 @@ public class RemindersActivity extends AppCompatActivity {
             container.removeView(view);
         }
     }
-
 }

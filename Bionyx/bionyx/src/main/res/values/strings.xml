@@ -65,6 +65,11 @@
         When taking picture, the patient’s finger should be relaxed and not pressed hardly against any surface.
     </string>
 
+    <string name="capture_image">
+        \tTap the \"Take picture\" button to capture fingernail image.
+        When taking fingernail image, make sure to focus the camera to the fingernail surface. \n
+    </string>
+
     <string name="crop_image">
         \tCrop the image of the fingernail\'s surface and ensure that the fingernail\'s image orientation is horizontally upward.\n
     </string>
@@ -76,7 +81,7 @@
     <string name="take_note">
         \t\tThis procedure is similar to other laboratory tests that are requested by physicians.
         It is meant to help assist in arriving at an impression or a diagnosis; however, the final disposition of the patient remains with the doctor.
-        Whatever result this app shows, it is best to consult a physician.\n
+        Whatever result this app shows, it is still best to consult a physician.\n
     </string>
 
     <string name="do_not_capture">
@@ -85,7 +90,32 @@
     </string>
 
     <string name="white_background">
-        \t\tUse white background.\n
+        \t\tIt is preferred to use white background when taking fingernail image.\n
+    </string>
+
+    <string name="need_wifi">
+        \t\tMake sure that the mobile phone is connected to the internet to process the image and have result of prognosis.\n
+    </string>
+
+    <string name="rt_lighting">
+        \t\tThere should be an adequate lighting. Sunlight or daylight is the preferred source. Prevent detecting images with glare.\n
+    </string>
+
+    <string name="rt_alignment">
+        \t Ensure that the fingernail\'s orientation of the user is horizontally upward.\n
+    </string>
+
+    <string name="rt_focus">
+        \t Wait until the camera is focused on the fingernail of the user to be able to detect properly\n
+    </string>
+
+    <string name="rt_white_background">
+        \t\tIt is preferred to use white background when using real-time detection of fingernail.\n
+    </string>
+
+    <string name="rt_warning">
+        \t\tThe Real-time feature of the application gives possible diseases associated to the detected nail disorder.
+        However, the result of the real-time feature is not recorded to the history of the application\n
     </string>
 
 
