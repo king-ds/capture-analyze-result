@@ -62,11 +62,11 @@
     </string>
 
     <string name="not_pressed">
-        \t\tWhen taking picture, the patient’s finger should be relaxed and not pressed hardly against any surface.\n
+        When taking picture, the patient’s finger should be relaxed and not pressed hardly against any surface.
     </string>
 
     <string name="crop_image">
-        \t\tCrop the image of the fingernail\'s surface.\n
+        \tCrop the image of the fingernail\'s surface and ensure that the fingernail\'s image orientation is horizontally upward.\n
     </string>
 
     <string name="process_image">
@@ -87,8 +87,6 @@
     <string name="white_background">
         \t\tUse white background.\n
     </string>
-
-
 
 
     <string name="title_activity_about">About Bionyx</string>

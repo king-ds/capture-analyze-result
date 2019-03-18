@@ -407,7 +407,7 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
                                             .type(Type.ERROR)
                                             .message("Email is already used")
                                             .duration(Duration.SHORT)
-                                            .show();;
+                                            .show();
                                     focusView = r_email;
                                 }
                             });
@@ -471,6 +471,12 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
                                 startActivity(intent);
                             }
                         })
+                        .show();
+            }else{
+                Snackbar.with(RegisterActivity.this,null)
+                        .type(Type.ERROR)
+                        .message("Cannot connect to bionyx server.")
+                        .duration(Duration.SHORT)
                         .show();
             }
         }

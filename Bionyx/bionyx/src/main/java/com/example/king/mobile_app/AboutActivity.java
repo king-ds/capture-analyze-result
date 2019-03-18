@@ -200,7 +200,9 @@ public class AboutActivity extends AppCompatActivity
                 historyPhotoLoader.clearCache();
                 SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
                 sharedPreferences.edit().clear().commit();
+                String user_log = "user_log";
                 Intent iLogin = new Intent(AboutActivity.this, LoginActivity.class);
+                iLogin.putExtra("user_loggedout", user_log);
                 startActivity(iLogin);
                 AboutActivity.this.finish();
 

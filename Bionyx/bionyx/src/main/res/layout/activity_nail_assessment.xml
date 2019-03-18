@@ -13,7 +13,7 @@
         android:orientation="vertical"
         android:background="@color/colorPrimary"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".NailAssessmentActivity"
+        tools:context=".CameraAssessActivity"
         android:layout_centerInParent="true">
 
         <android.support.design.widget.AppBarLayout
@@ -56,10 +56,10 @@
                 android:layout_gravity="center_vertical|center_horizontal|center"
                 android:layout_margin="15dp"
                 android:drawableTop="@drawable/vector_nail_assessment_fingernail"
-                android:text="PLACE FINGERNAIL AT THE CENTER OF THE CAMERA"
+                android:text="TAP THE PROCESS BUTTON TO PROCESS THE CAPTURED FINGERNAIL OBJECT"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
-                android:textSize="30dp"
+                android:textSize="23dp"
                 android:visibility="visible" />
 
             <TextView

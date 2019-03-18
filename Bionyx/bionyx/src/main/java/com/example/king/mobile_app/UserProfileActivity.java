@@ -914,8 +914,9 @@ public class UserProfileActivity extends AppCompatActivity
                 SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
                 sharedPreferences.edit().clear().commit();
                 profile_photo_loader.clearCache();
+                String user_log = "user_log";
                 Intent iLogin = new Intent(UserProfileActivity.this, LoginActivity.class);
-                startActivity(iLogin);
+                iLogin.putExtra("user_loggedout", user_log);
                 UserProfileActivity.this.finish();
                 break;
         }

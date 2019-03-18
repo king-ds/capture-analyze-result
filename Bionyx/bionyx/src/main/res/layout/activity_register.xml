@@ -203,7 +203,7 @@
                 android:layout_marginStart="10dp"
                 android:checked="false"
                 android:fontFamily="@font/montserrat"
-                android:text="I agree to the Terms of Service"
+                android:text="I agree to the Bionyx Terms of Service and Private Policy"
                 android:textColor="#fff"
                 android:textSize="15sp"
                 android:textStyle="bold" />

@@ -48,9 +48,9 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 imageView.startAnimation(animation_3);
-                finish();
                 Intent i = new Intent(getBaseContext(),LoginActivity.class);
                 startActivity(i);
+                finish();
             }
 
             @Override

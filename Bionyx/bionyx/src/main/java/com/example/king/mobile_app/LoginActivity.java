@@ -60,6 +60,14 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
         setContentView(R.layout.activity_login);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        if(getIntent().hasExtra("user_loggedout")){
+            Snackbar.with(LoginActivity.this,null)
+                    .type(Type.CUSTOM, 0xff000000)
+                    .message("Logged out.")
+                    .duration(Duration.SHORT)
+                    .show();
+        }
+
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -162,6 +170,7 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
     @Override
     public void processFinish(String token, String id, String first_name, String last_name, String username, String email, String date_joined){
         Intent intent = new Intent(this, DashboardActivity.class);
+        String user_log = "user_log";
         intent.putExtra("First Name", first_name);
         intent.putExtra("Last Name", last_name);
         intent.putExtra("Username", username);
@@ -169,6 +178,7 @@ public class LoginActivity extends BaseActivity implements AsyncResponse_Login{
         intent.putExtra("Date Joined", date_joined);
         intent.putExtra("Token", token);
         intent.putExtra("Id", id);
+        intent.putExtra("user_loggedin", user_log);
         startActivity(intent);
         this.finish();
     }

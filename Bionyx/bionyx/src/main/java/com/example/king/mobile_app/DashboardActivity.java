@@ -23,6 +23,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.chootdev.csnackbar.Duration;
+import com.chootdev.csnackbar.Snackbar;
+import com.chootdev.csnackbar.Type;
 import com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager;
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +107,14 @@ public class DashboardActivity extends AppCompatActivity
             }
 
             applyFontToMenuItem(mi);
+
+            if(getIntent().hasExtra("user_loggedin")){
+                Snackbar.with(DashboardActivity.this,null)
+                        .type(Type.SUCCESS)
+                        .message("Logged in.")
+                        .duration(Duration.SHORT)
+                        .show();
+            }
         }
         /* end of navigation view configuration */
 
@@ -193,7 +205,9 @@ public class DashboardActivity extends AppCompatActivity
                 sharedPreferences.edit().clear().commit();
                 profile_photo_loader.clearCache();
                 historyPhotoLoader.clearCache();
+                String user_log = "user_log";
                 Intent iLogin = new Intent(DashboardActivity.this, LoginActivity.class);
+                iLogin.putExtra("user_loggedout", user_log);
                 startActivity(iLogin);
                 DashboardActivity.this.finish();
                 break;
