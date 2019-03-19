@@ -62,12 +62,12 @@
     </string>
 
     <string name="not_pressed">
-        When taking picture, the patient’s finger should be relaxed and not pressed hardly against any surface.
+        When taking picture, the patient’s finger should be RELAXED and not pressed hardly against any surface.
     </string>
 
     <string name="capture_image">
-        \tTap the \"Take picture\" button to capture fingernail image.
-        When taking fingernail image, make sure to focus the camera to the fingernail surface. \n
+        \tTap the TAKE PICTURE button to capture fingernail image.
+        When taking fingernail image, MAKE SURE TO FOCUS THE CAMERA TO THE FINGERNAIL SURFACE. \n
     </string>
 
     <string name="crop_image">
@@ -75,7 +75,7 @@
     </string>
 
     <string name="process_image">
-        \t\tTap the process button to process the fingernail image and wait for the result.\n
+        \t\tTap the PROCESS button to process the fingernail image and wait for the result.\n
     </string>
 
     <string name="take_note">
@@ -90,11 +90,11 @@
     </string>
 
     <string name="white_background">
-        \t\tIt is preferred to use white background when taking fingernail image.\n
+        \t\tIt is preferred to use WHITE BACKGROUND when taking fingernail image.\n
     </string>
 
     <string name="need_wifi">
-        \t\tMake sure that the mobile phone is connected to the internet to process the image and have result of prognosis.\n
+        \t\tMake sure that the mobile phone is CONNECTED TO THE INTERNET to process the image and have result of prognosis.\n
     </string>
 
     <string name="rt_lighting">
@@ -116,6 +116,21 @@
     <string name="rt_warning">
         \t\tThe Real-time feature of the application gives possible diseases associated to the detected nail disorder.
         However, the result of the real-time feature is not recorded to the history of the application\n
+    </string>
+
+    <string name="instruction">
+        \t1.Tap the TAKE PICTURE button to capture fingernail image.
+        \n2. Follow the alignment of the fingernail as shown in the image above.
+        \n3. Crop the image to the fingernail\'s surface.
+        \n4. Afterwards, tap PROCESS button and wait for the result.
+    </string>
+
+    <string name="tool_instruction">
+        \t1. Tap the TAKE PICTURE button to capture fingernail image.\n
+        \n2. Focus the camera to the fingernail.\n
+        \n3. Follow the alignment of the fingernail as shown in the image.\n
+        \n3. Crop the image to the fingernail\'s surface.\n
+        \n4. Afterwards, tap PROCESS button and wait for the result.\n
     </string>
 
 

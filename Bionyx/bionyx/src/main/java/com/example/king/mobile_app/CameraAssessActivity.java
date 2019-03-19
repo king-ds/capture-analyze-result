@@ -22,13 +22,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -81,7 +84,7 @@ public class CameraAssessActivity extends AppCompatActivity {
     //GUI ITEMS
     private static ProgressDialog mProgressDialog;
     private SweetAlertDialog pDialog;
-    Button CaptureImg, Upload;
+    Button CaptureImg, Upload, okButton;
     ImageView iCaptured;
     TextView tvPlaceFingernail;
     final int CAMERA_CAPTURE = 1;
@@ -101,6 +104,7 @@ public class CameraAssessActivity extends AppCompatActivity {
         Upload = findViewById(R.id.btnUpload);
         CaptureImg = findViewById(R.id.btnCapture);
         iCaptured = findViewById(R.id.ivCaptured);
+
 
         Animation blink_animation = AnimationUtils.loadAnimation(CameraAssessActivity.this, R.anim.blink_anim);
         tvPlaceFingernail.startAnimation(blink_animation);
@@ -874,6 +878,36 @@ public class CameraAssessActivity extends AppCompatActivity {
 
     private void openHelpDialog(){
         System.out.println("Camera Nail Assessment : Open Help Dialog ");
+        //before inflating the custom alert dialog layout, we will get the current activity viewgroup
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+
+        //then we will inflate the custom alert dialog xml that we created
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog, viewGroup, false);
+
+
+        //Now we need an AlertDialog.Builder object
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        //setting the view of the builder to our custom view that we already inflated
+        builder.setView(dialogView);
+
+        //finally creating the alert dialog and displaying it
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
+        Button okButton = (Button) alertDialog.findViewById(R.id.buttonOk);
+        // if decline button is clicked, close the custom dialog
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                alertDialog.dismiss();
+            }
+        });
+
+
+
     }
 }
 

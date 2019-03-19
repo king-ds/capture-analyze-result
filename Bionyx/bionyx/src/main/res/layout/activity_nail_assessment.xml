@@ -55,27 +55,12 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal|center"
                 android:layout_margin="15dp"
-                android:drawableTop="@drawable/vector_nail_assessment_fingernail"
-                android:text="TAP THE PROCESS BUTTON TO PROCESS THE CAPTURED FINGERNAIL OBJECT"
+                android:drawableTop="@drawable/two"
+                android:text="@string/instruction"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
-                android:textSize="23dp"
+                android:textSize="20dp"
                 android:visibility="visible" />
-
-            <TextView
-                android:id="@+id/tvFileName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/btnSelectImage"
-                android:layout_marginBottom="20dp" />
-
-            <TextView
-                android:id="@+id/tvUploadStatus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/btnSelectImage"
-                 />
-
 
         </LinearLayout>
 
