@@ -2,5 +2,5 @@ package com.example.king.mobile_app;
 import android.app.Activity;
 
 public abstract class BaseActivity extends Activity{
-    protected final static String currentIp = "192.168.1.5:8000";
+    protected final static String currentIp = "192.168.1.24:8000";
 }

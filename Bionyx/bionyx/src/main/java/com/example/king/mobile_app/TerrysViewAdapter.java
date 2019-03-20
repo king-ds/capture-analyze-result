@@ -232,15 +232,10 @@ public class TerrysViewAdapter extends AppCompatActivity {
             document.add(space);
             document.add(disorder);
 
-            document.add(new Paragraph("Diseases: "));
-            Paragraph deas = new Paragraph(diseases);
-            String[] parts = diseases.split("-");
-            int count = parts.length;
-            for(int i = 0; i<count;i++)
-                document.add(new Paragraph(parts[i]));
+            document.add(new Paragraph("Diseases: Diabetes-Heart Disease", info));
 
-            document.add(new Paragraph("Status: "));
-            document.add(new Paragraph(stat));
+            document.add(new Paragraph("Status: Unhealthy", info));
+            document.add(space);
             String note = "** This procedure is similar to other laboratory tests that are requested by physicians.  " +
                     "It is meant to help assist in arriving at an impression or a diagnosis; however, the final disposition of the patient remains with the doctor.  " +
                     "Whatever result this app shows, it is best to consult a physician.**";

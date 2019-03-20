@@ -239,16 +239,8 @@ public class YellowViewAdapter extends AppCompatActivity {
             Paragraph disorder = new Paragraph("Disorder: Yellow Nails", info);
             document.add(space);
             document.add(disorder);
-
-            document.add(new Paragraph("Diseases: "));
-            Paragraph deas = new Paragraph(diseases);
-            String[] parts = diseases.split("-");
-            int count = parts.length;
-            for(int i = 0; i<count;i++)
-                document.add(new Paragraph(parts[i]));
-
-            document.add(new Paragraph("Status: "));
-            document.add(new Paragraph(stat));
+            document.add(new Paragraph("Possible Diseases: Diabetes", info));
+            document.add(new Paragraph("Status: Unhealthy", info));
             document.add(space);
             String note = "** This procedure is similar to other laboratory tests that are requested by physicians.  " +
                     "It is meant to help assist in arriving at an impression or a diagnosis; however, the final disposition of the patient remains with the doctor.  " +
@@ -256,7 +248,6 @@ public class YellowViewAdapter extends AppCompatActivity {
             Paragraph reminder = new Paragraph(note);
             reminder.setAlignment(Element.ALIGN_JUSTIFIED);
             document.add(reminder);
-            document.add(space);
             document.add(space);
 
             Paragraph questionnaire = new Paragraph("Questionnaire", info);

@@ -722,7 +722,7 @@ public class Camera2BasicFragment extends Fragment
           textView.clearAnimation();
         }
       });
-      showToast("Terry's Nails - Anemia, Diabetes, Heart Disease");
+      showToast("Terry's Nails - Diabetes, Heart Disease");
     } else {
       getActivity().runOnUiThread(new Runnable() {
         @Override

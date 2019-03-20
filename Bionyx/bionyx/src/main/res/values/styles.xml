@@ -36,6 +36,17 @@
         <item name="android:fontFamily">@font/montserrat</item>
     </style>
 
+    <style name="tooltip">
+        <item name="android:text">Hello World!</item>
+        <item name="android:textColor">?android:textColorPrimaryInverse</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:lineSpacingExtra">5dp</item>
+        <item name="backgroundColor">@color/colorPrimary</item>
+        <item name="cornerRadius">10dp</item>
+        <!--        <item name="arrowWidth">48dp</item>
+                <item name="arrowHeight">48dp</item>-->
+    </style>
+
 
 
 </resources>

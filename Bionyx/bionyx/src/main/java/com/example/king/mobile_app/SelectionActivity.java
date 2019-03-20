@@ -38,14 +38,14 @@ public class SelectionActivity extends AppCompatActivity {
             }
         });
 
-        btnGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Animation animation = AnimationUtils.loadAnimation(SelectionActivity.this, R.anim.fadein);
-                btnGallery.startAnimation(animation);
-                openGallery();
-            }
-        });
+//        btnGallery.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Animation animation = AnimationUtils.loadAnimation(SelectionActivity.this, R.anim.fadein);
+//                btnGallery.startAnimation(animation);
+//                openGallery();
+//            }
+//        });
 
         btnRealTime.setOnClickListener(new View.OnClickListener() {
             @Override

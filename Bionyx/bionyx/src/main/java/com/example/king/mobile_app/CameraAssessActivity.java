@@ -26,6 +26,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -59,6 +60,7 @@ import com.chootdev.csnackbar.Snackbar;
 import com.chootdev.csnackbar.Type;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
+import com.tooltip.Tooltip;
 
 
 import static com.example.king.mobile_app.BaseActivity.currentIp;
@@ -88,6 +90,7 @@ public class CameraAssessActivity extends AppCompatActivity {
     ImageView iCaptured;
     TextView tvPlaceFingernail;
     final int CAMERA_CAPTURE = 1;
+    private Tooltip mTooltip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +107,6 @@ public class CameraAssessActivity extends AppCompatActivity {
         Upload = findViewById(R.id.btnUpload);
         CaptureImg = findViewById(R.id.btnCapture);
         iCaptured = findViewById(R.id.ivCaptured);
-
 
         Animation blink_animation = AnimationUtils.loadAnimation(CameraAssessActivity.this, R.anim.blink_anim);
         tvPlaceFingernail.startAnimation(blink_animation);
@@ -582,7 +584,7 @@ public class CameraAssessActivity extends AppCompatActivity {
                         .setCancelText("View history")
                         .setContentText("You're unhealthy \n\n" +
                                 "Disorder: "+disorder+"\n\n" +
-                                "Considering the highest nail disorder detected, there is a possibility that you might develop: \n"+diseases+"\n\n" +
+                                "Considering the highest nail disorder detected, there is a possibility that you might develop: \n\n"+diseases+"\n\n" +
                                 "DISCLAIMER\n\n" +
                                 "This procedure is similar to other laboratory tests that are requested by physicians." +
                                 "It is meant to help assist in arriving at an impression or a diagnosis; however, the final disposition of the patient remains with the doctor." +

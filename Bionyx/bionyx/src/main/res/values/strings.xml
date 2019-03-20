@@ -50,87 +50,90 @@
     </string>
 
     <string name="lighting">
-        \t\tThere should be an adequate lighting. Sunlight or daylight is the preferred source. Prevent capturing images with glare.\n
+        \t\tThere should be an <b><i>ADEQUATE LIGHTING</i></b>. Sunlight or daylight is the preferred source. <b><i>PREVENT</i></b> capturing images with glare.\n
     </string>
 
     <string name="no_nailpolish">
-        \t\tAll nail polish, lacquer or other topical substances should be removed.\n
+        \t\tAll nail polish, lacquer or other topical substances should be <b><i>REMOVED</i></b>.\n
     </string>
 
     <string name="acetone">
-        \t\tThe surface of the fingernail should be cleansed with solution such as alcohol or acetone.\n
+        \t\tThe surface of the fingernail should be <b><i>CLEANSED</i></b> with solution such as alcohol or acetone.\n
     </string>
 
     <string name="not_pressed">
-        When taking picture, the patient’s finger should be RELAXED and not pressed hardly against any surface.
+        When taking picture, the patient’s finger should be <b><i>RELAXED</i></b> and not pressed <b><i>HARDLY</i></b> against any surface.
     </string>
 
     <string name="capture_image">
-        \tTap the TAKE PICTURE button to capture fingernail image.
-        When taking fingernail image, MAKE SURE TO FOCUS THE CAMERA TO THE FINGERNAIL SURFACE. \n
+        \tTap the <b><i>TAKE PICTURE</i></b> button to capture fingernail image.
+        When taking fingernail image, <b><i>MAKE SURE TO FOCUS THE CAMERA TO THE FINGERNAIL SURFACE</i></b>. \n
     </string>
 
     <string name="crop_image">
-        \tCrop the image of the fingernail\'s surface and ensure that the fingernail\'s image orientation is horizontally upward.\n
+        \t<b><i>CROP</i></b>  the image of the fingernail\'s surface and ensure that the fingernail\'s image orientation is horizontally upward.\n
     </string>
 
     <string name="process_image">
-        \t\tTap the PROCESS button to process the fingernail image and wait for the result.\n
+        \t\tTap the <b><i>PROCESS</i></b> button to process the fingernail image and wait for the result.\n
     </string>
 
     <string name="take_note">
-        \t\tThis procedure is similar to other laboratory tests that are requested by physicians.
+        This procedure is similar to other laboratory tests that are requested by physicians.
+        It is meant to help assist in arriving at an impression or a diagnosis; however, the final disposition of the patient remains with the doctor.
+        Whatever result this app shows, it is still best to consult a physician.\n
+    </string>
+
+    <string name="dialog_note">
+        <b>Note</b> : This procedure is similar to other laboratory tests that are requested by physicians.
         It is meant to help assist in arriving at an impression or a diagnosis; however, the final disposition of the patient remains with the doctor.
         Whatever result this app shows, it is still best to consult a physician.\n
     </string>
 
     <string name="do_not_capture">
-        \t\tAny images aside from fingernail image is prohibited.
-        Injured and painted fingernail is also prohobited since it may alter the result of the prognosis.\n
+        \t\tAny images aside from fingernail image is <b><i>PROHIBITED</i></b>.
+        <b><i>INJURED</i></b> and <b><i>PAINTED</i></b> fingernail is also <b><i>PROHIBITED</i></b> since it may alter the result of the prognosis.\n
     </string>
 
     <string name="white_background">
-        \t\tIt is preferred to use WHITE BACKGROUND when taking fingernail image.\n
+        \t\tIt is preferred to use <b><i>WHITE BACKGROUND</i></b> when taking fingernail image.\n
     </string>
 
     <string name="need_wifi">
-        \t\tMake sure that the mobile phone is CONNECTED TO THE INTERNET to process the image and have result of prognosis.\n
+        \t\tMake sure that the mobile phone is <b><i>CONNECTED TO THE INTERNET</i></b> to process the image and have result of prognosis.\n
     </string>
 
     <string name="rt_lighting">
-        \t\tThere should be an adequate lighting. Sunlight or daylight is the preferred source. Prevent detecting images with glare.\n
+        \t\tThere should be an <b><i>ADEQUATE LIGHTING</i></b>. Sunlight or daylight is the preferred source. <b><i>PREVENT</i></b> detecting images with glare.\n
     </string>
 
     <string name="rt_alignment">
-        \t Ensure that the fingernail\'s orientation of the user is horizontally upward.\n
+        \t Ensure that the fingernail\'s orientation of the user is <b><i>HORIZONTALLY UPWARD</i></b>.\n
     </string>
 
     <string name="rt_focus">
-        \t Wait until the camera is focused on the fingernail of the user to be able to detect properly\n
+        \t Wait until the camera is <b><i>FOCUSED</i></b> on the fingernail of the user to be able to detect properly\n
     </string>
 
     <string name="rt_white_background">
-        \t\tIt is preferred to use white background when using real-time detection of fingernail.\n
+        \t\tIt is preferred to use <b><i>WHITE BACKGROUND</i></b> when using real-time detection of fingernail.\n
     </string>
 
     <string name="rt_warning">
         \t\tThe Real-time feature of the application gives possible diseases associated to the detected nail disorder.
-        However, the result of the real-time feature is not recorded to the history of the application\n
+        However, the result of the real-time feature is <b><i>NOT RECORDED</i></b> to the history of the application\n
     </string>
 
     <string name="instruction">
-        \t1.Tap the TAKE PICTURE button to capture fingernail image.
-        \n2. Follow the alignment of the fingernail as shown in the image above.
-        \n3. Crop the image to the fingernail\'s surface.
-        \n4. Afterwards, tap PROCESS button and wait for the result.
+        Tap <b><i>TAKE PICTURE</i></b> button to capture fingernail image, <b><i>CROP</i></b> image and tap <b><i>PROCESS</i></b> button and wait for the result.
     </string>
 
     <string name="tool_instruction">
-        \t1. Tap the TAKE PICTURE button to capture fingernail image.\n
-        \n2. Focus the camera to the fingernail.\n
-        \n3. Follow the alignment of the fingernail as shown in the image.\n
-        \n3. Crop the image to the fingernail\'s surface.\n
-        \n4. Afterwards, tap PROCESS button and wait for the result.\n
+        1.) When taking picture, the patient\'s should be <b><i>RELAXED</i></b> and not pressed <b><i>HARDLY</i></b> against any surface.\n
+        \n2.) It is preferred to use <b><i>WHITE BACKGROUND</i></b> when taking fingernail image.\n
+        \n3.) Tap the <b><i>TAKE PICTURE</i></b> button to capture fingernail image. When taking fingernail image, <b><i>MAKE SURE TO FOCUS THE CAMERA TO THE FINGERNAIL SURFACE</i></b>\n
+        \n4.) <b><i>CROP</i></b> the image of the fingernail\'s surface and ensure that the fingernail\'s image orientation is <b><i>HORIZONTALLY UPWARD</i></b>.\n
+        \n5.) Tap <b><i>PROCESS</i></b> button and wait for the result.\n
     </string>
 
 

@@ -55,12 +55,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal|center"
                 android:layout_margin="15dp"
-                android:drawableTop="@drawable/two"
+                android:drawableTop="@drawable/vector_nail_assessment_fingernail"
                 android:text="@string/instruction"
-                android:textAlignment="center"
                 android:textColor="@color/colorWhite"
+                android:fontFamily="@font/montserrat"
+                android:textAlignment="center"
                 android:textSize="20dp"
-                android:visibility="visible" />
+                android:visibility="visible"
+                tools:ignore="RtlCompat" />
 
         </LinearLayout>
 
