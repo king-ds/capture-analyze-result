@@ -125,7 +125,7 @@
     </string>
 
     <string name="instruction">
-        Tap <b><i>TAKE PICTURE</i></b> button to capture fingernail image, <b><i>CROP</i></b> image and tap <b><i>PROCESS</i></b> button and wait for the result.
+        Tap <b><i>TAKE PICTURE</i></b> button to capture fingernail image, <b><i>CROP</i></b> image, <b><i>ALIGN</i></b> fingernail horizontally upward and tap <b><i>PROCESS</i></b> button and wait for the result.
     </string>
 
     <string name="tool_instruction">

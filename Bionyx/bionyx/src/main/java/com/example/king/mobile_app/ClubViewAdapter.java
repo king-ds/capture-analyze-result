@@ -246,14 +246,13 @@ public class ClubViewAdapter extends AppCompatActivity {
             reminder.setAlignment(Element.ALIGN_JUSTIFIED);
             document.add(reminder);
             document.add(space);
-            document.add(space);
 
             Paragraph questionnaire = new Paragraph("Questionnaire", info);
             document.add(questionnaire);
 
             String A1 = final_answer_1.getText().toString();
             System.out.println(A1);
-            Paragraph question1 = new Paragraph("1.) Where you born with this problem?", font);
+            Paragraph question1 = new Paragraph("1.) Were you born with this problem?", font);
             Paragraph answer1 = new Paragraph("Answer: "+A1, answer);
             document.add(question1);
             document.add(answer1);

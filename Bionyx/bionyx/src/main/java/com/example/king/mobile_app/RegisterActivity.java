@@ -470,12 +470,13 @@ public class RegisterActivity extends AppCompatActivity implements AsyncResponse
                             }
                         })
                         .show();
-            }else{
-                Snackbar.with(RegisterActivity.this,null)
-                        .type(Type.ERROR)
-                        .message("Cannot connect to bionyx server.")
-                        .duration(Duration.SHORT)
-                        .show();
+//            }else{
+//                Snackbar.with(RegisterActivity.this,null)
+//                        .type(Type.ERROR)
+//                        .message("Cannot connect to bionyx server.")
+//                        .duration(Duration.SHORT)
+//                        .show();
+//            }
             }
         }
 
